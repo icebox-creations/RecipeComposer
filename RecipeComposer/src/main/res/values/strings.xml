@@ -5,8 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Ingredients</string>
+    <string name="title_section2">Recipes</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
