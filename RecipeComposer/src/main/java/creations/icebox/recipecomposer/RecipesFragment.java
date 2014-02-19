@@ -1,9 +1,9 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +26,32 @@ public class RecipesFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String TAG = "***RECIPES FRAGMENT: ";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach");
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d(TAG, "onDetach");
+        super.onDetach();
+    }
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
     public static RecipesFragment newInstance(int sectionNumber) {
+        Log.d(TAG, "newInstance");
         RecipesFragment fragment = new RecipesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -45,6 +65,7 @@ public class RecipesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         TextView textView = (TextView) rootView.findViewById(R.id.section_label);
         textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));

@@ -1,22 +1,18 @@
 package creations.icebox.recipecomposer;
 
-import java.util.Locale;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -35,20 +31,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
+    private static final String TAG = "***MAIN ACTIVITY: ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Set up the action bar.
+        Log.d(TAG, "set up action bar");
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        Log.d(TAG, "set up action bar");
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
+        Log.d(TAG, "set up the ViewPager");
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -100,6 +102,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
+        Log.d(TAG, "onTabSelected");
         mViewPager.setCurrentItem(tab.getPosition());
     }
 
@@ -118,6 +121,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         static final int NUM_TABS = 2;
+        static final String TAB_SPA = "***SECTIONS PAGER ADAPTER";
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -128,8 +132,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // getItem is called to instantiate the fragment for the given page.
             switch (position) {
                 case 0:
+                    Log.d(TAB_SPA, "Ingredients Fragment new instance");
                     return IngredientsFragment.newInstance(0);
                 case 1:
+                    Log.d(TAB_SPA, "Recipes Fragment new instance");
                     return RecipesFragment.newInstance(1);
             }
             return null;
@@ -146,8 +152,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
+                    Log.d(TAB_SPA, "Ingredients Fragment title setup");
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
+                    Log.d(TAB_SPA, "Recipes Fragment title setup");
                     return getString(R.string.title_section2).toUpperCase(l);
             }
             return null;
