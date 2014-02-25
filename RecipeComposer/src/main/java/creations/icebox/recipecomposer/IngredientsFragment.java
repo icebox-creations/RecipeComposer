@@ -3,30 +3,46 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
-
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link IngredientsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link IngredientsFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class IngredientsFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
 
     private static final String TAG = "***INGREDIENTS FRAGMENT: ";
+    private String sample_ingredients[];
+
+    public static IngredientsFragment newInstance() {
+        Log.d(TAG, "newInstance");
+        return new IngredientsFragment();
+    }
+
+    public IngredientsFragment() {
+        sample_ingredients = new String[] {
+                "Jelly Beans",
+                "Ice cream Sandwiches",
+                "HoneyCombs"
+        };
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+//        ListAdapter listAdapter = new ArrayAdapter<String>(inflater.getContext(),
+//                android.R.layout.simple_list_item_1, sample_ingredients);
+//        setListAdapter(listAdapter);
+
+//        return super.onCreateView(inflater, container, savedInstanceState);
+
+        View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        return rootView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,32 +60,6 @@ public class IngredientsFragment extends Fragment {
     public void onDetach() {
         Log.d(TAG, "onDetach");
         super.onDetach();
-    }
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static IngredientsFragment newInstance(int sectionNumber) {
-        Log.d(TAG, "newInstance");
-        IngredientsFragment fragment = new IngredientsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public IngredientsFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
     }
 
 }

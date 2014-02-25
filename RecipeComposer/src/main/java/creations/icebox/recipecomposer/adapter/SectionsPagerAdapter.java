@@ -19,7 +19,7 @@ import creations.icebox.recipecomposer.RecipesFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     static final int NUM_TABS = 2;
-    static final String TAB_SPA = "***SECTIONS PAGER ADAPTER";
+    static final String TAB = "***SECTIONS PAGER ADAPTER";
     Context mContext;
 
     public SectionsPagerAdapter(FragmentManager fm) {
@@ -31,11 +31,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         switch (position) {
             case 0:
-                Log.d(TAB_SPA, "Ingredients Fragment new instance");
-                return IngredientsFragment.newInstance(0);
+                Log.d(TAB, "Ingredients Fragment new instance");
+                return IngredientsFragment.newInstance();
             case 1:
-                Log.d(TAB_SPA, "Recipes Fragment new instance");
-                return RecipesFragment.newInstance(1);
+                Log.d(TAB, "Recipes Fragment new instance");
+                return RecipesFragment.newInstance();
         }
         return null;
     }
@@ -51,10 +51,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Locale l = Locale.getDefault();
         switch (position) {
             case 0:
-                Log.d(TAB_SPA, "Ingredients Fragment title setup");
+                Log.d(TAB, "Ingredients Fragment title setup");
                 return mContext.getResources().getString(R.string.title_section1).toUpperCase(l);
             case 1:
-                Log.d(TAB_SPA, "Recipes Fragment title setup");
+                Log.d(TAB, "Recipes Fragment title setup");
                 return mContext.getResources().getString(R.string.title_section2).toUpperCase(l);
         }
         return null;

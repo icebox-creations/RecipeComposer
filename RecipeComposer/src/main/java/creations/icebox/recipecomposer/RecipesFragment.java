@@ -3,30 +3,34 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RecipesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RecipesFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class RecipesFragment extends Fragment {
 
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String TAG = "***RECIPES FRAGMENT: ";
+
+    public static RecipesFragment newInstance() {
+        Log.d(TAG, "newInstance");
+        return new RecipesFragment();
+    }
+
+    public RecipesFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
+        View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
+//        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+//        textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+        return rootView;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,32 +48,6 @@ public class RecipesFragment extends Fragment {
     public void onDetach() {
         Log.d(TAG, "onDetach");
         super.onDetach();
-    }
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
-    public static RecipesFragment newInstance(int sectionNumber) {
-        Log.d(TAG, "newInstance");
-        RecipesFragment fragment = new RecipesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public RecipesFragment() {
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
     }
 }
 //
