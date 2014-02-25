@@ -1,8 +1,6 @@
 package creations.icebox.recipecomposer;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -12,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Locale;
+import creations.icebox.recipecomposer.adapter.SectionsPagerAdapter;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -72,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // this tab is selected.
             actionBar.addTab(
                     actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setText(mSectionsPagerAdapter.getPageTitle(i, getApplicationContext()))
                             .setTabListener(this));
         }
     }
@@ -114,53 +112,53 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        static final int NUM_TABS = 2;
-        static final String TAB_SPA = "***SECTIONS PAGER ADAPTER";
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            switch (position) {
-                case 0:
-                    Log.d(TAB_SPA, "Ingredients Fragment new instance");
-                    return IngredientsFragment.newInstance(0);
-                case 1:
-                    Log.d(TAB_SPA, "Recipes Fragment new instance");
-                    return RecipesFragment.newInstance(1);
-            }
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            // Show 2 total pages.
-            return NUM_TABS;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    Log.d(TAB_SPA, "Ingredients Fragment title setup");
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    Log.d(TAB_SPA, "Recipes Fragment title setup");
-                    return getString(R.string.title_section2).toUpperCase(l);
-            }
-            return null;
-        }
-    }
+//    /**
+//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+//     * one of the sections/tabs/pages.
+//     */
+//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+//
+//        static final int NUM_TABS = 2;
+//        static final String TAB_SPA = "***SECTIONS PAGER ADAPTER";
+//
+//        public SectionsPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            // getItem is called to instantiate the fragment for the given page.
+//            switch (position) {
+//                case 0:
+//                    Log.d(TAB_SPA, "Ingredients Fragment new instance");
+//                    return IngredientsFragment.newInstance(0);
+//                case 1:
+//                    Log.d(TAB_SPA, "Recipes Fragment new instance");
+//                    return RecipesFragment.newInstance(1);
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            // Show 2 total pages.
+//            return NUM_TABS;
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            Locale l = Locale.getDefault();
+//            switch (position) {
+//                case 0:
+//                    Log.d(TAB_SPA, "Ingredients Fragment title setup");
+//                    return getString(R.string.title_section1).toUpperCase(l);
+//                case 1:
+//                    Log.d(TAB_SPA, "Recipes Fragment title setup");
+//                    return getString(R.string.title_section2).toUpperCase(l);
+//            }
+//            return null;
+//        }
+//    }
 
 //    /**
 //     * A placeholder fragment containing a simple view.
