@@ -3,13 +3,13 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,7 +26,9 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class RecipesFragment extends Fragment {
+import creations.icebox.recipecomposer.adapter.RecipeAdapter;
+
+public class RecipesFragment extends ListFragment {
 
     private static final String TAG = "***RECIPES FRAGMENT: ";
 
@@ -42,6 +44,8 @@ public class RecipesFragment extends Fragment {
     */
     private WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
 
+    ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
+
     public static RecipesFragment newInstance() {
         Log.d(TAG, "newInstance");
         return new RecipesFragment();
@@ -56,7 +60,23 @@ public class RecipesFragment extends Fragment {
         Log.d(TAG, "onCreateView");
 
         View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
+
+        RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this);
+        this.recipeDownloaderAsyncTaskWeakReference
+                = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
+
+        recipeDownloaderAsyncTask.execute();
+
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, recipeList.get(position).getRecipeTitle() + " clicked");
+        Toast.makeText(getActivity(),
+                "Recipe #" + position + " clicked",
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -67,15 +87,9 @@ public class RecipesFragment extends Fragment {
         /* Configure the fragment instance to be retained on configuration
         * change. Then start the async task */
         setRetainInstance(true);
-
-        // Call for doInBackground() in RecipeDownloader to be executed
-        RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this);
-        this.recipeDownloaderAsyncTaskWeakReference
-                = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
-        recipeDownloaderAsyncTask.execute();
      }
 
-    /* Test if the async task is running or not */
+    /* Use this to test if the async task is running or not */
     private boolean isAsyncTaskPendingOrRunning() {
         try {
             return this.recipeDownloaderAsyncTaskWeakReference != null
@@ -107,15 +121,12 @@ public class RecipesFragment extends Fragment {
     * */
     private class RecipeDownloaderAsyncTask extends AsyncTask<String, String, String> {
 
-        // JSON RESTful API test
         private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
         private String TAG = "***RECIPE DOWNLOADER***: ";
 
         private String recipeTitle = "";
         private String recipeURL = "";
         private String recipeIngredients = "";
-
-        ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
         private WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
@@ -127,48 +138,30 @@ public class RecipesFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
 
-            // HTTP Client that supports streaming uploads and downloads
             DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new BasicHttpParams());
-
-            // Define that I want to use the POST method to grab data from the provided URL
             HttpPost httpPost = new HttpPost(recipePuppyURL);
-
-            // Web service used is defined
             httpPost.setHeader("Content-type", "application/json");
-
-            // Used to read data from the URL
             InputStream inputStream = null;
-
-            // Will hold all the data from the URL
             String queryResult = null;
 
             try {
-                // Get a response if any from the web service
                 HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
-
-                // The content from the requested URL along with headers, etc.
                 HttpEntity httpEntity = httpResponse.getEntity();
-
-                // Get the main content from the URL
                 inputStream = httpEntity.getContent();
 
-                // JSON is UTF-8 by default
                 // BufferedReader reads data from the InputStream until the Buffer is full
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
 
                 // Will store the data
                 StringBuilder stringBuilder = new StringBuilder();
 
-                String line = "";
+                String line;
 
                 // Read in the data from the Buffer until nothing is left
                 while ((line = bufferedReader.readLine()) != null) {
-
-                    // Add data from the Buffer until nothing is left
                     stringBuilder.append(line + '\n');
                 }
 
-                // Store the complete data in result
                 queryResult = stringBuilder.toString();
 
             } catch (Exception e) {
@@ -190,7 +183,6 @@ public class RecipesFragment extends Fragment {
             JSONObject jsonObject;
 
             try {
-                // Print out all the data read in
                 Log.v("JSONParser RESULT: ", queryResult);
 
                 // Get the root JSONObject
@@ -206,9 +198,9 @@ public class RecipesFragment extends Fragment {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
                         // Pull items from the array
-                        recipeTitle = recipe.getString("title");
+                        recipeTitle = recipe.getString("title").replace("\n","");
                         recipeURL = recipe.getString("href");
-                        recipeIngredients = recipe.getString("ingredients");
+                        recipeIngredients = recipe.getString("ingredients").replace("\n", "");
 
                         recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients));
 
@@ -232,25 +224,15 @@ public class RecipesFragment extends Fragment {
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
             Log.d(TAG, "onPostExecute");
-//
-//        TextView title = (TextView) findViewById(R.id.title);
-//        TextView url = (TextView) findViewById(R.id.href);
-//        TextView ingredients = (TextView) findViewById(R.id.ingredients);
-//
-//            title.setText("Title: " + recipeTitle);
-//            url.setText("URL: " + recipeURL);
-//            ingredients.setText("Ingredients: " + recipeIngredients);
-//
-//        title.setText("Title: " + recipeList.get(0).getRecipeTitle());
-//        url.setText("URL: " + recipeList.get(0).getRecipeURL());
-//        ingredients.setText("Ingredients: " + recipeList.get(0).getRecipeIngredients());
 
-            Log.d(TAG, "Title: " + recipeList.get(0).getRecipeTitle());
-            Log.d(TAG, "URL: " + recipeList.get(0).getRecipeURL());
-            Log.d(TAG, "Ingredients: " + recipeList.get(0).getRecipeIngredients());
+//            Log.d(TAG, "Title: " + recipeList.get(0).getRecipeTitle());
+//            Log.d(TAG, "URL: " + recipeList.get(0).getRecipeURL());
+//            Log.d(TAG, "Ingredients: " + recipeList.get(0).getRecipeIngredients());
 
             if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");
+
+                setListAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList));
             }
         }
     }
