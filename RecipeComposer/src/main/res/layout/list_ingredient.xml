@@ -10,6 +10,17 @@
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textStyle="bold|normal"
         android:typeface="serif"
-        android:layout_marginTop="1dp"/>
+        android:layout_marginTop="5dp"
+        android:layout_gravity="left|center_vertical" />
+
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="4px"
+        android:layout_marginRight="10px" >
+    </CheckBox>
+
 
 </FrameLayout>

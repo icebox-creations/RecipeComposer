@@ -1,8 +1,10 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -20,9 +22,12 @@ import android.widget.TextView;
 
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 
@@ -30,7 +35,7 @@ public class IngredientsFragment extends ListFragment {
 
     private static final String DEBUG_TAG = "***INGREDIENTS FRAGMENT: ";
     private static SharedPreferences settings;
-    ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
+    HashMap<String, Ingredient> ingredientMap;
 
     public static IngredientsFragment newInstance() {
         Log.d(DEBUG_TAG, "newInstance of IngredientsFragment");
@@ -38,6 +43,7 @@ public class IngredientsFragment extends ListFragment {
     }
 
     public IngredientsFragment() {
+        ingredientMap = new HashMap<String, Ingredient>();
     }
 
     @Override
@@ -54,25 +60,55 @@ public class IngredientsFragment extends ListFragment {
         addIngredientButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try{
-//                    FileOutputStream fos = getActivity().openFileOutput("ingredientslist_file", getActivity().MODE_PRIVATE);
-//                    fos.write();
-//                    fos.close();
                     String ingredientTitle = ingredientEditText.getText().toString();
-                    ingredientList.add(new Ingredient(ingredientTitle));
-                    ListView lv = (ListView) rootView.findViewById(android.R.id.list);
-                    lv.setAdapter(new IngredientAdapter(getActivity(), android.R.layout.simple_selectable_list_item, ingredientList));
+                    Log.d("Clicked!: ", ingredientTitle);
+                    if(ingredientMap.containsKey(ingredientTitle) == false){
+                        ingredientMap.put(ingredientTitle, new Ingredient(ingredientTitle));
+                        ListView lv = (ListView) rootView.findViewById(android.R.id.list);
+                        lv.setAdapter(new IngredientAdapter(getActivity(), android.R.layout.simple_selectable_list_item, ingredientMap));
 
-                    // store in database or private preferences
-                    SharedPreferences.Editor edit = settings.edit();
-                    edit.putString("ingredient", ingredientTitle);
-                    edit.apply();
-                    String ingredient = settings.getString("ingredient", "");
-                    Log.d("Clicked!: ", ingredient);
+                        // Playing with storing in database OR private preferences
+                        SharedPreferences.Editor edit = settings.edit();
+                        edit.putString(ingredientTitle, ingredientTitle);
+                        edit.apply();
+                        Log.d("Stored!: ", ingredientTitle);
+
+                        FileOutputStream fos = getActivity().openFileOutput("ingredientslist_file", getActivity().MODE_PRIVATE);
+                        fos.write(ingredientTitle.getBytes());
+                        fos.close();
+                    }
                 } catch (Exception e) {
                     Log.d("Caught File Exception: ", e.getMessage());
                 }
             }
         });
+
+        final Button readIngredientButton = (Button) rootView.findViewById(R.id.readIngredient);
+        readIngredientButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                String ingredientTitle = ingredientEditText.getText().toString();
+                SharedPreferences.Editor edit = settings.edit();
+                String ingredientStr = settings.getString(ingredientTitle, "<none>");
+                Log.d("Read from memory!: ", ingredientStr);
+
+                try{
+                    FileInputStream fis = getActivity().openFileInput("ingredientslist_file");
+
+                    byte[] buffer = new byte[1024];
+                    int err = fis.read(buffer, 0, 1024);
+                    if (err != 0){
+                        Log.d("File error: ", "Error reading from file...ingredientslist_file.. " + Integer.toString(err));
+                    }
+                    Toast.makeText(getActivity(), "(Read from file) Last Added: " + new String(buffer), Toast.LENGTH_SHORT).show();
+                    fis.close();
+                    Log.d("Read from file all things read before: ", ingredientStr);
+                } catch (Exception e){
+                     Log.d("ERROR in File Manip: ", e.getMessage());
+                }
+            }
+        });
+
+
 
         return rootView;
     }
@@ -93,6 +129,14 @@ public class IngredientsFragment extends ListFragment {
     public void onDetach() {
         Log.d(DEBUG_TAG, "onDetach");
         super.onDetach();
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Ingredient {
     private String ingredientTitle = "";
     private ArrayList<String> tags;         // tags that associates this ingredients with ideas.
+    private boolean is_selected;
 
     private static final String DEBUG_TAG = "***NEW RECIPE: ";
 
@@ -19,7 +20,11 @@ public class Ingredient {
 
         this.ingredientTitle = ingredientTitle;
         this.tags = new ArrayList<String>();
+        this.is_selected = false;
     }
+
+
+    public String getName() { return ingredientTitle; }
 
     public String getIngredientTitle() {
         return ingredientTitle;
@@ -43,6 +48,14 @@ public class Ingredient {
 
     public void pushIngredientTag(String ingredientTag) {
         this.tags.add(ingredientTag);
+    }
+
+    public boolean isSelected(){
+        return is_selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.is_selected = selected;
     }
 
 }
