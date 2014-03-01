@@ -38,5 +38,14 @@
         android:layout_gravity="right|top"
         android:layout_marginTop="50dp" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Clear Temp File"
+        android:id="@+id/clearFile"
+        android:layout_gravity="right|top"
+        android:layout_marginTop="100dp" />
+
 
 </FrameLayout>

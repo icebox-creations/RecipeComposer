@@ -24,8 +24,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -73,9 +77,11 @@ public class IngredientsFragment extends ListFragment {
                         edit.apply();
                         Log.d("Stored!: ", ingredientTitle);
 
-                        FileOutputStream fos = getActivity().openFileOutput("ingredientslist_file", getActivity().MODE_PRIVATE);
-                        fos.write(ingredientTitle.getBytes());
-                        fos.close();
+                        // Direct file manip..l
+                        
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getActivity().openFileOutput("ingredientslist_file.txt", Context.MODE_PRIVATE | Context.MODE_APPEND));
+                        outputStreamWriter.write(ingredientTitle);
+                        outputStreamWriter.close();
                     }
                 } catch (Exception e) {
                     Log.d("Caught File Exception: ", e.getMessage());
@@ -92,15 +98,24 @@ public class IngredientsFragment extends ListFragment {
                 Log.d("Read from memory!: ", ingredientStr);
 
                 try{
-                    FileInputStream fis = getActivity().openFileInput("ingredientslist_file");
+                    // read directly from file..
+                    InputStream inputStream = getActivity().openFileInput("ingredientslist_file.txt");
+                    if (inputStream != null){
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String receiveString = "";
+                        StringBuilder stringBuilder = new StringBuilder();
 
-                    byte[] buffer = new byte[1024];
-                    int err = fis.read(buffer, 0, 1024);
-                    if (err != 0){
-                        Log.d("File error: ", "Error reading from file...ingredientslist_file.. " + Integer.toString(err));
+                        while ( (receiveString = bufferedReader.readLine()) != null ) {
+                            stringBuilder.append(receiveString);
+                        }
+                        inputStream.close();
+
+                        String file_contents = stringBuilder.toString();
+                        Toast.makeText(getActivity(), "Ingredients Added: " + new String(file_contents), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Couldnt read file: ingredientslist_file", Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(getActivity(), "(Read from file) Last Added: " + new String(buffer), Toast.LENGTH_SHORT).show();
-                    fis.close();
                     Log.d("Read from file all things read before: ", ingredientStr);
                 } catch (Exception e){
                      Log.d("ERROR in File Manip: ", e.getMessage());
@@ -108,6 +123,18 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
+
+        final Button clerFileButton = (Button) rootView.findViewById(R.id.clearFile);
+        clerFileButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                try{
+                    getActivity().deleteFile("ingredientslist_file.txt");
+                    Toast.makeText(getActivity(), "File Deleted!", Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    Log.d("ERROR: ", e.getMessage());
+                }
+            }
+        });
 
 
         return rootView;
