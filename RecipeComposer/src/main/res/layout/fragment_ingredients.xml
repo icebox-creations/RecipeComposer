@@ -1,12 +1,35 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="creations.icebox.recipecomposer.IngredientsFragment">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="creations.icebox.recipecomposer.IngredientsFragment"
+    android:orientation="vertical"
+    android:weightSum="5"  >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello ingredients fragment" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/ingredientEditText"
+        android:layout_weight="3"
+        android:layout_gravity="left" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="368dp"
+        android:id="@android:id/list"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center_horizontal|bottom" />
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Ingredient"
+        android:layout_weight="2"
+        android:id="@+id/addIngredient"
+        android:layout_marginTop="0dp"
+        android:layout_gravity="right|top" />
+
+
+
 
 </FrameLayout>
