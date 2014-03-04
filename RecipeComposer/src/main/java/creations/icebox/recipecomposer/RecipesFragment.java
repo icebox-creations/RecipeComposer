@@ -47,7 +47,7 @@ public class RecipesFragment extends ListFragment {
     ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
     public static RecipesFragment newInstance() {
-        Log.d(TAG, "newInstance");
+        Log.d(TAG, "newInstance of RecipesFragment");
         return new RecipesFragment();
     }
 
