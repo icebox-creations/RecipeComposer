@@ -3,6 +3,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <CheckBox
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp">
+    </CheckBox>
+
     <TextView
         android:id="@+id/title"
         android:layout_width="fill_parent"
@@ -10,17 +17,7 @@
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textStyle="bold|normal"
         android:typeface="serif"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="left|center_vertical" />
-
-    <CheckBox
-        android:id="@+id/check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="4px"
-        android:layout_marginRight="10px" >
-    </CheckBox>
+        android:layout_marginLeft="50dp" />
 
 
 </FrameLayout>
