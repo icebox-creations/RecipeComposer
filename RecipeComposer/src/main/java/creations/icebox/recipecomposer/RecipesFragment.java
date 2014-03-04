@@ -66,8 +66,33 @@ public class RecipesFragment extends ListFragment {
                 = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
 
         recipeDownloaderAsyncTask.execute();
+        Log.d(TAG, "execute 1st");
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
     }
 
     @Override
@@ -204,9 +229,9 @@ public class RecipesFragment extends ListFragment {
 
                         recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients));
 
-                        Log.d("Title: ", recipeTitle);
-                        Log.d("URL: ", recipeURL);
-                        Log.d("Ingredients List: ", recipeIngredients);
+//                        Log.d("Title: ", recipeTitle);
+//                        Log.d("URL: ", recipeURL);
+//                        Log.d("Ingredients List: ", recipeIngredients);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -232,8 +257,13 @@ public class RecipesFragment extends ListFragment {
             if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");
 
-                setListAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList));
+                // if the list view doesnt show up, confirm th context of the list view here:
+                ListView myList= getListView();
+                myList.setAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item,recipeList));
+
+//                setListAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList));
             }
+
         }
     }
 }

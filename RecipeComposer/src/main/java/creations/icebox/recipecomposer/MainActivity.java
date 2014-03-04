@@ -100,6 +100,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
+
+        //  if the fragment is recipe fragment:
+        //      tell it to execute list view handler:
+        //      (Which makes the api call and populates list view)
+        //      (We need access to the recipe fragment...)
+        //  else if ...
+        //
+        Log.d("Derp: ", fragmentTransaction.toString());
+
+
         mViewPager.setCurrentItem(tab.getPosition());
         Log.v(TAG, "onTabSelected clicked");
     }

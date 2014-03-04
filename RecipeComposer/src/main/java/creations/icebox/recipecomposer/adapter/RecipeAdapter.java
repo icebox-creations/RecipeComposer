@@ -42,7 +42,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         // to inflate it basically means to render, or show, the view.
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_recipe, null);
+            view = inflater.inflate(R.layout.list_item_recipe, null);
         }
 
         /*
