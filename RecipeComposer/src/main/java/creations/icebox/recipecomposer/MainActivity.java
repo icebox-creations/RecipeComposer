@@ -10,9 +10,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import creations.icebox.recipecomposer.helper.DBHelper;
+
 import creations.icebox.recipecomposer.adapter.SectionsPagerAdapter;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+    /* Database helper interface.. */
+    DBHelper dbh;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -33,7 +37,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Log.d(TAG, "onCreate");
+        dbh = new DBHelper(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

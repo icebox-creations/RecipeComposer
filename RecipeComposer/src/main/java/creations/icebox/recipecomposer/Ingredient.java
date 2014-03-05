@@ -10,6 +10,7 @@ import java.util.ArrayList;
  */
 public class Ingredient {
     private String ingredientTitle = "";
+    private String ingredientDescription = "";
     private ArrayList<String> tags;         // tags that associates this ingredients with ideas.
     private boolean is_selected;
 
@@ -23,13 +24,22 @@ public class Ingredient {
         this.is_selected = false;
     }
 
+    /* Getters */
+    public String getTitle() { return ingredientTitle; }
 
+    public String getDescription() { return ingredientDescription; }
+
+    /* aliases for getTitle */
     public String getName() { return ingredientTitle; }
-
     public String getIngredientTitle() {
         return ingredientTitle;
     }
+    public String getDescriptionTitle() {
+        return ingredientDescription;
+    }
 
+
+    /* Setters */
     public void setIngredientTitle(String recipeTitle) {
         this.ingredientTitle = recipeTitle;
     }
@@ -38,6 +48,7 @@ public class Ingredient {
     public ArrayList<String> getIngredientTags(){
         return tags;
     }
+
 
     public String topIngredientTag() {
         if (tags.size() <= 0){
