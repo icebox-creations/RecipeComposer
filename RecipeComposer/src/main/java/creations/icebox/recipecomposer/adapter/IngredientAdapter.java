@@ -17,12 +17,8 @@ import java.util.HashMap;
 import creations.icebox.recipecomposer.Ingredient;
 import creations.icebox.recipecomposer.R;
 
-
-/**
- * Created on 2/28/14.
- */
 public class IngredientAdapter extends BaseAdapter {
-    private static final String DEBUG_TAG = "***RECIPE ADAPTER: ";
+    private static final String DEBUG_TAG = "***INGREDIENT ADAPTER***: ";
 
     private HashMap<String, Ingredient> ingredientMap;
     private String[] mKeys;

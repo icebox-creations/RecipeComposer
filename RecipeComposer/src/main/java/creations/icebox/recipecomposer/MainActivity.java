@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import creations.icebox.recipecomposer.adapter.SectionsPagerAdapter;
+import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -22,10 +22,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    TabsPagerAdapter mTabsPagerAdapter;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * The {@link ViewPager} that will host the tab contents.
      */
     ViewPager mViewPager;
 
@@ -44,13 +44,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        Log.d(TAG, "set up action bar");
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        Log.d(TAG, "set up tab adapter");
+        mTabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         Log.d(TAG, "set up the ViewPager");
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setAdapter(mTabsPagerAdapter);
 
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -63,14 +63,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         });
 
         // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+        for (int i = 0; i < mTabsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
             // the adapter. Also specify this Activity object, which implements
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
             actionBar.addTab(
                     actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i, getApplicationContext()))
+                            .setText(mTabsPagerAdapter.getPageTitle(i, getApplicationContext()))
                             .setTabListener(this));
         }
     }

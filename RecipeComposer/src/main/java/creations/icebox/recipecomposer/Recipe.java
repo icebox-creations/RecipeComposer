@@ -7,7 +7,7 @@ public class Recipe {
     private String recipeURL = "";
     private String recipeIngredients = "";
 
-    private static final String TAG = "***NEW RECIPE: ";
+    private static final String TAG = "***NEW RECIPE***: ";
 
     public Recipe(String recipeTitle, String recipeURL, String recipeIngredients) {
         Log.d(TAG, "constructor");

@@ -37,12 +37,12 @@ import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 
 public class IngredientsFragment extends ListFragment {
 
-    private static final String DEBUG_TAG = "***INGREDIENTS FRAGMENT: ";
+    private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private static SharedPreferences settings;
     HashMap<String, Ingredient> ingredientMap;
 
     public static IngredientsFragment newInstance() {
-        Log.d(DEBUG_TAG, "newInstance of IngredientsFragment");
+        Log.d(TAG, "newInstance of IngredientsFragment");
         return new IngredientsFragment();
     }
 
@@ -53,7 +53,7 @@ public class IngredientsFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(DEBUG_TAG, "onCreateView");
+        Log.d(TAG, "onCreateView");
         final View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -142,19 +142,19 @@ public class IngredientsFragment extends ListFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(DEBUG_TAG, "onCreate");
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onAttach(Activity activity) {
-        Log.d(DEBUG_TAG, "onAttach");
+        Log.d(TAG, "onAttach");
         super.onAttach(activity);
     }
 
     @Override
     public void onDetach() {
-        Log.d(DEBUG_TAG, "onDetach");
+        Log.d(TAG, "onDetach");
         super.onDetach();
     }
 

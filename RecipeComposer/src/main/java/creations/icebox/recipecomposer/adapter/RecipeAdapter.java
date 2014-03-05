@@ -14,7 +14,7 @@ import creations.icebox.recipecomposer.Recipe;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
-    private static final String TAG = "***RECIPE ADAPTER: ";
+    private static final String TAG = "***RECIPE ADAPTER***: ";
 
     private ArrayList<Recipe> recipeArrayList;
 

@@ -5,24 +5,20 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-/**
- * Created on 2/28/14.
- */
 public class Ingredient {
     private String ingredientTitle = "";
-    private ArrayList<String> tags;         // tags that associates this ingredients with ideas.
-    private boolean is_selected;
+    private ArrayList<String> tags; // tags that associates this ingredients with ideas.
+    private boolean isSelected;
 
-    private static final String DEBUG_TAG = "***NEW RECIPE: ";
+    private static final String TAG = "***NEW INGREDIENT***: ";
 
     public Ingredient(String ingredientTitle) {
-        Log.d(DEBUG_TAG, "constructor");
+        Log.d(TAG, "constructor");
 
         this.ingredientTitle = ingredientTitle;
         this.tags = new ArrayList<String>();
-        this.is_selected = false;
+        this.isSelected = false;
     }
-
 
     public String getName() { return ingredientTitle; }
 
@@ -34,12 +30,11 @@ public class Ingredient {
         this.ingredientTitle = recipeTitle;
     }
 
-
     public ArrayList<String> getIngredientTags(){
         return tags;
     }
 
-    public String topIngredientTag() {
+    public String getTopIngredientTag() {
         if (tags.size() <= 0){
             return "";
         }
@@ -51,11 +46,11 @@ public class Ingredient {
     }
 
     public boolean isSelected(){
-        return is_selected;
+        return isSelected;
     }
 
-    public void setSelected(boolean selected) {
-        this.is_selected = selected;
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
 }
