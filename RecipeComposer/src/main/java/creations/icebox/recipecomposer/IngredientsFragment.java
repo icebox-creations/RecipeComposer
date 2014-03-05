@@ -34,10 +34,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
+import creations.icebox.recipecomposer.helper.DBHelper;
 
 public class IngredientsFragment extends ListFragment {
 
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
+
+    DBHelper dbh;   // instances of fragments can be destroyed..
+
     private static SharedPreferences settings;
     HashMap<String, Ingredient> ingredientMap;
 
@@ -54,6 +58,9 @@ public class IngredientsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+
+        dbh = new DBHelper(getActivity());
+
         final View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -68,6 +75,9 @@ public class IngredientsFragment extends ListFragment {
                     Log.d("Clicked!: ", ingredientTitle);
                     if(ingredientMap.containsKey(ingredientTitle) == false){
                         ingredientMap.put(ingredientTitle, new Ingredient(ingredientTitle));
+
+//                        insertIngredient();
+
                         ListView lv = (ListView) rootView.findViewById(android.R.id.list);
                         lv.setAdapter(new IngredientAdapter(getActivity(), android.R.layout.simple_selectable_list_item, ingredientMap));
 
