@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.v7.appcompat.R;
 import android.util.Log;
 
 import creations.icebox.recipecomposer.Ingredient;
 import creations.icebox.recipecomposer.Recipe;
-//import creations.icebox.recipecomposer.;
 
 public class DBHelper extends SQLiteOpenHelper{
     final static String DB_NAME = "recipe_composer.db";
