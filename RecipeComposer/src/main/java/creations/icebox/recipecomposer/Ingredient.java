@@ -14,7 +14,9 @@ public class Ingredient {
 
     public Ingredient(String ingredientTitle) {
         Log.d(TAG, "constructor");
-
+        if (ingredientTitle == null){
+            ingredientTitle = "";
+        }
         this.ingredientTitle = ingredientTitle;
         this.tags = new ArrayList<String>();
         this.isSelected = false;
@@ -27,18 +29,19 @@ public class Ingredient {
 
     /* aliases for getTitle */
     public String getName() { return ingredientTitle; }
-
     public String getIngredientTitle() {
         return ingredientTitle;
-    }
-
-    public String getDescriptionTitle() {
-        return ingredientDescription;
     }
 
     /* Setters */
     public void setIngredientTitle(String recipeTitle) {
         this.ingredientTitle = recipeTitle;
+    }
+    public void setDescription(String ingredientDescription) {
+        if (ingredientDescription == null){
+            ingredientDescription = "";
+        }
+        this.ingredientTitle = ingredientDescription;
     }
 
     public ArrayList<String> getIngredientTags(){
