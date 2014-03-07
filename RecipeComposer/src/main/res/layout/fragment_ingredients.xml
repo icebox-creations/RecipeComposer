@@ -45,19 +45,31 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Read Ingredient" />
+                android:text="Find Ingredient" />
 
+        </TableRow>
+
+        <TableRow>
+            <Button
+                android:id="@+id/findAllIngredients"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Read All Ingredients" />
+        </TableRow>
+
+        <TableRow>
             <Button
                 android:id="@+id/clearFile"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Clear Temp File" />
-
+                android:text="Drop Tables" />
         </TableRow>
 
-        <TableRow
+    <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
