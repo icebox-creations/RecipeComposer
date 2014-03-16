@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
+        android:id="@+id/recipeTitleTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:textStyle="bold|normal"
-        android:typeface="serif" />
+        android:textStyle="bold|normal" />
 
     <TextView
-        android:id="@+id/ingredients"
-        android:layout_width="fill_parent"
+        android:id="@+id/recipeIngredientsTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/recipeTitleTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:id="@+id/href"
-        android:layout_width="fill_parent"
+        android:id="@+id/recipeURLTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_below="@+id/ingredients"
+        android:layout_below="@+id/recipeIngredientsTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

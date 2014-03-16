@@ -8,5 +8,8 @@
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_ingredient_edit_text_hint">Enter an ingredient...</string>
+    <string name="add_ingredient_button">Add Ingredient</string>
+    <string name="recipes_empty_list_view">No recipes to display.</string>
 
 </resources>

@@ -57,9 +57,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         if (i != null) {
 
             try {
-                TextView title = (TextView) view.findViewById(R.id.title);
-                TextView url = (TextView) view.findViewById(R.id.href);
-                TextView ingredients = (TextView) view.findViewById(R.id.ingredients);
+                TextView title = (TextView) view.findViewById(R.id.recipeTitleTextView);
+                TextView url = (TextView) view.findViewById(R.id.recipeURLTextView);
+                TextView ingredients = (TextView) view.findViewById(R.id.recipeIngredientsTextView);
 
                 if (title != null) {
                     title.setText(i.getRecipeTitle());
