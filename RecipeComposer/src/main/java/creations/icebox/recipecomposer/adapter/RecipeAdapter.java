@@ -25,7 +25,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 	*/
     public RecipeAdapter(Context context, int resource, ArrayList<Recipe> recipeArrayList) {
         super(context, resource, recipeArrayList);
-        this.recipeArrayList = recipeArrayList;
+        this.recipeArrayList = new ArrayList<Recipe>();
+        this.recipeArrayList.addAll(recipeArrayList);
     }
 
     /*

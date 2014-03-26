@@ -3,24 +3,33 @@ package creations.icebox.recipecomposer;
 import android.util.Log;
 
 public class Ingredient {
+    private static final String TAG = "***NEW INGREDIENT***: ";
     private long id = 0;
     private String ingredientTitle = "";
-    private static final String TAG = "***NEW INGREDIENT***: ";
+    private boolean selected = false;
 
-    public long getId() {
+    public long getIngredientId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setIngredientId(long id) {
         this.id = id;
     }
 
-    public String getTitle() {
+    public String getIngredientTitle() {
         return ingredientTitle;
     }
 
     public void setIngredientTitle(String recipeTitle) {
         this.ingredientTitle = recipeTitle;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /** Will be used by the ArrayAdapter in the Listview */

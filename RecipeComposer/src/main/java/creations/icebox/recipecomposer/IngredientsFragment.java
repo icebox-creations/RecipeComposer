@@ -4,13 +4,21 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
@@ -18,9 +26,9 @@ import creations.icebox.recipecomposer.helper.SQLiteDAO;
 
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
-
     private SQLiteDAO sqLiteDAO;
     private View rootView;
+    private ArrayList<Ingredient> ingredientArrayList;
 
     public static IngredientsFragment newInstance() {
         Log.d(TAG, "newInstance of IngredientsFragment");
@@ -48,6 +56,32 @@ public class IngredientsFragment extends ListFragment {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.ingredient_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.remove_ingredient:
+                ingredientArrayList.remove(info.position);
+                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
+
+                // need to actually remove this ingredient from the db
+                // not working
+                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
+
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onResume() {
         Log.d(TAG, "onResume");
         sqLiteDAO.open();
@@ -66,30 +100,56 @@ public class IngredientsFragment extends ListFragment {
         Log.d(TAG, "onCreateView");
         rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
-        final Button addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
-        final EditText ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
+        try {
+            final Button addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
+            final EditText ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
 
-        addIngredientButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "add ingredient button clicked!");
-                ArrayAdapter<Ingredient> arrayAdapter = (ArrayAdapter<Ingredient>) getListAdapter();
-                String ingredientTitle = ingredientEditText.getText().toString();
-                Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+            addIngredientButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "add ingredient button clicked!");
 
-                if (ingredient != null) {
-                    arrayAdapter.add(ingredient);
-                    arrayAdapter.notifyDataSetChanged();
+                    if (ingredientEditText.getText().length() > 0) {
+                        String ingredientTitle = ingredientEditText.getText().toString();
+                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+
+                        if (ingredient != null) {
+                            ArrayAdapter<Ingredient> arrayAdapter = (ArrayAdapter<Ingredient>) getListAdapter();
+                            arrayAdapter.add(ingredient);
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Toast.makeText(getActivity(),
+                                "Sorry, you must supply an ingredient",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-
-        List<Ingredient> ingredientList = sqLiteDAO.getAllIngredients();
-
-        setListAdapter(new IngredientAdapter(getActivity(), android.R.layout.simple_list_item_1,
-                ingredientList));
-
+            });
+        } catch (NullPointerException e) {
+            Log.d(TAG, "onCreateView: " + e.toString());
+        }
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ingredientArrayList = sqLiteDAO.getAllIngredients();
+
+        setListAdapter(new IngredientAdapter(getActivity(),
+                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
+
+        registerForContextMenu(getListView());
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
+        Toast.makeText(getActivity(),
+                "Ingredient #" + position + " clicked",
+                Toast.LENGTH_SHORT).show();
     }
 }
 

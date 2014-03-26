@@ -1,55 +1,114 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.Ingredient;
 import creations.icebox.recipecomposer.R;
 
+/** Follows the ViewHolder Design Pattern */
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
 
-    private List<Ingredient> ingredientList;
+    private ArrayList<Ingredient> ingredientArrayList;
 
-    public IngredientAdapter(Context context, int resource, List<Ingredient> ingredientList) {
-        super(context, resource, ingredientList);
-        this.ingredientList = ingredientList;
+    public IngredientAdapter(Context context, int resource, ArrayList<Ingredient> ingredientArrayList) {
+        super(context, resource, ingredientArrayList);
+        this.ingredientArrayList = ingredientArrayList;
+    }
+
+    /** ViewHolder: caches our TextView and CheckBox */
+    static class ViewHolderItem {
+        TextView ingredientTitle;
+        CheckBox ingredientCheckBox;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        View view = convertView;
+        ViewHolderItem viewHolder;
+        Log.d(TAG, "ConvertView " + String.valueOf(position));
 
-        if (view == null) {
+        if (convertView == null) {
+            // inflate the layout
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.list_item_ingredient, null);
-        }
+            convertView = inflater.inflate(R.layout.list_item_ingredient, null);
 
-        Ingredient i = ingredientList.get(position);
+            // set up the ViewHolder
+            viewHolder = new ViewHolderItem();
+            viewHolder.ingredientTitle = (TextView) convertView.findViewById(R.id.ingredientTitleTextView);
+            viewHolder.ingredientCheckBox = (CheckBox) convertView.findViewById(R.id.ingredientCheckbox);
 
-        if (i != null) {
+            // store the holder with the view
+            convertView.setTag(viewHolder);
 
-            try {
-                TextView title = (TextView) view.findViewById(R.id.ingredientTitleTextView);
-
-                if (title != null) {
-                    title.setText(i.getTitle());
+            viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox checkBox = (CheckBox) v;
+                    Ingredient ingredient = (Ingredient) checkBox.getTag();
+                    Toast.makeText(getContext(), "Clicked on CheckBox: " + checkBox.isChecked(),
+                            Toast.LENGTH_SHORT).show();
+                    ingredient.setSelected(checkBox.isChecked());
                 }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+            });
+        } else {
+            // we've just avoided calling findViewById() on the resource file every time
+            // just use the viewHolder
+            viewHolder = (ViewHolderItem) convertView.getTag();
         }
 
-        return view;
+        // Ingredient item based on the position
+        Ingredient ingredient = ingredientArrayList.get(position);
+
+        // assign values if the ingredient is not null
+        if (ingredient != null) {
+            viewHolder.ingredientTitle.setText(ingredient.getIngredientTitle());
+            viewHolder.ingredientCheckBox.setChecked(ingredient.isSelected());
+            viewHolder.ingredientCheckBox.setTag(ingredient);
+        }
+
+        return convertView;
     }
+//
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//
+//        View view = convertView;
+//
+//        if (view == null) {
+//            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            view = inflater.inflate(R.layout.list_item_ingredient, null);
+//        }
+//
+//        Ingredient i = ingredientArrayList.get(position);
+//
+//        if (i != null) {
+//
+//            try {
+//                TextView ingredientTitle = (TextView) view.findViewById(R.id.ingredientTitleTextView);
+//
+//                if (ingredientTitle != null) {
+//                    ingredientTitle.setText(i.getIngredientTitle());
+//                }
+//
+//            } catch (NullPointerException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        return view;
+//    }
 }
 
 //package creations.icebox.recipecomposer.adapter;

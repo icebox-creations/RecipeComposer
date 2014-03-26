@@ -85,8 +85,8 @@ public class SQLiteDAO {
         return newIngredient;
     }
 
-    private void deleteIngredient(Ingredient ingredient) {
-        long id = ingredient.getId();
+    public void deleteIngredient(Ingredient ingredient) {
+        long id = ingredient.getIngredientId();
         Log.d(TAG, "ingredient deleted with id: " + id);
 
         sqLiteDatabase.delete(
@@ -96,8 +96,8 @@ public class SQLiteDAO {
         );
     }
 
-    public List<Ingredient> getAllIngredients() {
-        List<Ingredient> ingredientList = new ArrayList<Ingredient>();
+    public ArrayList<Ingredient> getAllIngredients() {
+        ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
 
         Cursor cursor = sqLiteDatabase.query(
                 sqLiteDBHelper.TABLE_INGREDIENTS,
@@ -118,7 +118,7 @@ public class SQLiteDAO {
 
     private Ingredient cursorToIngredient(Cursor cursor) {
         Ingredient ingredient = new Ingredient();
-        ingredient.setId(cursor.getLong(0));
+        ingredient.setIngredientId(cursor.getLong(0));
         ingredient.setIngredientTitle(cursor.getString(1));
         return ingredient;
     }

@@ -10,7 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
     </CheckBox>
 
     <TextView
@@ -21,7 +23,7 @@
         android:textStyle="bold|normal"
         android:layout_marginLeft="50dp"
         android:paddingBottom="7dp"
-        android:paddingTop="7dp" />
+        android:paddingTop="5dp" />
 
 
 </FrameLayout>
