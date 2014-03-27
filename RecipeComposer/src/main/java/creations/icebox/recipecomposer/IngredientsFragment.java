@@ -137,61 +137,100 @@ public class IngredientsFragment extends ListFragment {
         return rootView;
     }
 
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater menuInflater = mode.getMenuInflater();
-            menuInflater.inflate(R.menu.ingredient_menu, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_remove_ingredient:
-                    Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
-                    mode.finish();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-        }
-    };
+//    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+//        @Override
+//        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//            // Inflate a menu resource providing context menu items
+//            MenuInflater menuInflater = mode.getMenuInflater();
+//            menuInflater.inflate(R.menu.ingredient_menu, menu);
+//            return true;
+//        }
+//
+//        @Override
+//        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//            return false;
+//        }
+//
+//        @Override
+//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.action_remove_ingredient:
+//                    Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
+//                    mode.finish();
+//                    return true;
+//                default:
+//                    return false;
+//            }
+//        }
+//
+//        @Override
+//        public void onDestroyActionMode(ActionMode mode) {
+//            mActionMode = null;
+//        }
+//    };
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        // https://developer.android.com/guide/topics/ui/menus.html#context-menu
+        ListView listView = getListView();
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemLongClick");
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-                if (mActionMode != null) {
-                    return false;
-                } else {
-                    // Start the CAB using the ActionMode.Callback
-                    mActionMode = getActivity().startActionMode(mActionModeCallback);
-                    Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
-                    view.setSelected(true);
-                    return true;
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = mode.getMenuInflater();
+                menuInflater.inflate(R.menu.ingredient_menu, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_remove_ingredient:
+                        Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
+                        mode.finish();
+                        return true;
+                    default:
+                        return false;
                 }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
             }
         });
 
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d(TAG, "onItemLongClick");
+//
+//                if (mActionMode != null) {
+//                    return false;
+//                } else {
+//                    // Start the CAB using the ActionMode.Callback
+//                    mActionMode = getActivity().startActionMode(mActionModeCallback);
+//                    Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
+//                    view.setSelected(true);
+//                    return true;
+//                }
+//            }
+//        });
+//
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(),
