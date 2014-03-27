@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +31,10 @@ public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
     private View rootView;
+    ActionMode mActionMode;
+    Button addIngredientButton;
+    EditText ingredientEditText;
+
     private ArrayList<Ingredient> ingredientArrayList;
 
     public static IngredientsFragment newInstance() {
@@ -68,14 +75,13 @@ public class IngredientsFragment extends ListFragment {
                 (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         switch (item.getItemId()) {
-            case R.id.remove_ingredient:
-                ingredientArrayList.remove(info.position);
-                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
-
-                // need to actually remove this ingredient from the db
-                // not working
+            case R.id.action_remove_ingredient:
+                // Remove this ingredient from the db
                 sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
 
+                // Remove from listview
+                ingredientArrayList.remove(info.position);
+                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
                 return true;
         }
         return false;
@@ -101,8 +107,8 @@ public class IngredientsFragment extends ListFragment {
         rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         try {
-            final Button addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
-            final EditText ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
+            addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
+            ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
 
             addIngredientButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,26 +137,86 @@ public class IngredientsFragment extends ListFragment {
         return rootView;
     }
 
-    @Override
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater menuInflater = mode.getMenuInflater();
+            menuInflater.inflate(R.menu.ingredient_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_remove_ingredient:
+                    Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+    };
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemLongClick");
+
+                if (mActionMode != null) {
+                    return false;
+                } else {
+                    // Start the CAB using the ActionMode.Callback
+                    mActionMode = getActivity().startActionMode(mActionModeCallback);
+                    Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
+                    view.setSelected(true);
+                    return true;
+                }
+            }
+        });
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(),
+                    "Ingredient #" + position + " clicked",
+                    Toast.LENGTH_SHORT).show();
+            }
+        });
+
         setListAdapter(new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
-
-        registerForContextMenu(getListView());
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
-        Toast.makeText(getActivity(),
-                "Ingredient #" + position + " clicked",
-                Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void onListItemClick(ListView l, View v, int position, long id) {
+//        Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
+//        Toast.makeText(getActivity(),
+//                "Ingredient #" + position + " clicked",
+//                Toast.LENGTH_SHORT).show();
+
+//        CheckBox checkBox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+//        Log.d(TAG, v.findViewById(R.id.ingredientCheckbox).getParent().toString());
+//        checkBox.setEnabled(true);
+//        Ingredient ingredient = (Ingredient) checkBox.getTag();
+//        ingredient.setSelected(checkBox.isChecked());
+//    }
 }
 
 //import android.app.Activity;

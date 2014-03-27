@@ -2,6 +2,7 @@ package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
 
+    private SparseBooleanArray mSelectedItemsIds;
     private ArrayList<Ingredient> ingredientArrayList;
 
     public IngredientAdapter(Context context, int resource, ArrayList<Ingredient> ingredientArrayList) {
         super(context, resource, ingredientArrayList);
+        mSelectedItemsIds = new SparseBooleanArray();
         this.ingredientArrayList = ingredientArrayList;
     }
 
@@ -37,7 +40,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolderItem viewHolder;
-        Log.d(TAG, "ConvertView " + String.valueOf(position));
+        //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
         if (convertView == null) {
             // inflate the layout
@@ -80,6 +83,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
         return convertView;
     }
+
 //
 //    @Override
 //    public View getView(int position, View convertView, ViewGroup parent) {
