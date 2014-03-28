@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,10 +32,11 @@ public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
     private View rootView;
-    ActionMode mActionMode;
+
     Button addIngredientButton;
     EditText ingredientEditText;
 
+    private ArrayList<Ingredient> ingredientArrayListChecked;
     private ArrayList<Ingredient> ingredientArrayList;
 
     public static IngredientsFragment newInstance() {
@@ -137,38 +139,6 @@ public class IngredientsFragment extends ListFragment {
         return rootView;
     }
 
-//    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-//        @Override
-//        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//            // Inflate a menu resource providing context menu items
-//            MenuInflater menuInflater = mode.getMenuInflater();
-//            menuInflater.inflate(R.menu.ingredient_menu, menu);
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.action_remove_ingredient:
-//                    Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
-//                    mode.finish();
-//                    return true;
-//                default:
-//                    return false;
-//            }
-//        }
-//
-//        @Override
-//        public void onDestroyActionMode(ActionMode mode) {
-//            mActionMode = null;
-//        }
-//    };
-
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -213,49 +183,35 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d(TAG, "onItemLongClick");
-//
-//                if (mActionMode != null) {
-//                    return false;
-//                } else {
-//                    // Start the CAB using the ActionMode.Callback
-//                    mActionMode = getActivity().startActionMode(mActionModeCallback);
-//                    Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
-//                    view.setSelected(true);
-//                    return true;
-//                }
-//            }
-//        });
-//
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                ((CheckBox) view.getTag(R.id.ingredientCheckbox)).toggle();
+
+                ingredientArrayListChecked = ((IngredientAdapter)getListAdapter()).getIngredientArrayList();
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String title = ((TextView)view.findViewById(R.id.ingredientTitleTextView)).getText().toString();
                 Toast.makeText(getActivity(),
-                    "Ingredient #" + position + " clicked",
-                    Toast.LENGTH_SHORT).show();
+                        "Ingredient #" + position + " clicked " + title,
+                        Toast.LENGTH_SHORT).show();
+
+                for (Ingredient ingredient : ingredientArrayListChecked) {
+                    if (ingredient.isSelected()) {
+                        // push the ingredient onto the list
+                        stringBuffer.append("\n" + ingredient.getIngredientTitle());
+                    }
+                }
+                Toast.makeText(getActivity(), stringBuffer, Toast.LENGTH_LONG).show();
+
+                /* create a intent/bundle of the ingredients to pass to the recipe fragment
+                * which will then use the titles to build a request */
             }
         });
-
         setListAdapter(new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
     }
-
-//    @Override
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//        Log.d(TAG, ingredientArrayList.get(position).getIngredientTitle() + " clicked");
-//        Toast.makeText(getActivity(),
-//                "Ingredient #" + position + " clicked",
-//                Toast.LENGTH_SHORT).show();
-
-//        CheckBox checkBox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
-//        Log.d(TAG, v.findViewById(R.id.ingredientCheckbox).getParent().toString());
-//        checkBox.setEnabled(true);
-//        Ingredient ingredient = (Ingredient) checkBox.getTag();
-//        ingredient.setSelected(checkBox.isChecked());
-//    }
 }
 
 //import android.app.Activity;
