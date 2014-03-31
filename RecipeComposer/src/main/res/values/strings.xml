@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Recipe Composer</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">R.C.</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
@@ -11,5 +9,9 @@
     <string name="add_ingredient_edit_text_hint">Enter an ingredient...</string>
     <string name="add_ingredient_button">Add Ingredient</string>
     <string name="recipes_empty_list_view">No recipes to display.</string>
+
+    <string name="action_refresh">Refresh</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_remove">Remove</string>
 
 </resources>

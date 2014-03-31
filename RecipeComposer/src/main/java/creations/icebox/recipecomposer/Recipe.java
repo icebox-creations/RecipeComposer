@@ -10,7 +10,7 @@ public class Recipe {
     private static final String TAG = "***NEW RECIPE***: ";
 
     public Recipe(String recipeTitle, String recipeURL, String recipeIngredients) {
-        Log.d(TAG, "constructor");
+//        Log.d(TAG, "constructor");
 
         this.recipeTitle = recipeTitle;
         this.recipeURL = recipeURL;

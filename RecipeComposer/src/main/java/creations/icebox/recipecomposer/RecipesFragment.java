@@ -7,6 +7,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -45,7 +48,7 @@ public class RecipesFragment extends ListFragment {
     an object, but you don't want that reference to protect the object
     from the garbage collector.
     */
-    private WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
+    WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
 
     ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
@@ -57,9 +60,19 @@ public class RecipesFragment extends ListFragment {
     public RecipesFragment() {
     }
 
-    public void onNavigationToRecipes(StringBuffer ingredientTitles) {
-        this.ingredientTitles = ingredientTitles;
-        Log.d(TAG, "ingredientTitles in Recipes Fragment: " + this.ingredientTitles);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            ingredientTitles = ((MainActivity) getActivity()).getIngredientTitles();
+            Log.d(TAG, "setUserVisibleHint-> ingredientTitles: " + ingredientTitles);
+
+            if (ingredientTitles != null) {
+                new RecipeDownloaderAsyncTask(this, ingredientTitles).execute();
+            } else {
+                Log.d(TAG, "ingredientTitles is null");
+            }
+        }
     }
 
     @Override
@@ -69,12 +82,12 @@ public class RecipesFragment extends ListFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
 
-        RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this);
-        this.recipeDownloaderAsyncTaskWeakReference
-                = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
+//        RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this, ingredientTitles);
 
-        recipeDownloaderAsyncTask.execute();
-        Log.d(TAG, "execute 1st");
+//        this.recipeDownloaderAsyncTaskWeakReference
+//                = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
+
+//        recipeDownloaderAsyncTask.execute();
 
         return rootView;
     }
@@ -91,26 +104,16 @@ public class RecipesFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
 
         ingredientTitles = new StringBuffer();
 
         /* Configure the fragment instance to be retained on configuration
         * change. Then start the async task */
         setRetainInstance(true);
-     }
 
-    /* Use this to test if the async task is running or not */
-    private boolean isAsyncTaskPendingOrRunning() {
-        try {
-            return this.recipeDownloaderAsyncTaskWeakReference != null
-                    && this.recipeDownloaderAsyncTaskWeakReference.get() != null
-                    && !this.recipeDownloaderAsyncTaskWeakReference.get()
-                        .getStatus().equals(AsyncTask.Status.FINISHED);
-        } catch (NullPointerException e) {
-            Log.d(TAG, "Error in isAsyncTaskPendingOrRunning: " + e.toString());
-            return false;
-        }
+//        setHasOptionsMenu(true);
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -149,14 +152,32 @@ public class RecipesFragment extends ListFragment {
         super.onDetach();
     }
 
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.recipe_actions, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.recipeActionRefresh:
+//                Log.d(TAG, "Refresh init");
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
     /*
     * Use AsyncTask if you need to perform background tasks, but also need
     * to change components on the GUI. Put the background operations in
     * doInBackground. Put the GUI manipulation code in onPostExecute
     * */
-    private class RecipeDownloaderAsyncTask extends AsyncTask<String, String, String> {
+    private class RecipeDownloaderAsyncTask extends AsyncTask<StringBuffer, String, String> {
 
-        private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
+//        private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3";
+        private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
         private String TAG = "***RECIPE DOWNLOADER***: ";
 
         private String recipeTitle = "";
@@ -165,14 +186,23 @@ public class RecipesFragment extends ListFragment {
 
         private WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
-        private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment) {
-            this.recipesFragmentWeakReference
-                    = new WeakReference<RecipesFragment>(recipesFragment);
+        private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles) {
+
+            recipePuppyURL += ingredientTitles;
+            Log.d(TAG, "URL now = " + recipePuppyURL);
+
+//            if (ingredientTitles != null) {
+//                Log.d(TAG, "RecipeDownloaderAsyncTask constructor; ingredientTitles = " + ingredientTitles.toString());
+//            } else {
+//                Log.d(TAG, "RecipeDownloaderAsyncTask constructor; ingredientTitles = null");
+//            }
+
+//            this.recipesFragmentWeakReference
+//                    = new WeakReference<RecipesFragment>(recipesFragment);
         }
 
         @Override
-        protected String doInBackground(String... strings) {
-
+        protected String doInBackground(StringBuffer... params) {
             DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new BasicHttpParams());
             HttpPost httpPost = new HttpPost(recipePuppyURL);
             httpPost.setHeader("Content-type", "application/json");
@@ -217,6 +247,9 @@ public class RecipesFragment extends ListFragment {
             // Holds Key / Value pairs from a JSON source
             JSONObject jsonObject;
 
+            // Remove previous entries
+            recipeList.clear();
+
             try {
                 Log.v("JSONParser RESULT: ", queryResult);
 
@@ -239,10 +272,6 @@ public class RecipesFragment extends ListFragment {
 
                         recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients));
 
-//                        Log.d("Title: ", recipeTitle);
-//                        Log.d("URL: ", recipeURL);
-//                        Log.d("Ingredients List: ", recipeIngredients);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -251,6 +280,12 @@ public class RecipesFragment extends ListFragment {
             } catch (JSONException je) {
                 je.printStackTrace();
             }
+
+            StringBuffer tempList = new StringBuffer();
+            for (Recipe aRecipeList : recipeList) {
+                tempList.append("\n" + aRecipeList.getRecipeTitle());
+            }
+            Log.d(TAG, "recipeList = " + tempList);
 
             return queryResult;
         }
@@ -264,15 +299,11 @@ public class RecipesFragment extends ListFragment {
 //            Log.d(TAG, "URL: " + recipeList.get(0).getRecipeURL());
 //            Log.d(TAG, "Ingredients: " + recipeList.get(0).getRecipeIngredients());
 
-            if (this.recipesFragmentWeakReference.get() != null) {
+//            if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");
 
-                // if the list view doesnt show up, confirm th context of the list view here:
-                ListView myList= getListView();
-                myList.setAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item,recipeList));
-
-//                setListAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList));
-            }
+                setListAdapter(new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList));
+//            }
 
         }
     }

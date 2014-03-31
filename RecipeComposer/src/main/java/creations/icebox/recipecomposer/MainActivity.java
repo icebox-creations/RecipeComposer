@@ -35,7 +35,9 @@ public class MainActivity extends ActionBarActivity
 
     StringBuffer ingredientTitles;
 
-    RecipesFragment recipesFragment;
+    public StringBuffer getIngredientTitles() {
+        return ingredientTitles;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class MainActivity extends ActionBarActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsPagerAdapter);
 
+//        mViewPager.setOffscreenPageLimit(1);
+
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
@@ -83,16 +87,13 @@ public class MainActivity extends ActionBarActivity
                             .setText(mTabsPagerAdapter.getPageTitle(i, getApplicationContext()))
                             .setTabListener(this));
         }
+
+
 //        if (savedInstanceState != null) {
 //            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 //        }
     }
 
-    /**
-     * Save all appropriate fragment state.
-     *
-     * @param outState
-     */
 //    @Override
 //    protected void onSaveInstanceState(Bundle outState) {
 //        outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
@@ -103,8 +104,8 @@ public class MainActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -123,8 +124,9 @@ public class MainActivity extends ActionBarActivity
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         Log.d(TAG, fragmentTransaction.toString());
 
-
-        mViewPager.setCurrentItem(tab.getPosition());
+        if (mViewPager.getCurrentItem() != tab.getPosition()) {
+            mViewPager.setCurrentItem(tab.getPosition());
+        }
         if (tab.getPosition() == 1) {
             //make recipe requests using the ingredients titles..
             Log.v(TAG, "onTabSelected clicked: recipe tab");
@@ -148,12 +150,8 @@ public class MainActivity extends ActionBarActivity
      * @param ingredientTitles
      */
     @Override
-    public void onNavigationToRecipes(StringBuffer ingredientTitles) {
+    public void onPageChange(StringBuffer ingredientTitles) {
         this.ingredientTitles = ingredientTitles;
         Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, this.ingredientTitles.toString());
-
-        recipesFragment = new RecipesFragment();
-        recipesFragment.onNavigationToRecipes(ingredientTitles);
     }
 }

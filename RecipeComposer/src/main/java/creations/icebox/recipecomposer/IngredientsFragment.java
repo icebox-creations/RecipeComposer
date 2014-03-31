@@ -1,11 +1,8 @@
 package creations.icebox.recipecomposer;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -26,10 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
-import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
 
 public class IngredientsFragment extends ListFragment {
@@ -48,7 +43,7 @@ public class IngredientsFragment extends ListFragment {
     private ArrayList<Ingredient> ingredientArrayList;
 
     public interface OnPageChangeListener {
-        public void onNavigationToRecipes(StringBuffer ingredientTitles);
+        public void onPageChange(StringBuffer ingredientTitles);
     }
 
     public static IngredientsFragment newInstance() {
@@ -81,7 +76,7 @@ public class IngredientsFragment extends ListFragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.ingredient_menu, menu);
+        menuInflater.inflate(R.menu.ingredient_cab, menu);
     }
 
     @Override
@@ -177,7 +172,7 @@ public class IngredientsFragment extends ListFragment {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater menuInflater = mode.getMenuInflater();
-                menuInflater.inflate(R.menu.ingredient_menu, menu);
+                menuInflater.inflate(R.menu.ingredient_cab, menu);
                 return true;
             }
 
@@ -213,6 +208,12 @@ public class IngredientsFragment extends ListFragment {
 
                 ingredientArrayListChecked = ((IngredientAdapter)getListAdapter()).getIngredientArrayList();
 
+//                StringBuffer tempList = new StringBuffer();
+//                for (Ingredient i : ingredientArrayListChecked) {
+//                    tempList.append(i.getIngredientTitle());
+//                }
+//                Log.d(TAG, "checked list = " + tempList);
+
                 ingredientTitles.delete(0, ingredientTitles.length());
 
                 String title = ((TextView)view.findViewById(R.id.ingredientTitleTextView)).getText().toString();
@@ -225,15 +226,17 @@ public class IngredientsFragment extends ListFragment {
                         // push the ingredient onto the list
                         if (ingredientTitles.length() == 0) {
                             ingredientTitles.append(ingredient.getIngredientTitle());
+                            Log.d(TAG, ingredient.getIngredientTitle());
                         } else if (ingredientTitles.length() > 0) {
                             ingredientTitles.append("," + ingredient.getIngredientTitle());
+                            Log.d(TAG, "," + ingredient.getIngredientTitle());
                         }
                     }
                 }
                 Toast.makeText(getActivity(), ingredientTitles, Toast.LENGTH_SHORT).show();
 
                 // Send the event to the host activity
-                mCallback.onNavigationToRecipes(ingredientTitles);
+                mCallback.onPageChange(ingredientTitles);
             }
         });
         setListAdapter(new IngredientAdapter(getActivity(),
