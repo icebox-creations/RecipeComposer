@@ -37,6 +37,7 @@ public class RecipesFragment extends ListFragment {
     private static final String TAG = "***RECIPES FRAGMENT: ";
 
     StringBuffer ingredientTitles;
+    String query;
 
     /*
     A weak reference is used so that the fragment and the async task
@@ -65,10 +66,11 @@ public class RecipesFragment extends ListFragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             ingredientTitles = ((MainActivity) getActivity()).getIngredientTitles();
-            Log.d(TAG, "setUserVisibleHint-> ingredientTitles: " + ingredientTitles);
+            query = ((MainActivity) getActivity()).getQuery();
+            Log.d(TAG, "setUserVisibleHint-> ingredientTitles: " + ingredientTitles + " | query: " + query);
 
-            if (ingredientTitles != null) {
-                new RecipeDownloaderAsyncTask(this, ingredientTitles).execute();
+            if (ingredientTitles != null || query != null) {
+                new RecipeDownloaderAsyncTask(this, ingredientTitles, query).execute();
             } else {
                 Log.d(TAG, "ingredientTitles is null");
             }
@@ -186,9 +188,9 @@ public class RecipesFragment extends ListFragment {
 
         private WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
-        private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles) {
+        private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query) {
 
-            recipePuppyURL += ingredientTitles;
+            recipePuppyURL = recipePuppyURL + ingredientTitles + "&q=" + query;
             Log.d(TAG, "URL now = " + recipePuppyURL);
 
 //            if (ingredientTitles != null) {

@@ -34,9 +34,13 @@ public class MainActivity extends ActionBarActivity
     private static final String TAG = "***MAIN ACTIVITY: ";
 
     StringBuffer ingredientTitles;
+    String query;
 
     public StringBuffer getIngredientTitles() {
         return ingredientTitles;
+    }
+    public String getQuery() {
+        return query;
     }
 
     @Override
@@ -150,8 +154,14 @@ public class MainActivity extends ActionBarActivity
      * @param ingredientTitles
      */
     @Override
-    public void onPageChange(StringBuffer ingredientTitles) {
-        this.ingredientTitles = ingredientTitles;
-        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles, Toast.LENGTH_SHORT).show();
+    public void onPageChange(StringBuffer ingredientTitles, String query) {
+        try {
+            this.ingredientTitles = ingredientTitles;
+            this.query = query;
+        } catch (Exception e) {
+            Log.d(TAG, e.toString());
+        }
+        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles +
+                "\n" + "query = " + query, Toast.LENGTH_SHORT).show();
     }
 }

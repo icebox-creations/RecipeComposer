@@ -3,6 +3,8 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -35,7 +37,11 @@ public class IngredientsFragment extends ListFragment {
     Button addIngredientButton;
     EditText ingredientEditText;
 
+    Button clearQueryButton;
+    EditText queryEditText;
+
     StringBuffer ingredientTitles;
+    String query;
 
     OnPageChangeListener mCallback;
 
@@ -43,7 +49,7 @@ public class IngredientsFragment extends ListFragment {
     private ArrayList<Ingredient> ingredientArrayList;
 
     public interface OnPageChangeListener {
-        public void onPageChange(StringBuffer ingredientTitles);
+        public void onPageChange(StringBuffer ingredientTitles, String query);
     }
 
     public static IngredientsFragment newInstance() {
@@ -58,6 +64,22 @@ public class IngredientsFragment extends ListFragment {
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
         ingredientTitles = new StringBuffer();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        try {
+            if (!isVisibleToUser) {
+                Log.d(TAG, "isVisibleToUser = false");
+                mCallback.onPageChange(ingredientTitles, query);
+            } else {
+                Log.d(TAG, "isVisibleToUser = true");
+            }
+        } catch (NullPointerException e) {
+            Log.d(TAG, "setUserVisibleHint-> " + e.toString());
+        }
     }
 
     @Override
@@ -124,8 +146,11 @@ public class IngredientsFragment extends ListFragment {
 
 
         try {
-            addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
+            addIngredientButton = (Button) rootView.findViewById(R.id.addIngredientButton);
             ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
+
+            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
+            queryEditText = (EditText) rootView.findViewById(R.id.queryEditText);
 
             addIngredientButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -148,6 +173,38 @@ public class IngredientsFragment extends ListFragment {
                     }
                 }
             });
+
+            queryEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    query = queryEditText.getText().toString();
+                    Log.d(TAG, "addTextChangedListener-> query: " + query);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            clearQueryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "clear query button clicked!");
+                    try {
+                        if (queryEditText.getText().length() > 0) {
+                            queryEditText.setText("");
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "clearQueryButton: " + e.toString());
+                    }
+                }
+            });
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateView: " + e.toString());
         }
@@ -156,6 +213,8 @@ public class IngredientsFragment extends ListFragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Log.d(TAG, "onActivityCreated");
 
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
@@ -236,7 +295,7 @@ public class IngredientsFragment extends ListFragment {
                 Toast.makeText(getActivity(), ingredientTitles, Toast.LENGTH_SHORT).show();
 
                 // Send the event to the host activity
-                mCallback.onPageChange(ingredientTitles);
+//                mCallback.onPageChange(ingredientTitles, query);
             }
         });
         setListAdapter(new IngredientAdapter(getActivity(),
