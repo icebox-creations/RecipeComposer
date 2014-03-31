@@ -1,8 +1,11 @@
 package creations.icebox.recipecomposer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -26,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
+import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
 
 public class IngredientsFragment extends ListFragment {
@@ -36,8 +40,16 @@ public class IngredientsFragment extends ListFragment {
     Button addIngredientButton;
     EditText ingredientEditText;
 
+    StringBuffer ingredientTitles;
+
+    OnPageChangeListener mCallback;
+
     private ArrayList<Ingredient> ingredientArrayListChecked;
     private ArrayList<Ingredient> ingredientArrayList;
+
+    public interface OnPageChangeListener {
+        public void onNavigationToRecipes(StringBuffer ingredientTitles);
+    }
 
     public static IngredientsFragment newInstance() {
         Log.d(TAG, "newInstance of IngredientsFragment");
@@ -50,18 +62,19 @@ public class IngredientsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
+        ingredientTitles = new StringBuffer();
     }
 
     @Override
     public void onAttach(Activity activity) {
         Log.d(TAG, "onAttach");
         super.onAttach(activity);
-    }
-
-    @Override
-    public void onDetach() {
-        Log.d(TAG, "onDetach");
-        super.onDetach();
+        if (activity instanceof OnPageChangeListener) {
+            mCallback = (OnPageChangeListener) activity;
+        } else {
+            throw new ClassCastException(activity.toString()
+                    + " must implement IngredientsFragment.OnNavigationListener");
+        }
     }
 
     @Override
@@ -97,6 +110,12 @@ public class IngredientsFragment extends ListFragment {
     }
 
     @Override
+    public void onDetach() {
+        Log.d(TAG, "onDetach");
+        super.onDetach();
+    }
+
+    @Override
     public void onPause() {
         Log.d(TAG, "onPause");
         sqLiteDAO.close();
@@ -107,6 +126,7 @@ public class IngredientsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
+
 
         try {
             addIngredientButton = (Button) rootView.findViewById(R.id.addIngredient);
@@ -143,6 +163,7 @@ public class IngredientsFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         ingredientArrayList = sqLiteDAO.getAllIngredients();
+
 
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
         ListView listView = getListView();
@@ -186,12 +207,14 @@ public class IngredientsFragment extends ListFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick");
 
                 ((CheckBox) view.getTag(R.id.ingredientCheckbox)).toggle();
 
                 ingredientArrayListChecked = ((IngredientAdapter)getListAdapter()).getIngredientArrayList();
 
-                StringBuffer stringBuffer = new StringBuffer();
+                ingredientTitles.delete(0, ingredientTitles.length());
+
                 String title = ((TextView)view.findViewById(R.id.ingredientTitleTextView)).getText().toString();
                 Toast.makeText(getActivity(),
                         "Ingredient #" + position + " clicked " + title,
@@ -200,13 +223,17 @@ public class IngredientsFragment extends ListFragment {
                 for (Ingredient ingredient : ingredientArrayListChecked) {
                     if (ingredient.isSelected()) {
                         // push the ingredient onto the list
-                        stringBuffer.append("\n" + ingredient.getIngredientTitle());
+                        if (ingredientTitles.length() == 0) {
+                            ingredientTitles.append(ingredient.getIngredientTitle());
+                        } else if (ingredientTitles.length() > 0) {
+                            ingredientTitles.append("," + ingredient.getIngredientTitle());
+                        }
                     }
                 }
-                Toast.makeText(getActivity(), stringBuffer, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), ingredientTitles, Toast.LENGTH_SHORT).show();
 
-                /* create a intent/bundle of the ingredients to pass to the recipe fragment
-                * which will then use the titles to build a request */
+                // Send the event to the host activity
+                mCallback.onNavigationToRecipes(ingredientTitles);
             }
         });
         setListAdapter(new IngredientAdapter(getActivity(),

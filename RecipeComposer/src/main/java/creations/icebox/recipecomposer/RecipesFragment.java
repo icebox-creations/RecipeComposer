@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class RecipesFragment extends ListFragment {
 
     private static final String TAG = "***RECIPES FRAGMENT: ";
 
+    StringBuffer ingredientTitles;
+
     /*
     A weak reference is used so that the fragment and the async task
     are loosely coupled. If a weak reference isn't used, the async
@@ -54,6 +57,11 @@ public class RecipesFragment extends ListFragment {
     public RecipesFragment() {
     }
 
+    public void onNavigationToRecipes(StringBuffer ingredientTitles) {
+        this.ingredientTitles = ingredientTitles;
+        Log.d(TAG, "ingredientTitles in Recipes Fragment: " + this.ingredientTitles);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,6 +77,46 @@ public class RecipesFragment extends ListFragment {
         Log.d(TAG, "execute 1st");
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Log.d(TAG, recipeList.get(position).getRecipeTitle() + " clicked");
+        Toast.makeText(getActivity(),
+                "Recipe #" + position + " clicked",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+
+        ingredientTitles = new StringBuffer();
+
+        /* Configure the fragment instance to be retained on configuration
+        * change. Then start the async task */
+        setRetainInstance(true);
+     }
+
+    /* Use this to test if the async task is running or not */
+    private boolean isAsyncTaskPendingOrRunning() {
+        try {
+            return this.recipeDownloaderAsyncTaskWeakReference != null
+                    && this.recipeDownloaderAsyncTaskWeakReference.get() != null
+                    && !this.recipeDownloaderAsyncTaskWeakReference.get()
+                        .getStatus().equals(AsyncTask.Status.FINISHED);
+        } catch (NullPointerException e) {
+            Log.d(TAG, "Error in isAsyncTaskPendingOrRunning: " + e.toString());
+            return false;
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, "onAttach");
+        super.onAttach(activity);
     }
 
     @Override
@@ -93,44 +141,6 @@ public class RecipesFragment extends ListFragment {
     public void onStop() {
         Log.d(TAG, "onStop");
         super.onStop();
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Log.d(TAG, recipeList.get(position).getRecipeTitle() + " clicked");
-        Toast.makeText(getActivity(),
-                "Recipe #" + position + " clicked",
-                Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-
-        /* Configure the fragment instance to be retained on configuration
-        * change. Then start the async task */
-        setRetainInstance(true);
-     }
-
-    /* Use this to test if the async task is running or not */
-    private boolean isAsyncTaskPendingOrRunning() {
-        try {
-            return this.recipeDownloaderAsyncTaskWeakReference != null
-                    && this.recipeDownloaderAsyncTaskWeakReference.get() != null
-                    && !this.recipeDownloaderAsyncTaskWeakReference.get()
-                        .getStatus().equals(AsyncTask.Status.FINISHED);
-        } catch (NullPointerException e) {
-            Log.d(TAG, "Error in isAsyncTaskPendingOrRunning: " + e.toString());
-            return false;
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        Log.d(TAG, "onAttach");
-        super.onAttach(activity);
     }
 
     @Override

@@ -9,10 +9,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity
+        implements ActionBar.TabListener, IngredientsFragment.OnPageChangeListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,6 +33,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     private static final String TAG = "***MAIN ACTIVITY: ";
 
+    StringBuffer ingredientTitles;
+
+    RecipesFragment recipesFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -48,7 +54,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         Log.d(TAG, "set up tab adapter");
-        mTabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mTabsPagerAdapter = new TabsPagerAdapter(this, getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         Log.d(TAG, "set up the ViewPager");
@@ -61,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected");
                 actionBar.setSelectedNavigationItem(position);
             }
         });
@@ -76,7 +83,20 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mTabsPagerAdapter.getPageTitle(i, getApplicationContext()))
                             .setTabListener(this));
         }
+//        if (savedInstanceState != null) {
+//            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
+//        }
     }
+
+    /**
+     * Save all appropriate fragment state.
+     *
+     * @param outState
+     */
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        outState.putInt("tab", getActionBar().getSelectedNavigationIndex());
+//    }
 
 
     @Override
@@ -101,27 +121,39 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-
-        //  if the fragment is recipe fragment:
-        //      tell it to execute list view handler:
-        //      (Which makes the api call and populates list view)
-        //      (We need access to the recipe fragment...)
-        //  else if ...
-        //
-        Log.d("Derp: ", fragmentTransaction.toString());
+        Log.d(TAG, fragmentTransaction.toString());
 
 
         mViewPager.setCurrentItem(tab.getPosition());
-        Log.v(TAG, "onTabSelected clicked");
+        if (tab.getPosition() == 1) {
+            //make recipe requests using the ingredients titles..
+            Log.v(TAG, "onTabSelected clicked: recipe tab");
+        } else if (tab.getPosition() == 0) {
+            Log.v(TAG, "onTabSelected clicked: ingredients tab");
+        }
     }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    /**
+     * Listen to OnPageChangeListener event from Ingredients Fragment and forward to Recipes Fragment
+     * @param ingredientTitles
+     */
+    @Override
+    public void onNavigationToRecipes(StringBuffer ingredientTitles) {
+        this.ingredientTitles = ingredientTitles;
+        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, this.ingredientTitles.toString());
+
+        recipesFragment = new RecipesFragment();
+        recipesFragment.onNavigationToRecipes(ingredientTitles);
     }
 }

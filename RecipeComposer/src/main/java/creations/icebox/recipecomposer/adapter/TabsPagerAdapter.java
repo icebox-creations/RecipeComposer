@@ -2,6 +2,7 @@ package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
@@ -22,8 +23,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     static final String TAB = "***TABS PAGER ADAPTER***";
     Context mContext;
 
-    public TabsPagerAdapter(FragmentManager fm) {
+    public TabsPagerAdapter(FragmentActivity fragmentActivity, FragmentManager fm) {
         super(fm);
+        mContext = fragmentActivity;
     }
 
     @Override
