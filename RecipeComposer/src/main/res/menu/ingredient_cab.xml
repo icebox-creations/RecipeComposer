@@ -4,6 +4,7 @@
 
     <item
         android:id="@+id/action_remove_ingredient"
+        android:icon="@drawable/ic_action_discard"
         android:title="@string/action_remove"
         android:showAsAction="always" />
 

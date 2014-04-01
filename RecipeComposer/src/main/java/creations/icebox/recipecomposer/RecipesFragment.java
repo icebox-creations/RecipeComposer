@@ -190,14 +190,14 @@ public class RecipesFragment extends ListFragment {
 
         private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query) {
 
-            recipePuppyURL = recipePuppyURL + ingredientTitles + "&q=" + query;
+            if (ingredientTitles == null) {
+                recipePuppyURL = recipePuppyURL + "&q=" + query;
+            } else if (query == null) {
+                recipePuppyURL = recipePuppyURL + ingredientTitles;
+            } else {
+                recipePuppyURL = recipePuppyURL + ingredientTitles + "&q=" + query;
+            }
             Log.d(TAG, "URL now = " + recipePuppyURL);
-
-//            if (ingredientTitles != null) {
-//                Log.d(TAG, "RecipeDownloaderAsyncTask constructor; ingredientTitles = " + ingredientTitles.toString());
-//            } else {
-//                Log.d(TAG, "RecipeDownloaderAsyncTask constructor; ingredientTitles = null");
-//            }
 
 //            this.recipesFragmentWeakReference
 //                    = new WeakReference<RecipesFragment>(recipesFragment);
@@ -268,9 +268,9 @@ public class RecipesFragment extends ListFragment {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
                         // Pull items from the array
-                        recipeTitle = recipe.getString("title").replace("\n","");
-                        recipeURL = recipe.getString("href");
-                        recipeIngredients = recipe.getString("ingredients").replace("\n", "");
+                        recipeTitle = recipe.getString("title").trim();
+                        recipeURL = recipe.getString("href").trim();
+                        recipeIngredients = recipe.getString("ingredients").trim();
 
                         recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients));
 

@@ -131,12 +131,12 @@ public class MainActivity extends ActionBarActivity
         if (mViewPager.getCurrentItem() != tab.getPosition()) {
             mViewPager.setCurrentItem(tab.getPosition());
         }
-        if (tab.getPosition() == 1) {
-            //make recipe requests using the ingredients titles..
-            Log.v(TAG, "onTabSelected clicked: recipe tab");
-        } else if (tab.getPosition() == 0) {
-            Log.v(TAG, "onTabSelected clicked: ingredients tab");
-        }
+//        if (tab.getPosition() == 1) {
+//            //make recipe requests using the ingredients titles..
+//            Log.v(TAG, "onTabSelected clicked: recipe tab");
+//        } else if (tab.getPosition() == 0) {
+//            Log.v(TAG, "onTabSelected clicked: ingredients tab");
+//        }
     }
 
     @Override

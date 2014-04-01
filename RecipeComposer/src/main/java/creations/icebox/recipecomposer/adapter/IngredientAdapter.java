@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.Ingredient;
 import creations.icebox.recipecomposer.R;
+import creations.icebox.recipecomposer.helper.SQLiteDAO;
 
 /** Follows the ViewHolder Design Pattern */
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {
@@ -24,10 +27,16 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
 
     private ArrayList<Ingredient> ingredientArrayList;
+    private StringBuffer ingredientTitles;
+
+    public StringBuffer getIngredientTitles() {
+        return ingredientTitles;
+    }
 
     public IngredientAdapter(Context context, int resource, ArrayList<Ingredient> ingredientArrayList) {
         super(context, resource, ingredientArrayList);
         this.ingredientArrayList = ingredientArrayList;
+        ingredientTitles = new StringBuffer();
     }
 
     /** ViewHolder: caches our TextView and CheckBox */
@@ -43,7 +52,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolderItem viewHolder;
+        final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
         if (convertView == null) {
@@ -61,26 +70,70 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
             convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
-            viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
+            viewHolder.ingredientTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CheckBox checkBox = (CheckBox) v;
-                    Ingredient ingredient = (Ingredient) checkBox.getTag();
-                    Toast.makeText(getContext(), "Clicked on CheckBox: " + checkBox.isChecked(),
-                            Toast.LENGTH_SHORT).show();
-                    ingredient.setSelected(checkBox.isChecked());
+                    Log.d(TAG, "TextView was clicked");
+
+                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
+
+                    if (viewHolder.ingredientCheckBox.isChecked()) {
+                        Log.d(TAG, "checked so uncheck");
+                        ingredient.setSelected(false);
+                    } else {
+                        Log.d(TAG, "not checked so check");
+                        ingredient.setSelected(true);
+                    }
+                    viewHolder.ingredientCheckBox.toggle();
+
+                    ingredientTitles.delete(0, ingredientTitles.length());
+
+                    for (Ingredient i : ingredientArrayList) {
+                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
+                        if (i.isSelected()) {
+                            if (ingredientTitles.length() == 0) {
+                                ingredientTitles.append(i.getIngredientTitle());
+                            } else if (ingredientTitles.length() > 0) {
+                                ingredientTitles.append("," + i.getIngredientTitle());
+                            }
+                        }
+                    }
+                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
                 }
             });
 
-            viewHolder.ingredientCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Toast.makeText(getContext(), "CheckBox changed to " + isChecked,
-                            Toast.LENGTH_SHORT).show();
-                    Ingredient ingredient = (Ingredient) buttonView.getTag();
-                    ingredient.setSelected(isChecked);
+                public void onClick(View v) {
+                    Log.d(TAG, "CheckBox was clicked");
+                    CheckBox checkBox = (CheckBox) v;
+                    Ingredient ingredient = (Ingredient) checkBox.getTag();
+                    ingredient.setSelected(checkBox.isChecked());
+
+                    ingredientTitles.delete(0, ingredientTitles.length());
+
+                    for (Ingredient i : ingredientArrayList) {
+                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
+                        if (i.isSelected()) {
+                            if (ingredientTitles.length() == 0) {
+                                ingredientTitles.append(i.getIngredientTitle());
+                            } else if (ingredientTitles.length() > 0) {
+                                ingredientTitles.append("," + i.getIngredientTitle());
+                            }
+                        }
+                    }
+                    Log.d(TAG, "ingredient titles in Checkbox: = " + ingredientTitles);
                 }
             });
+
+//            viewHolder.ingredientCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    Log.d(TAG, "checkbox changed to " + isChecked);
+//                    Ingredient ingredient = (Ingredient) buttonView.getTag();
+//                    ingredient.setSelected(isChecked);
+//                }
+//            });
 
         } else {
             // we've just avoided calling findViewById() on the resource file every time

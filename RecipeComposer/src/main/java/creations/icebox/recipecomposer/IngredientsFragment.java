@@ -40,13 +40,14 @@ public class IngredientsFragment extends ListFragment {
     Button clearQueryButton;
     EditText queryEditText;
 
-    StringBuffer ingredientTitles;
     String query;
 
     OnPageChangeListener mCallback;
 
     private ArrayList<Ingredient> ingredientArrayListChecked;
     private ArrayList<Ingredient> ingredientArrayList;
+
+    IngredientAdapter ingredientAdapter;
 
     public interface OnPageChangeListener {
         public void onPageChange(StringBuffer ingredientTitles, String query);
@@ -63,7 +64,6 @@ public class IngredientsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
-        ingredientTitles = new StringBuffer();
     }
 
     @Override
@@ -72,8 +72,8 @@ public class IngredientsFragment extends ListFragment {
 
         try {
             if (!isVisibleToUser) {
+                mCallback.onPageChange(ingredientAdapter.getIngredientTitles(), query);
                 Log.d(TAG, "isVisibleToUser = false");
-                mCallback.onPageChange(ingredientTitles, query);
             } else {
                 Log.d(TAG, "isVisibleToUser = true");
             }
@@ -94,30 +94,30 @@ public class IngredientsFragment extends ListFragment {
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.ingredient_cab, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.action_remove_ingredient:
-                // Remove this ingredient from the db
-                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
-
-                // Remove from listview
-                ingredientArrayList.remove(info.position);
-                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
-                return true;
-        }
-        return false;
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater menuInflater = getActivity().getMenuInflater();
+//        menuInflater.inflate(R.menu.ingredient_cab, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info =
+//                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//
+//        switch (item.getItemId()) {
+//            case R.id.action_remove_ingredient:
+//                // Remove this ingredient from the db
+//                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
+//
+//                // Remove from listview
+//                ingredientArrayList.remove(info.position);
+//                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
+//                return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public void onResume() {
@@ -218,14 +218,19 @@ public class IngredientsFragment extends ListFragment {
 
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
-
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
         ListView listView = getListView();
+        ingredientAdapter = new IngredientAdapter(getActivity(),
+                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
+        listView.setAdapter(ingredientAdapter);
+
+//        setListAdapter(new IngredientAdapter(getActivity(),
+//                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
+
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
             }
 
             @Override
@@ -242,9 +247,13 @@ public class IngredientsFragment extends ListFragment {
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.action_remove_ingredient:
                         Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
+//                        sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
+//                        ingredientArrayList.remove(info.position);
+//                        ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
                         mode.finish();
                         return true;
                     default:
@@ -258,48 +267,47 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick");
-
-                ((CheckBox) view.getTag(R.id.ingredientCheckbox)).toggle();
-
-                ingredientArrayListChecked = ((IngredientAdapter)getListAdapter()).getIngredientArrayList();
-
-//                StringBuffer tempList = new StringBuffer();
-//                for (Ingredient i : ingredientArrayListChecked) {
-//                    tempList.append(i.getIngredientTitle());
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Log.d(TAG, "onItemClick");
+//
+//                ((CheckBox) view.getTag(R.id.ingredientCheckbox)).toggle();
+//
+//                ingredientArrayListChecked = ((IngredientAdapter)getListAdapter()).getIngredientArrayList();
+//
+//                ingredientTitles.delete(0, ingredientTitles.length());
+//
+//                String title = ((TextView)view.findViewById(R.id.ingredientTitleTextView)).getText().toString();
+//                Toast.makeText(getActivity(),
+//                        "Ingredient #" + position + " clicked " + title,
+//                        Toast.LENGTH_SHORT).show();
+//
+//                for (Ingredient ingredient : ingredientArrayListChecked) {
+//
+//                    ingredient.setIngredientTitle(ingredient.getIngredientTitle().trim().replace(" ", "+"));
+//                    Log.d(TAG, ingredient.getIngredientTitle());
+//
+//                    if (ingredient.isSelected()) {
+//
+//                        if (ingredientTitles.length() == 0) {
+//
+//                            ingredientTitles.append(ingredient.getIngredientTitle());
+//                            Log.d(TAG, "ingredientTitle = " + ingredient.getIngredientTitle());
+//
+//                        } else if (ingredientTitles.length() > 0) {
+//                            ingredientTitles.append("," + ingredient.getIngredientTitle());
+//                            Log.d(TAG, "," + ingredient.getIngredientTitle());
+//                        }
+//                    }
 //                }
-//                Log.d(TAG, "checked list = " + tempList);
+//                Toast.makeText(getActivity(), ingredientTitles, Toast.LENGTH_SHORT).show();
+//
+//                // Send the event to the host activity
+////                mCallback.onPageChange(ingredientTitles, query);
+//            }
+//        });
 
-                ingredientTitles.delete(0, ingredientTitles.length());
-
-                String title = ((TextView)view.findViewById(R.id.ingredientTitleTextView)).getText().toString();
-                Toast.makeText(getActivity(),
-                        "Ingredient #" + position + " clicked " + title,
-                        Toast.LENGTH_SHORT).show();
-
-                for (Ingredient ingredient : ingredientArrayListChecked) {
-                    if (ingredient.isSelected()) {
-                        // push the ingredient onto the list
-                        if (ingredientTitles.length() == 0) {
-                            ingredientTitles.append(ingredient.getIngredientTitle());
-                            Log.d(TAG, ingredient.getIngredientTitle());
-                        } else if (ingredientTitles.length() > 0) {
-                            ingredientTitles.append("," + ingredient.getIngredientTitle());
-                            Log.d(TAG, "," + ingredient.getIngredientTitle());
-                        }
-                    }
-                }
-                Toast.makeText(getActivity(), ingredientTitles, Toast.LENGTH_SHORT).show();
-
-                // Send the event to the host activity
-//                mCallback.onPageChange(ingredientTitles, query);
-            }
-        });
-        setListAdapter(new IngredientAdapter(getActivity(),
-                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
     }
 }
 
