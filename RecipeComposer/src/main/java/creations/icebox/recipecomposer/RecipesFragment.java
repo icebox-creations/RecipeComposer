@@ -1,6 +1,8 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -70,7 +72,12 @@ public class RecipesFragment extends ListFragment {
             Log.d(TAG, "setUserVisibleHint-> ingredientTitles: " + ingredientTitles + " | query: " + query);
 
             if (ingredientTitles != null || query != null) {
-                new RecipeDownloaderAsyncTask(this, ingredientTitles, query).execute();
+                RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this, ingredientTitles, query);
+                this.recipeDownloaderAsyncTaskWeakReference
+                    = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
+                recipeDownloaderAsyncTask.execute();
+
+//                new RecipeDownloaderAsyncTask(this, ingredientTitles, query).execute();
             } else {
                 Log.d(TAG, "ingredientTitles is null");
             }
@@ -101,6 +108,10 @@ public class RecipesFragment extends ListFragment {
         Toast.makeText(getActivity(),
                 "Recipe #" + position + " clicked",
                 Toast.LENGTH_SHORT).show();
+
+        Uri uriUrl = Uri.parse(recipeList.get(position).getRecipeURL());
+        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+        startActivity(launchBrowser);
     }
 
     @Override
@@ -186,7 +197,7 @@ public class RecipesFragment extends ListFragment {
         private String recipeURL = "";
         private String recipeIngredients = "";
 
-        private WeakReference<RecipesFragment> recipesFragmentWeakReference;
+        WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
         private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query) {
 
@@ -199,8 +210,8 @@ public class RecipesFragment extends ListFragment {
             }
             Log.d(TAG, "URL now = " + recipePuppyURL);
 
-//            this.recipesFragmentWeakReference
-//                    = new WeakReference<RecipesFragment>(recipesFragment);
+            this.recipesFragmentWeakReference
+                    = new WeakReference<RecipesFragment>(recipesFragment);
         }
 
         @Override

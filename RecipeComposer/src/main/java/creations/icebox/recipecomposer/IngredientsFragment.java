@@ -188,7 +188,7 @@ public class IngredientsFragment extends ListFragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
+                    query = query.trim().replace(" ", "+");
                 }
             });
 
