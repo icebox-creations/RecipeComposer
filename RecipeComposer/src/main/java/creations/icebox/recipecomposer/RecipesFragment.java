@@ -344,6 +344,7 @@ public class RecipesFragment extends ListFragment {
 
                 queryResult = stringBuilder.toString();
 
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -361,6 +362,10 @@ public class RecipesFragment extends ListFragment {
 
             // Holds Key / Value pairs from a JSON source
             JSONObject jsonObject;
+
+            if(queryResult == null || queryResult.isEmpty()){
+                return "";
+            }
 
             try {
                 Log.v("JSONParser RESULT: ", queryResult);

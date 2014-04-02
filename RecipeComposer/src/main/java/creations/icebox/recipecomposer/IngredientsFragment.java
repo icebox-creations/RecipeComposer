@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,19 +37,19 @@ public class IngredientsFragment extends ListFragment {
     private SQLiteDAO sqLiteDAO;
     private View rootView;
 
-    Button addIngredientButton;
-    EditText ingredientEditText;
+    Button      addIngredientButton;
+    EditText    ingredientEditText;
 
-    Button clearQueryButton;
-    EditText queryEditText;
+    Button      clearQueryButton;
+    EditText    queryEditText;
+    SearchView  mSearchView; // ingerdient search
 
     String query = new String();
 
     OnPageChangeListener mCallback;
 
-    private ArrayList<Ingredient> ingredientArrayListChecked;
-    private ArrayList<Ingredient> ingredientArrayListCopy;
     private ArrayList<Ingredient> ingredientArrayList;
+    //private ArrayList<Ingredient> ingredientArrayList;
 
     IngredientAdapter ingredientAdapter;
 
@@ -100,30 +102,9 @@ public class IngredientsFragment extends ListFragment {
         }
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater menuInflater = getActivity().getMenuInflater();
-//        menuInflater.inflate(R.menu.ingredient_cab, menu);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info =
-//                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        switch (item.getItemId()) {
-//            case R.id.action_remove_ingredient:
-//                // Remove this ingredient from the db
-//                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
-//
-//                // Remove from listview
-//                ingredientArrayList.remove(info.position);
-//                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
-//                return true;
-//        }
-//        return false;
-//    }
+
+
+
 
     @Override
     public void onResume() {
@@ -146,7 +127,7 @@ public class IngredientsFragment extends ListFragment {
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         try{
-            SearchView mSearchView = (SearchView) searchItem.getActionView();
+            mSearchView = (SearchView) searchItem.getActionView();
             setupSearchView(mSearchView);
 
             if (mSearchView != null) {
@@ -173,8 +154,6 @@ public class IngredientsFragment extends ListFragment {
             Log.d(TAG, e.getLocalizedMessage());
         }
 
-
-
     }
 
     @Override
@@ -199,11 +178,11 @@ public class IngredientsFragment extends ListFragment {
                           && ingredientTitleInputEditText.getText().length() > 0)
                     {
                         ingredientTitle = ingredientTitleInputEditText.getText().toString();
-
                         Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+
                         try {
                             if (ingredient != null) {
-                                ingredientAdapter.add(ingredient);
+                                ingredientAdapter.add(ingredient, mSearchView.getQuery().toString());
                                 ingredientAdapter.notifyDataSetChanged();
                             }
                         } catch (NullPointerException e) {
@@ -258,9 +237,10 @@ public class IngredientsFragment extends ListFragment {
                     if (ingredientEditText.getText().length() > 0) {
                         String ingredientTitle = ingredientEditText.getText().toString();
                         Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+
                         try {
                             if (ingredient != null) {
-                                ingredientAdapter.add(ingredient);
+                                ingredientAdapter.add(ingredient, mSearchView.getQuery().toString());
                                 ingredientAdapter.notifyDataSetChanged();
                             }
                         } catch (NullPointerException e) {
@@ -307,6 +287,8 @@ public class IngredientsFragment extends ListFragment {
                     }
                 }
             });
+
+
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateView: " + e.toString());
         }
@@ -317,7 +299,6 @@ public class IngredientsFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         Log.d(TAG, "onActivityCreated");
-
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
@@ -326,6 +307,8 @@ public class IngredientsFragment extends ListFragment {
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);
         listView.setTextFilterEnabled(true);
+
+
 
 //        setListAdapter(new IngredientAdapter(getActivity(),
 //                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
@@ -367,6 +350,39 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
+        listView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG, "LONG CLICK");
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.ingredient_cab, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.action_remove_ingredient:
+                // Remove this ingredient from the db
+                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
+
+                // Remove from listview
+                ingredientArrayList.remove(info.position);
+                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
+                return true;
+        }
+        return false;
     }
 
     private void setupSearchView(SearchView searchView){
