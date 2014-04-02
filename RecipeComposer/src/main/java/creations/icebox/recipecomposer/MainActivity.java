@@ -161,7 +161,7 @@ public class MainActivity extends ActionBarActivity
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
-        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles +
-                "\n" + "query = " + query, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles +
+//                "\n" + "query = " + query, Toast.LENGTH_SHORT).show();
     }
 }

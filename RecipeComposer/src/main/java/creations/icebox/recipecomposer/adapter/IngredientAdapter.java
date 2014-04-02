@@ -89,7 +89,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                     ingredientTitles.delete(0, ingredientTitles.length());
 
                     for (Ingredient i : ingredientArrayList) {
-                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
+
                         if (i.isSelected()) {
                             if (ingredientTitles.length() == 0) {
                                 ingredientTitles.append(i.getIngredientTitle());

@@ -1,6 +1,7 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
 import creations.icebox.recipecomposer.Recipe;
+import creations.icebox.recipecomposer.RecipesFragment;
 
 /** Follows the ViewHolder Design Pattern */
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
@@ -28,7 +30,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     public RecipeAdapter(Context context, int resource, ArrayList<Recipe> recipeArrayList) {
         super(context, resource, recipeArrayList);
         this.recipeArrayList = new ArrayList<Recipe>();
-        this.recipeArrayList.addAll(recipeArrayList);
+        Log.d(TAG, "constructor: recipeArrayList size = " + recipeArrayList.size());
+        this.recipeArrayList = recipeArrayList;
     }
 
     /** ViewHolder: caches our TextViews */
@@ -38,6 +41,15 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         TextView recipeURL;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void notifyDataSetChanged() {
+        Log.d(TAG, "notifyDataSetChanged: recipeArrayList size = " + recipeArrayList.size());
+        super.notifyDataSetChanged();
+    }
+
     /*
     * we are overriding the getView method here - this is what defines how each
     * list item will look.
@@ -45,7 +57,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ViewHolderItem viewHolder;
+        final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
         if (convertView == null) {

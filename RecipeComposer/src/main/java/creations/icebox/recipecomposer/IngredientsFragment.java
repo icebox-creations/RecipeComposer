@@ -40,7 +40,7 @@ public class IngredientsFragment extends ListFragment {
     Button clearQueryButton;
     EditText queryEditText;
 
-    String query;
+    String query = new String();
 
     OnPageChangeListener mCallback;
 
@@ -161,10 +161,13 @@ public class IngredientsFragment extends ListFragment {
                         String ingredientTitle = ingredientEditText.getText().toString();
                         Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
 
-                        if (ingredient != null) {
-                            ArrayAdapter<Ingredient> arrayAdapter = (ArrayAdapter<Ingredient>) getListAdapter();
-                            arrayAdapter.add(ingredient);
-                            arrayAdapter.notifyDataSetChanged();
+                        try {
+                            if (ingredient != null) {
+                                ingredientAdapter.add(ingredient);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
+                        } catch (NullPointerException e) {
+                            Log.d(TAG, "add ing. button error: " + e.toString());
                         }
                     } else {
                         Toast.makeText(getActivity(),
