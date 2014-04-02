@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import creations.icebox.recipecomposer.Ingredient;
 import creations.icebox.recipecomposer.R;
@@ -27,6 +29,9 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
 
     private ArrayList<Ingredient> ingredientArrayList;
+    private ArrayList<Ingredient> ingredientArrayListCopy;
+    private ArrayList<Ingredient> ingredientArrayListOriginal;
+
     private StringBuffer ingredientTitles;
 
     public StringBuffer getIngredientTitles() {
@@ -36,6 +41,8 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     public IngredientAdapter(Context context, int resource, ArrayList<Ingredient> ingredientArrayList) {
         super(context, resource, ingredientArrayList);
         this.ingredientArrayList = ingredientArrayList;
+        ingredientArrayListOriginal = new ArrayList<Ingredient>(ingredientArrayList);
+        ingredientArrayListCopy     = new ArrayList<Ingredient>(ingredientArrayList);
         ingredientTitles = new StringBuffer();
     }
 
@@ -47,6 +54,12 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
     public ArrayList<Ingredient> getIngredientArrayList() {
         return ingredientArrayList;
+    }
+
+    @Override
+    public void add(Ingredient ingredient) {
+          super.add(ingredient); // default
+          ingredientArrayListOriginal.add(ingredient);
     }
 
     @Override
@@ -89,7 +102,6 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                     ingredientTitles.delete(0, ingredientTitles.length());
 
                     for (Ingredient i : ingredientArrayList) {
-
                         if (i.isSelected()) {
                             if (ingredientTitles.length() == 0) {
                                 ingredientTitles.append(i.getIngredientTitle());
@@ -152,6 +164,53 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         }
 
         return convertView;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                Log.d(TAG, "performFiltering");
+                constraint = constraint.toString().toLowerCase();
+                FilterResults results = new FilterResults();
+
+                if (constraint != null && constraint.toString().length() > 0) {
+                    for (Ingredient anIngredient : ingredientArrayList) {
+                        Log.d(TAG, " > > > > > " + anIngredient.getIngredientTitle() + "... ");
+                    }
+
+                    ArrayList<Ingredient> found = new ArrayList<Ingredient>();
+                    for (Ingredient ingredient : ingredientArrayListOriginal) {
+                        if (ingredient.getIngredientTitle().toLowerCase().contains(constraint)) {
+                            found.add(ingredient);
+                            Log.d(TAG, " - - - - - " + ingredient.getIngredientTitle() + ", ");
+                        }
+                    }
+                    results.values =  new ArrayList<Ingredient>(found);
+                    results.count  =  found.size();
+                } else {
+                    results.values = new ArrayList<Ingredient>(ingredientArrayListOriginal);
+                    results.count  = ingredientArrayListOriginal.size();
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                Log.d(TAG, "publishResults");
+                ingredientArrayList.clear();
+                try {
+                    for (Ingredient ingredient : (ArrayList<Ingredient>) results.values) {
+                        Log.d(TAG, " + + + + + " + ingredient.getIngredientTitle() + ", ");
+                        ingredientArrayList.add(ingredient);
+                    }
+                } catch (NullPointerException e) {
+                    Log.d(TAG, "HEY " + e.getMessage());
+                }
+                notifyDataSetChanged();
+            }
+        };
     }
 
 //

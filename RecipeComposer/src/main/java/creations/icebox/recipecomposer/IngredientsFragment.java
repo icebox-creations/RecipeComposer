@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
@@ -19,9 +20,12 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
@@ -42,6 +46,7 @@ public class IngredientsFragment extends ListFragment {
     OnPageChangeListener mCallback;
 
     private ArrayList<Ingredient> ingredientArrayListChecked;
+    private ArrayList<Ingredient> ingredientArrayListCopy;
     private ArrayList<Ingredient> ingredientArrayList;
 
     IngredientAdapter ingredientAdapter;
@@ -135,8 +140,41 @@ public class IngredientsFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.ingredient_fragment_actions, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.ingredient_fragment_actions, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        try{
+            SearchView mSearchView = (SearchView) searchItem.getActionView();
+            setupSearchView(mSearchView);
+
+            if (mSearchView != null) {
+                mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        Log.d(TAG, newText);
+                        ListView lv = getListView();
+                        if (newText.length() == 0){
+                            lv.clearTextFilter();
+                        } else {
+                            lv.setFilterText(newText);
+                        }
+                        return false;
+                    }
+                });
+            }
+        } catch (NullPointerException e){
+            Log.d(TAG, e.getLocalizedMessage());
+        }
+
+
+
     }
 
     @Override
@@ -205,7 +243,6 @@ public class IngredientsFragment extends ListFragment {
         Log.d(TAG, "onCreateView");
         rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
-
         try {
             addIngredientButton = (Button) rootView.findViewById(R.id.addIngredientButton);
             ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
@@ -246,7 +283,7 @@ public class IngredientsFragment extends ListFragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     query = queryEditText.getText().toString();
-                    Log.d(TAG, "addTextChangedListener-> query: " + query);
+                    Log.d(TAG, "addTextChangedListener-> query: " + query + " char seq: " + s.toString());
                 }
 
                 @Override
@@ -254,6 +291,8 @@ public class IngredientsFragment extends ListFragment {
                     query = query.trim().replace(" ", "+");
                 }
             });
+
+
 
             clearQueryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -286,6 +325,7 @@ public class IngredientsFragment extends ListFragment {
         ingredientAdapter = new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);
+        listView.setTextFilterEnabled(true);
 
 //        setListAdapter(new IngredientAdapter(getActivity(),
 //                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
@@ -327,6 +367,10 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
+    }
+
+    private void setupSearchView(SearchView searchView){
+        searchView.setQueryHint("Find ingredient..");
     }
 }
 

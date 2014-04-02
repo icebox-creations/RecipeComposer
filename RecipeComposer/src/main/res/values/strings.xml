@@ -19,4 +19,6 @@
 
     <string name="action_search">Search..</string>
 
+    <string name="ingredient_search">Find ingredient..</string>
+
 </resources>
