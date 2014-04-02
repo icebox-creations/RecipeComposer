@@ -4,15 +4,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
+            android:uiOptions="splitActionBarWhenNarrow"
             android:name="creations.icebox.recipecomposer.MainActivity"
             android:label="@string/app_name" >
+            <meta-data  android:name="android.support.UI_OPTIONS"
+                        android:value="splitActionBarWhenNarrow" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,3 +23,7 @@
     </application>
 
 </manifest>
+
+
+    <!---->
+

@@ -167,8 +167,9 @@ public class RecipesFragment extends ListFragment {
         /* Configure the fragment instance to be retained on configuration
         * change. Then start the async task */
         setRetainInstance(true);
-
-//        setHasOptionsMenu(true);
+        // when added, invalid optiosn menu, fragments on options menu..
+        // manage own items.. no menu switching!
+        setHasOptionsMenu(true);
     }
 
     @Override
