@@ -102,10 +102,6 @@ public class IngredientsFragment extends ListFragment {
         }
     }
 
-
-
-
-
     @Override
     public void onResume() {
         Log.d(TAG, "onResume");
