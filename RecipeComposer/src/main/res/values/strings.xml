@@ -5,7 +5,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
-    <string name="keyword_edit_text_hint">Enter a recipe keyword &#8230;</string>
+    <string name="keyword_edit_text_hint">Enter a recipe keyword&#8230;</string>
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
     <string name="recipes_empty_list_view">No recipes to display.</string>
@@ -14,7 +14,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_remove">Remove</string>
     <string name="action_new_ingredient">New Ingredient!</string>
-    <string name="action_search">Search &#8230;</string>
-    <string name="ingredient_search">Find ingredient &#8230;</string>
+    <string name="action_search">Search&#8230;</string>
+    <string name="ingredient_search">Find ingredient&#8230;</string>
 
 </resources>
