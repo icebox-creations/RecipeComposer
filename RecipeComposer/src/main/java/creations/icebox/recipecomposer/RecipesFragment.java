@@ -1,6 +1,7 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -230,7 +231,7 @@ public class RecipesFragment extends ListFragment {
     * to change components on the GUI. Put the background operations in
     * doInBackground. Put the GUI manipulation code in onPostExecute
     * */
-    private class RecipeDownloaderAsyncTask extends AsyncTask<StringBuffer, String, String> {
+    private class RecipeDownloaderAsyncTask extends AsyncTask<String, Integer, String> {
 
         private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
         private String TAG = "***RECIPE DOWNLOADER***: ";
@@ -238,6 +239,8 @@ public class RecipesFragment extends ListFragment {
         private String recipeTitle = "";
         private String recipeURL = "";
         private String recipeIngredients = "";
+
+        private ProgressDialog progressDialog;
 
         private int lastStatusCode = 200;
 
@@ -270,7 +273,7 @@ public class RecipesFragment extends ListFragment {
         }
 
         @Override
-        protected String doInBackground(StringBuffer... params) {
+        protected String doInBackground(String... params) {
 
             /*
             * if the url is different, we know we should clear the recipeList and call the api
@@ -402,8 +405,19 @@ public class RecipesFragment extends ListFragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+        }
+
+        @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+
+            progressDialog.dismiss();
 
 //            if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");
