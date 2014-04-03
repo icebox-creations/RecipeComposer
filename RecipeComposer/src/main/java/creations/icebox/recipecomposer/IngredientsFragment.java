@@ -37,11 +37,8 @@ public class IngredientsFragment extends ListFragment {
     private SQLiteDAO sqLiteDAO;
     private View rootView;
 
-    Button      addIngredientButton;
-    EditText    ingredientEditText;
-
     Button      clearQueryButton;
-    EditText    queryEditText;
+    EditText    keywordEditText;
     SearchView  mSearchView; // ingerdient search
 
     String query = new String();
@@ -149,7 +146,6 @@ public class IngredientsFragment extends ListFragment {
         } catch (NullPointerException e){
             Log.d(TAG, e.getLocalizedMessage());
         }
-
     }
 
     @Override
@@ -219,38 +215,10 @@ public class IngredientsFragment extends ListFragment {
         rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         try {
-            addIngredientButton = (Button) rootView.findViewById(R.id.addIngredientButton);
-            ingredientEditText = (EditText) rootView.findViewById(R.id.ingredientEditText);
-
             clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
-            queryEditText = (EditText) rootView.findViewById(R.id.queryEditText);
+            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
 
-            addIngredientButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "add ingredient button clicked!");
-
-                    if (ingredientEditText.getText().length() > 0) {
-                        String ingredientTitle = ingredientEditText.getText().toString();
-                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
-
-                        try {
-                            if (ingredient != null) {
-                                ingredientAdapter.add(ingredient, mSearchView.getQuery().toString());
-                                ingredientAdapter.notifyDataSetChanged();
-                            }
-                        } catch (NullPointerException e) {
-                            Log.d(TAG, "add ing. button error: " + e.toString());
-                        }
-                    } else {
-                        Toast.makeText(getActivity(),
-                                "Sorry, you must supply an ingredient",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-            queryEditText.addTextChangedListener(new TextWatcher() {
+            keywordEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -258,7 +226,7 @@ public class IngredientsFragment extends ListFragment {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    query = queryEditText.getText().toString();
+                    query = keywordEditText.getText().toString();
                     Log.d(TAG, "addTextChangedListener-> query: " + query + " char seq: " + s.toString());
                 }
 
@@ -268,22 +236,19 @@ public class IngredientsFragment extends ListFragment {
                 }
             });
 
-
-
             clearQueryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "clear query button clicked!");
                     try {
-                        if (queryEditText.getText().length() > 0) {
-                            queryEditText.setText("");
+                        if (keywordEditText.getText().length() > 0) {
+                            keywordEditText.setText("");
                         }
                     } catch (NullPointerException e) {
                         Log.d(TAG, "clearQueryButton: " + e.toString());
                     }
                 }
             });
-
 
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateView: " + e.toString());
@@ -303,13 +268,8 @@ public class IngredientsFragment extends ListFragment {
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);
         listView.setTextFilterEnabled(true);
-
-
-
-//        setListAdapter(new IngredientAdapter(getActivity(),
-//                android.R.layout.simple_list_item_multiple_choice, ingredientArrayList));
-
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
@@ -342,7 +302,6 @@ public class IngredientsFragment extends ListFragment {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-
             }
         });
 
@@ -353,7 +312,6 @@ public class IngredientsFragment extends ListFragment {
                 return true;
             }
         });
-
     }
 
     @Override
@@ -385,4 +343,3 @@ public class IngredientsFragment extends ListFragment {
         searchView.setQueryHint("Find ingredient..");
     }
 }
-

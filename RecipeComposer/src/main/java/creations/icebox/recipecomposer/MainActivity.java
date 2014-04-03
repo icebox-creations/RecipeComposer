@@ -72,8 +72,6 @@ public class MainActivity extends ActionBarActivity
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsPagerAdapter);
 
-//        mViewPager.setOffscreenPageLimit(1);
-
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
@@ -135,12 +133,6 @@ public class MainActivity extends ActionBarActivity
         if (mViewPager.getCurrentItem() != tab.getPosition()) {
             mViewPager.setCurrentItem(tab.getPosition());
         }
-//        if (tab.getPosition() == 1) {
-//            //make recipe requests using the ingredients titles..
-//            Log.v(TAG, "onTabSelected clicked: recipe tab");
-//        } else if (tab.getPosition() == 0) {
-//            Log.v(TAG, "onTabSelected clicked: ingredients tab");
-//        }
     }
 
     @Override
@@ -165,7 +157,5 @@ public class MainActivity extends ActionBarActivity
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
-//        Toast.makeText(this, "ingredientTitles in Main Activity = " + this.ingredientTitles +
-//                "\n" + "query = " + query, Toast.LENGTH_SHORT).show();
     }
 }

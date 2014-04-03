@@ -226,5 +226,4 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
             }
         };
     }
-
 }
