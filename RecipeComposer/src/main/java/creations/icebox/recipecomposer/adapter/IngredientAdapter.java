@@ -108,6 +108,8 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
             convertView.setTag(viewHolder);
             convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
+            /*  */
+
 //            convertView.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
 //                public boolean onLongClick(View v) {
@@ -115,6 +117,9 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 //                    return false;
 //                }
 //            });
+
+
+            /*  */
 
 //            convertView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -147,9 +152,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 //                }
 //            });
 
-
-
-
+/*  */
 
 //            viewHolder.ingredientTitle.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -190,27 +193,8 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                     /* This is to fix the checkbox double check and off issue */
                     checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
                     itemClickListener(v, position);
-
-//                    Ingredient ingredient = (Ingredient) checkBox.getTag();
-//                    ingredient.setSelected(checkBox.isChecked());
-//
-//                    ingredientTitles.delete(0, ingredientTitles.length());
-//
-//                    for (Ingredient i : ingredientArrayList) {
-//                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
-//                        if (i.isSelected()) {
-//                            if (ingredientTitles.length() == 0) {
-//                                ingredientTitles.append(i.getIngredientTitle());
-//                            } else if (ingredientTitles.length() > 0) {
-//                                ingredientTitles.append("," + i.getIngredientTitle());
-//                            }
-//                        }
-//                    }
-//                    Log.d(TAG, "ingredient titles in Checkbox: = " + ingredientTitles);
                 }
             });
-
-
 
 //            viewHolder.ingredientCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override
