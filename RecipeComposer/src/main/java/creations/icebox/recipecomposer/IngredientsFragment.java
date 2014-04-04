@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -273,12 +274,14 @@ public class IngredientsFragment extends ListFragment {
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                Log.d(TAG, "STAte CHANGED ");
             }
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 MenuInflater menuInflater = mode.getMenuInflater();
                 menuInflater.inflate(R.menu.ingredient_cab, menu);
+                Log.d(TAG, "CREATING CONTEXT MENU");
                 return true;
             }
 
@@ -302,16 +305,19 @@ public class IngredientsFragment extends ListFragment {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                Log.d(TAG, "EXITED CONTEXT MENU");
             }
         });
 
-        listView.setOnLongClickListener(new View.OnLongClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Log.d(TAG, "LONG CLICK");
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "LIST CLICK");
+                ingredientAdapter.itemClickListener(view, position);
             }
         });
+
+
     }
 
     @Override

@@ -77,8 +77,9 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
+        Log.d(TAG, "position: " + position + "<- getView");
         final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
@@ -94,63 +95,109 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
             // store the holder with the view
             convertView.setTag(viewHolder);
+//            convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
-            convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
+//            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    Log.d(TAG, "LONG CLICKED from adapter");
+//                    return false;
+//                }
+//            });
 
-            viewHolder.ingredientTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "TextView was clicked");
+//            convertView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.d(TAG, "CLICKED from adapter");
+//
+//                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
+//
+//                    if (viewHolder.ingredientCheckBox.isChecked()) {
+//                        Log.d(TAG, "checked so uncheck");
+//                        ingredient.setSelected(false);
+//                    } else {
+//                        Log.d(TAG, "not checked so check");
+//                        ingredient.setSelected(true);
+//                    }
+//                    viewHolder.ingredientCheckBox.toggle();
+//
+//                    ingredientTitles.delete(0, ingredientTitles.length());
+//
+//                    for (Ingredient i : ingredientArrayList) {
+//                        if (i.isSelected()) {
+//                            if (ingredientTitles.length() == 0) {
+//                                ingredientTitles.append(i.getIngredientTitle());
+//                            } else if (ingredientTitles.length() > 0) {
+//                                ingredientTitles.append("," + i.getIngredientTitle());
+//                            }
+//                        }
+//                    }
+//                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
+//                }
+//            });
 
-                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
 
-                    if (viewHolder.ingredientCheckBox.isChecked()) {
-                        Log.d(TAG, "checked so uncheck");
-                        ingredient.setSelected(false);
-                    } else {
-                        Log.d(TAG, "not checked so check");
-                        ingredient.setSelected(true);
-                    }
-                    viewHolder.ingredientCheckBox.toggle();
 
-                    ingredientTitles.delete(0, ingredientTitles.length());
 
-                    for (Ingredient i : ingredientArrayList) {
-                        if (i.isSelected()) {
-                            if (ingredientTitles.length() == 0) {
-                                ingredientTitles.append(i.getIngredientTitle());
-                            } else if (ingredientTitles.length() > 0) {
-                                ingredientTitles.append("," + i.getIngredientTitle());
-                            }
-                        }
-                    }
-                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
-                }
-            });
 
+//            viewHolder.ingredientTitle.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.d(TAG, "TextView was clicked");
+//
+//                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
+//
+//                    if (viewHolder.ingredientCheckBox.isChecked()) {
+//                        Log.d(TAG, "checked so uncheck");
+//                        ingredient.setSelected(false);
+//                    } else {
+//                        Log.d(TAG, "not checked so check");
+//                        ingredient.setSelected(true);
+//                    }
+//                    viewHolder.ingredientCheckBox.toggle();
+//
+//                    ingredientTitles.delete(0, ingredientTitles.length());
+//
+//                    for (Ingredient i : ingredientArrayList) {
+//                        if (i.isSelected()) {
+//                            if (ingredientTitles.length() == 0) {
+//                                ingredientTitles.append(i.getIngredientTitle());
+//                            } else if (ingredientTitles.length() > 0) {
+//                                ingredientTitles.append("," + i.getIngredientTitle());
+//                            }
+//                        }
+//                    }
+//                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
+//                }
+//            });
+//
             viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "CheckBox was clicked");
                     CheckBox checkBox = (CheckBox) v;
-                    Ingredient ingredient = (Ingredient) checkBox.getTag();
-                    ingredient.setSelected(checkBox.isChecked());
-
-                    ingredientTitles.delete(0, ingredientTitles.length());
-
-                    for (Ingredient i : ingredientArrayList) {
-                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
-                        if (i.isSelected()) {
-                            if (ingredientTitles.length() == 0) {
-                                ingredientTitles.append(i.getIngredientTitle());
-                            } else if (ingredientTitles.length() > 0) {
-                                ingredientTitles.append("," + i.getIngredientTitle());
-                            }
-                        }
-                    }
-                    Log.d(TAG, "ingredient titles in Checkbox: = " + ingredientTitles);
+                    checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
+                    itemClickListener(v, position);
+//                    Ingredient ingredient = (Ingredient) checkBox.getTag();
+//                    ingredient.setSelected(checkBox.isChecked());
+//
+//                    ingredientTitles.delete(0, ingredientTitles.length());
+//
+//                    for (Ingredient i : ingredientArrayList) {
+//                        i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
+//                        if (i.isSelected()) {
+//                            if (ingredientTitles.length() == 0) {
+//                                ingredientTitles.append(i.getIngredientTitle());
+//                            } else if (ingredientTitles.length() > 0) {
+//                                ingredientTitles.append("," + i.getIngredientTitle());
+//                            }
+//                        }
+//                    }
+//                    Log.d(TAG, "ingredient titles in Checkbox: = " + ingredientTitles);
                 }
             });
+
+
 
 //            viewHolder.ingredientCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                @Override
@@ -178,6 +225,40 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         }
 
         return convertView;
+    }
+
+    public void itemClickListener(View view, int position) {
+
+        Log.d(TAG, "position: " + position + "<- itemClickListener");
+
+        Log.d(TAG, "itemClickListener in the adapter!");
+
+//        Ingredient ingredient = (Ingredient) checkBox.getTag();
+
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
+        checkBox.toggle();
+        Ingredient ingredient = ingredientArrayListView.get(position);
+        ingredient.setSelected(checkBox.isChecked());
+
+//        if (ingredient.isSelected()) {
+//            ingredient.setSelected(false);
+//        } else {
+//            ingredient.setSelected(true);
+//        }
+
+        ingredientTitles.delete(0, ingredientTitles.length());
+
+        for (Ingredient i : ingredientArrayList) {
+            i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
+            if (i.isSelected()) {
+                if (ingredientTitles.length() == 0) {
+                    ingredientTitles.append(i.getIngredientTitle());
+                } else if (ingredientTitles.length() > 0) {
+                    ingredientTitles.append("," + i.getIngredientTitle());
+                }
+            }
+        }
+        Log.d(TAG, "ingredient titles in Checkbox: = " + ingredientTitles);
     }
 
     @Override

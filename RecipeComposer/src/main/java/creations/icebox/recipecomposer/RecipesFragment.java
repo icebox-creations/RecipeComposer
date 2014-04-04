@@ -239,6 +239,7 @@ public class RecipesFragment extends ListFragment {
         private String recipeTitle = "";
         private String recipeURL = "";
         private String recipeIngredients = "";
+        private String recipePicUrl = "";
 
         private ProgressDialog progressDialog;
 
@@ -386,11 +387,11 @@ public class RecipesFragment extends ListFragment {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
                         // Pull items from the array
-                        recipeTitle = recipe.getString("title").trim().replace("&amp;", "&");
-                        recipeURL = recipe.getString("href").trim();
-                        recipeIngredients = recipe.getString("ingredients").trim();
-
-                        recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients));
+                        recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&");
+                        recipeURL           = recipe.getString("href").trim();
+                        recipeIngredients   = recipe.getString("ingredients").trim();
+                        recipePicUrl        = recipe.getString("thumbnail").trim();
+                        recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients, recipePicUrl));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

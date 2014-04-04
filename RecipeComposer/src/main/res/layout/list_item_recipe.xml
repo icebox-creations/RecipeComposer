@@ -3,31 +3,41 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:paddingLeft="40dp" >
+
+    <ImageView
+        android:id="@+id/recipeImageView"
+        android:contentDescription="Recipe Image"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/recipeTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textStyle="bold|normal" />
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textStyle="bold|normal"
+        android:layout_marginLeft="55dp"/>
 
     <TextView
         android:id="@+id/recipeIngredientsTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="@android:style/TextAppearance.Small"
         android:layout_below="@+id/recipeTitleTextView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="55dp"/>
 
-    <TextView
-        android:id="@+id/recipeURLTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_below="@+id/recipeIngredientsTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <!--<TextView-->
+        <!--android:id="@+id/recipeURLTextView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="@android:style/TextAppearance.Small"-->
+        <!--android:layout_below="@+id/recipeIngredientsTextView"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
 
 </RelativeLayout>

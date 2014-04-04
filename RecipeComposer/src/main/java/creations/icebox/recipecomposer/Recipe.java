@@ -7,14 +7,25 @@ public class Recipe {
     private String recipeURL = "";
     private String recipeIngredients = "";
 
+    public String getRecipePicUrl() {
+        return recipePicUrl;
+    }
+
+    public void setRecipePicUrl(String recipePicUrl) {
+        this.recipePicUrl = recipePicUrl;
+    }
+
+    private String recipePicUrl = "";
+
     private static final String TAG = "***NEW RECIPE***: ";
 
-    public Recipe(String recipeTitle, String recipeURL, String recipeIngredients) {
+    public Recipe(String recipeTitle, String recipeURL, String recipeIngredients, String recipePicUrl) {
 //        Log.d(TAG, "constructor");
 
         this.recipeTitle = recipeTitle;
         this.recipeURL = recipeURL;
         this.recipeIngredients = recipeIngredients;
+        setRecipePicUrl(recipePicUrl);
     }
 
     public String getRecipeTitle() {

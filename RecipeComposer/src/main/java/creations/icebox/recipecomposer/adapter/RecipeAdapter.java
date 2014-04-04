@@ -1,14 +1,20 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
@@ -38,7 +44,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     static class ViewHolderItem {
         TextView recipeTitle;
         TextView recipeIngredients;
-        TextView recipeURL;
+//        TextView recipeURL;
     }
 
     /**
@@ -69,7 +75,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder = new ViewHolderItem();
             viewHolder.recipeTitle = (TextView) convertView.findViewById(R.id.recipeTitleTextView);
             viewHolder.recipeIngredients = (TextView) convertView.findViewById(R.id.recipeIngredientsTextView);
-            viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeURLTextView);
+//            viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeURLTextView);
 
             convertView.setTag(viewHolder);
 
@@ -81,60 +87,49 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         // Recipe item based on the position
         Recipe recipe = recipeArrayList.get(position);
+        String recipeImageURL = recipe.getRecipePicUrl();
+
+        ImageView iv =  (ImageView)parent.findViewById(R.id.recipeImageView);
+        if (iv != null){
+            (new DownloadImageTask(iv))
+                    .execute(recipeImageURL);
+        }
 
         // assign values if the recipe is not null
         if (recipe != null) {
             viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
             viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
-            viewHolder.recipeURL.setText(recipe.getRecipeURL());
+//            viewHolder.recipeURL.setText(recipe.getRecipeURL());
         }
-
         return convertView;
     }
 
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        // assign the view we are converting to a local variable
-//        View view = convertView;
-//
-//        // first check to see if the view is null. if so, we have to inflate it.
-//        // to inflate it basically means to render, or show, the view.
-//        if (view == null) {
-//            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = inflater.inflate(R.layout.list_item_recipe, null);
-//        }
-//
-//        /*
-//         * Recall that the variable position is sent in as an argument to this method.
-//         * The variable simply refers to the position of the current object in the list. (The ArrayAdapter
-//         * iterates through the list we sent it)
-//         *
-//         * Therefore, i refers to the current Item object.
-//         */
-//        Recipe i = recipeArrayList.get(position);
-//
-//        if (i != null) {
-//
-//            try {
-//                TextView title = (TextView) view.findViewById(R.id.recipeTitleTextView);
-//                TextView url = (TextView) view.findViewById(R.id.recipeURLTextView);
-//                TextView ingredients = (TextView) view.findViewById(R.id.recipeIngredientsTextView);
-//
-//                if (title != null) {
-//                    title.setText(i.getRecipeTitle());
-//                }
-//                if (url != null) {
-//                    url.setText(i.getRecipeURL());
-//                }
-//                if (ingredients != null) {
-//                    ingredients.setText(i.getRecipeIngredients());
-//                }
-//            } catch (NullPointerException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return view;
-//    }
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                Log.d(TAG, "IMAGE URL: " + urldisplay);
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+                Log.d(TAG, "LOADED THE IMAGE FROM INTERNET..");
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                bmImage.setImageBitmap(result);
+            }
+        }
+    }
 }
