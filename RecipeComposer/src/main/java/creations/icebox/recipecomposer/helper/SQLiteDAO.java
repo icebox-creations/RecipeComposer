@@ -122,5 +122,4 @@ public class SQLiteDAO {
         ingredient.setIngredientTitle(cursor.getString(1));
         return ingredient;
     }
-
 }

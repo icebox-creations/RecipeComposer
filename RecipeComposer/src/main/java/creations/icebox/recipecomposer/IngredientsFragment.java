@@ -196,6 +196,49 @@ public class IngredientsFragment extends ListFragment {
 
             Log.d(TAG, "About to add a new ingredient");
             return true;
+        } else if (id == R.id.action_remove_ingredient) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+//            builder.setTitle("Remove Ingredient");
+            builder.setMessage("Remove selected ingredient(s)?");
+            builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CheckBox checkbox;
+                    ListView listView = getListView();
+                    int listViewItemCount = listView.getChildCount();
+                    for (int i = 0; i < listViewItemCount; i++){
+                        try{
+                            View v = listView.getAdapter().getView(i, null, null);
+                            checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+                            if (checkbox.isChecked()){
+                                Log.d(TAG, "delete... " + ingredientArrayList.get(i));
+
+                                // Remove this ingredient from the db
+                                sqLiteDAO.deleteIngredient(ingredientArrayList.get(i));
+
+                                // Remove from listview -- doesn't handle the case of searching for
+                                // an ingredient and deleting it. It still appears in the original
+                                // list. But upon closing the app and re-opening, it's removed. So
+                                // we need to update the listview when that happens.
+                                ingredientArrayList.remove(i);
+                                ingredientAdapter.notifyDataSetChanged();
+                            }
+
+                        } catch (Exception e) {
+                            Log.d(TAG, "error!!->" + e.getMessage());
+                        }
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+            return true;
         } else if (id == R.id.action_search) {
             Log.d(TAG, "About to search");
             return true;
@@ -222,7 +265,6 @@ public class IngredientsFragment extends ListFragment {
             keywordEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
@@ -264,50 +306,82 @@ public class IngredientsFragment extends ListFragment {
         ingredientArrayList = sqLiteDAO.getAllIngredients();
 
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
-        ListView listView = getListView();
+        final ListView listView = getListView();
         ingredientAdapter = new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);
         listView.setTextFilterEnabled(true);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                Log.d(TAG, "STAte CHANGED ");
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater menuInflater = mode.getMenuInflater();
-                menuInflater.inflate(R.menu.ingredient_cab, menu);
-                Log.d(TAG, "CREATING CONTEXT MENU");
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.action_remove_ingredient:
-                        Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                Log.d(TAG, "EXITED CONTEXT MENU");
-            }
-        });
+//        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+//
+//        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+//            @Override
+//            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+//                Log.d(TAG, "STAte CHANGED ");
+//            }
+//
+//            @Override
+//            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+//                MenuInflater menuInflater = mode.getMenuInflater();
+//                menuInflater.inflate(R.menu.ingredient_cab, menu);
+//
+//                CheckBox checkbox;
+//                int listViewItemCount = listView.getChildCount();
+//                for (int i = 0; i < listViewItemCount; i++){
+//                    try{
+//                        View v = listView.getAdapter().getView(i, null, null);
+//                        checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+//                        Log.d(TAG, " " + i + checkbox.getTag().toString());
+//                        if (checkbox.isChecked()){
+////                            checkbox.setButtonDrawable(R.drawable.btn_check_on_pressed_red);
+////                            checkbox.refreshDrawableState();
+//                        }
+//                    } catch (Exception e) {
+//                        Log.d(TAG, "DUn BROKE CHECKBOX DrawaBLE SWItcHArOO: " + e.getMessage());
+//                    }
+//
+//                }
+//                Log.d(TAG, "CREATING CONTEXT MENU");
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+//
+//                switch (item.getItemId()) {
+//                    case R.id.action_remove_ingredient:
+//                        Toast.makeText(getActivity(), "Remove clicked", Toast.LENGTH_SHORT).show();
+//                        mode.finish();
+//                        return true;
+//                    default:
+//                        return false;
+//                }
+//            }
+//
+//            @Override
+//            public void onDestroyActionMode(ActionMode mode) {
+//                CheckBox checkbox;
+//                int listViewItemCount = listView.getChildCount();
+//                Log.d(TAG, " " + listViewItemCount);
+//                for (int i = 0; i < listViewItemCount; i++){
+//                    try{
+//                        View v = listView.getChildAt(i);
+//                        checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+//                        if (checkbox.isChecked()){
+////                            checkbox.setButtonDrawable(R.drawable.btn_check_on_pressed_holo_dark);
+//                        }
+//                    } catch (Exception e) {
+//                        Log.d(TAG, e.getMessage());
+//                    }
+//
+//                }
+//                Log.d(TAG, "EXITED CONTEXT MENU");
+//            }
+//        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -320,30 +394,30 @@ public class IngredientsFragment extends ListFragment {
 
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.ingredient_cab, menu);
-    }
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        MenuInflater menuInflater = getActivity().getMenuInflater();
+//        menuInflater.inflate(R.menu.ingredient_cab, menu);
+//    }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.action_remove_ingredient:
-                // Remove this ingredient from the db
-                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
-
-                // Remove from listview
-                ingredientArrayList.remove(info.position);
-                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
-                return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo info =
+//                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//
+//        switch (item.getItemId()) {
+//            case R.id.action_remove_ingredient:
+//                // Remove this ingredient from the db
+//                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
+//
+//                // Remove from listview
+//                ingredientArrayList.remove(info.position);
+//                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
+//                return true;
+//        }
+//        return false;
+//    }
 
     private void setupSearchView(SearchView searchView){
         searchView.setQueryHint("Find ingredient..");

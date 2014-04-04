@@ -1,6 +1,7 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -30,6 +31,15 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
 
     private ArrayList<Ingredient> ingredientArrayList; // for the view
+
+    public ArrayList<Ingredient> getIngredientArrayListView() {
+        return ingredientArrayListView;
+    }
+
+    public ArrayList<Ingredient> getIngredientArrayList() {
+        return ingredientArrayList;
+    }
+
     private ArrayList<Ingredient> ingredientArrayListView;  // used fro the data
 
     private StringBuffer ingredientTitles;
@@ -53,8 +63,9 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         CheckBox ingredientCheckBox;
     }
 
-    public ArrayList<Ingredient> getIngredientArrayList() {
-        return ingredientArrayList;
+    public void toggleCheckBoxDrawable(){
+
+
     }
 
     @Override
@@ -79,7 +90,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        Log.d(TAG, "position: " + position + "<- getView");
+        //Log.d(TAG, "position: " + position + "<- getView");
         final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
@@ -95,7 +106,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
             // store the holder with the view
             convertView.setTag(viewHolder);
-//            convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
+            convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
 //            convertView.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
@@ -176,8 +187,10 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                 public void onClick(View v) {
                     Log.d(TAG, "CheckBox was clicked");
                     CheckBox checkBox = (CheckBox) v;
+                    /* This is to fix the checkbox double check and off issue */
                     checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
                     itemClickListener(v, position);
+
 //                    Ingredient ingredient = (Ingredient) checkBox.getTag();
 //                    ingredient.setSelected(checkBox.isChecked());
 //
@@ -237,6 +250,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
         checkBox.toggle();
+
         Ingredient ingredient = ingredientArrayListView.get(position);
         ingredient.setSelected(checkBox.isChecked());
 

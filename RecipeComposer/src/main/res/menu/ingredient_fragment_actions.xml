@@ -13,10 +13,17 @@
         android:orderInCategory="1"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_remove_ingredient"
+        android:icon="@drawable/ic_action_discard"
+        android:title="@string/action_remove"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@drawable/abc_ic_search"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView" />
 

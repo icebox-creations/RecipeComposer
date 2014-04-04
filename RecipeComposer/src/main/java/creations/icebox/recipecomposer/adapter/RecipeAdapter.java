@@ -47,9 +47,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 //        TextView recipeURL;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void notifyDataSetChanged() {
         Log.d(TAG, "notifyDataSetChanged: recipeArrayList size = " + recipeArrayList.size());
