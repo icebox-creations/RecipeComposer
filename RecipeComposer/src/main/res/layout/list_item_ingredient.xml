@@ -14,7 +14,6 @@
         android:layout_marginTop="5dp"
         android:focusable="false"
         android:focusableInTouchMode="false">
-        <!--android:button="@drawable/cb_selector"-->
     </CheckBox>
 
     <TextView

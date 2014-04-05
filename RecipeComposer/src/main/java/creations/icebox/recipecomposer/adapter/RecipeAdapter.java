@@ -9,17 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
-import creations.icebox.recipecomposer.Recipe;
-import creations.icebox.recipecomposer.RecipesFragment;
+import creations.icebox.recipecomposer.pojo.Recipe;
 
 /** Follows the ViewHolder Design Pattern */
 public class RecipeAdapter extends ArrayAdapter<Recipe> {

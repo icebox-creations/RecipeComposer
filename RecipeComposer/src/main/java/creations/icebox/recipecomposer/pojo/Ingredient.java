@@ -1,9 +1,11 @@
-package creations.icebox.recipecomposer;
+package creations.icebox.recipecomposer.pojo;
 
 import android.util.Log;
 
+/** Plain Old Java Object (POJO) */
 public class Ingredient {
     private static final String TAG = "***NEW INGREDIENT***: ";
+
     private long id = 0;
     private String ingredientTitle = "";
     private boolean selected = false;
@@ -32,9 +34,9 @@ public class Ingredient {
         this.selected = selected;
     }
 
-    /** Will be used by the ArrayAdapter in the Listview */
-    @Override
-    public String toString() {
-        return ingredientTitle;
-    }
+//    /** Will be used by the ArrayAdapter in the Listview */
+//    @Override
+//    public String toString() {
+//        return ingredientTitle;
+//    }
 }

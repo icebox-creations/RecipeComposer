@@ -31,20 +31,20 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.RecipeAdapter;
+import creations.icebox.recipecomposer.pojo.Recipe;
 
 public class RecipesFragment extends ListFragment {
 
     private static final String TAG = "***RECIPES FRAGMENT: ";
 
-    StringBuffer ingredientTitles;
-    String query;
-    int currentPageGlobal = 0;
     ListView listView;
     RecipeAdapter recipeAdapter;
-    private int preLast;
-
+    StringBuffer ingredientTitles;
     StringBuffer ingredientTitlesOld = new StringBuffer();
     String queryOld = new String();
+    String query;
+    private int preLast;
+    int currentPageGlobal = 0;
     int currentPageOld = 0;
 
     /*
@@ -82,8 +82,6 @@ public class RecipesFragment extends ListFragment {
                 this.recipeDownloaderAsyncTaskWeakReference
                     = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
                 recipeDownloaderAsyncTask.execute();
-
-
             } else {
                 Log.d(TAG, "ELSE");
             }
@@ -94,18 +92,9 @@ public class RecipesFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-
-        View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_recipes, container, false);
     }
 
-    /**
-     * Attach to list view once the view hierarchy has been created.
-     *
-     * @param view
-     * @param savedInstanceState
-     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -173,6 +162,23 @@ public class RecipesFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.recipe_actions, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.recipeActionRefresh:
+//                Log.d(TAG, "Refresh init");
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
     @Override
     public void onAttach(Activity activity) {
         Log.d(TAG, "onAttach");
@@ -209,23 +215,6 @@ public class RecipesFragment extends ListFragment {
         super.onDetach();
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.recipe_actions, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.recipeActionRefresh:
-//                Log.d(TAG, "Refresh init");
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     /*
     * Use AsyncTask if you need to perform background tasks, but also need
     * to change components on the GUI. Put the background operations in
@@ -233,10 +222,10 @@ public class RecipesFragment extends ListFragment {
     * */
     private class RecipeDownloaderAsyncTask extends AsyncTask<String, Integer, String> {
 
-        private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
         private String TAG = "***RECIPE DOWNLOADER***: ";
 
         private String recipeTitle = "";
+        private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
         private String recipeURL = "";
         private String recipeIngredients = "";
         private String recipePicUrl = "";
@@ -348,7 +337,6 @@ public class RecipesFragment extends ListFragment {
 
                 queryResult = stringBuilder.toString();
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -386,12 +374,18 @@ public class RecipesFragment extends ListFragment {
                     try {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
-                        // Pull items from the array
+                        Recipe new_recipe = new Recipe();
                         recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&");
                         recipeURL           = recipe.getString("href").trim();
                         recipeIngredients   = recipe.getString("ingredients").trim();
                         recipePicUrl        = recipe.getString("thumbnail").trim();
-                        recipeList.add(new Recipe(recipeTitle, recipeURL, recipeIngredients, recipePicUrl));
+
+                        new_recipe.setRecipeTitle(recipeTitle);
+                        new_recipe.setRecipeURL(recipeURL);
+                        new_recipe.setRecipeIngredients(recipeIngredients);
+                        new_recipe.setRecipePicUrl(recipePicUrl);
+
+                        recipeList.add(new_recipe);
 
                     } catch (JSONException e) {
                         e.printStackTrace();

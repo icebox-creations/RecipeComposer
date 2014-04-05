@@ -6,32 +6,27 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
+import creations.icebox.recipecomposer.pojo.Ingredient;
 
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
@@ -108,9 +103,10 @@ public class IngredientsFragment extends ListFragment {
     }
 
     @Override
-    public void onDetach() {
-        Log.d(TAG, "onDetach");
-        super.onDetach();
+    public void onPause() {
+        Log.d(TAG, "onPause");
+        sqLiteDAO.close();
+        super.onPause();
     }
 
     @Override
@@ -246,12 +242,6 @@ public class IngredientsFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPause() {
-        Log.d(TAG, "onPause");
-        sqLiteDAO.close();
-        super.onPause();
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -390,8 +380,6 @@ public class IngredientsFragment extends ListFragment {
                 ingredientAdapter.itemClickListener(view, position);
             }
         });
-
-
     }
 
 //    @Override

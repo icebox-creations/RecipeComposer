@@ -8,9 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import creations.icebox.recipecomposer.Ingredient;
+import creations.icebox.recipecomposer.pojo.Ingredient;
 
 /**
  * Maintains the database connection and supports adding new ingredients and fetching all
