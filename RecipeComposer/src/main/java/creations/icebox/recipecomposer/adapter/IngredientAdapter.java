@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import creations.icebox.recipecomposer.pojo.Ingredient;
+import creations.icebox.recipecomposer.lib.Ingredient;
 import creations.icebox.recipecomposer.R;
 
 /** Follows the ViewHolder Design Pattern */

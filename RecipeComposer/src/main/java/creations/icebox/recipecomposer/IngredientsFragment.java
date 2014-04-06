@@ -26,12 +26,11 @@ import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
-import creations.icebox.recipecomposer.pojo.Ingredient;
+import creations.icebox.recipecomposer.lib.Ingredient;
 
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
-    private View rootView;
 
     Button      clearQueryButton;
     EditText    keywordEditText;
@@ -246,7 +245,7 @@ public class IngredientsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         try {
             clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
@@ -378,6 +377,48 @@ public class IngredientsFragment extends ListFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "LIST CLICK");
                 ingredientAdapter.itemClickListener(view, position);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "LONG CLICK");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                final Ingredient ingredient = (Ingredient) listView.getItemAtPosition(position);
+
+                final String oldIngredientTitle;
+                oldIngredientTitle = ingredient.getIngredientTitle();
+
+                final EditText ingredientTitleInputEditText = new EditText(getActivity());
+                ingredientTitleInputEditText.setText(ingredient.getIngredientTitle());
+                ingredientTitleInputEditText.setSelection(ingredientTitleInputEditText.getText().length());
+
+                final int pos = position;
+
+                builder.setView(ingredientTitleInputEditText);
+
+                builder.setTitle("Edit Ingredient");
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        sqLiteDAO.updateIngredientTitle(oldIngredientTitle, ingredientTitleInputEditText.getText().toString());
+
+                        ingredientAdapter.getItem(pos).setIngredientTitle(ingredientTitleInputEditText.getText().toString());
+                        ingredientAdapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
     }

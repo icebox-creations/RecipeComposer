@@ -31,7 +31,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.RecipeAdapter;
-import creations.icebox.recipecomposer.pojo.Recipe;
+import creations.icebox.recipecomposer.lib.Recipe;
 
 public class RecipesFragment extends ListFragment {
 

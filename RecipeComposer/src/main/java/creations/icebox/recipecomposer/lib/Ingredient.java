@@ -1,6 +1,4 @@
-package creations.icebox.recipecomposer.pojo;
-
-import android.util.Log;
+package creations.icebox.recipecomposer.lib;
 
 /** Plain Old Java Object (POJO) */
 public class Ingredient {

@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
-import creations.icebox.recipecomposer.pojo.Recipe;
+import creations.icebox.recipecomposer.lib.Recipe;
 
 /** Follows the ViewHolder Design Pattern */
 public class RecipeAdapter extends ArrayAdapter<Recipe> {

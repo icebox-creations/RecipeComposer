@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import creations.icebox.recipecomposer.pojo.Ingredient;
+import creations.icebox.recipecomposer.lib.Ingredient;
 
 /**
  * Maintains the database connection and supports adding new ingredients and fetching all
@@ -95,6 +95,24 @@ public class SQLiteDAO {
         );
     }
 
+    public int updateIngredientTitle(String oldIngredientTitle, String newIngredientTitle) {
+
+        if (newIngredientTitle.isEmpty()) {
+            Toast.makeText(context, "You must specify a new ingredient title", Toast.LENGTH_LONG).show();
+            return 0;
+        }
+
+        ContentValues newContentValues = new ContentValues();
+        newContentValues.put("title", newIngredientTitle);
+
+        return sqLiteDatabase.update(
+                sqLiteDBHelper.TABLE_INGREDIENTS,
+                newContentValues,
+                "title = \"" +  oldIngredientTitle + "\"",
+                null
+        );
+    }
+
     public ArrayList<Ingredient> getAllIngredients() {
         ArrayList<Ingredient> ingredientList = new ArrayList<Ingredient>();
 
@@ -121,4 +139,5 @@ public class SQLiteDAO {
         ingredient.setIngredientTitle(cursor.getString(1));
         return ingredient;
     }
+
 }
