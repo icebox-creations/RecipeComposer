@@ -97,104 +97,31 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
             convertView.setTag(viewHolder);
             convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
-            /*  */
 
-//            convertView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    Log.d(TAG, "LONG CLICKED from adapter");
-//                    return false;
-//                }
-//            });
-
-
-            /*  */
-
-//            convertView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d(TAG, "CLICKED from adapter");
-//
-//                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
-//
-//                    if (viewHolder.ingredientCheckBox.isChecked()) {
-//                        Log.d(TAG, "checked so uncheck");
-//                        ingredient.setSelected(false);
-//                    } else {
-//                        Log.d(TAG, "not checked so check");
-//                        ingredient.setSelected(true);
-//                    }
-//                    viewHolder.ingredientCheckBox.toggle();
-//
-//                    ingredientTitles.delete(0, ingredientTitles.length());
-//
-//                    for (Ingredient i : ingredientArrayList) {
-//                        if (i.isSelected()) {
-//                            if (ingredientTitles.length() == 0) {
-//                                ingredientTitles.append(i.getIngredientTitle());
-//                            } else if (ingredientTitles.length() > 0) {
-//                                ingredientTitles.append("," + i.getIngredientTitle());
-//                            }
-//                        }
-//                    }
-//                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
-//                }
-//            });
-
-/*  */
-
-//            viewHolder.ingredientTitle.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d(TAG, "TextView was clicked");
-//
-//                    Ingredient ingredient = (Ingredient) viewHolder.ingredientCheckBox.getTag();
-//
-//                    if (viewHolder.ingredientCheckBox.isChecked()) {
-//                        Log.d(TAG, "checked so uncheck");
-//                        ingredient.setSelected(false);
-//                    } else {
-//                        Log.d(TAG, "not checked so check");
-//                        ingredient.setSelected(true);
-//                    }
-//                    viewHolder.ingredientCheckBox.toggle();
-//
-//                    ingredientTitles.delete(0, ingredientTitles.length());
-//
-//                    for (Ingredient i : ingredientArrayList) {
-//                        if (i.isSelected()) {
-//                            if (ingredientTitles.length() == 0) {
-//                                ingredientTitles.append(i.getIngredientTitle());
-//                            } else if (ingredientTitles.length() > 0) {
-//                                ingredientTitles.append("," + i.getIngredientTitle());
-//                            }
-//                        }
-//                    }
-//                    Log.d(TAG, "ingredient titles in TextView = " + ingredientTitles);
-//                }
-//            });
-//
             viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "CheckBox was clicked");
                     CheckBox checkBox = (CheckBox) v;
-                    final int _position = position;
+
+                     /* get the tag of the ingredient that belongs to this checbkox..
+                      * from the ingredient arraylist for listview  */
+                    Ingredient ingredient = (Ingredient) checkBox.getTag();
+                    int pos = 0;
+                    for ( ; pos < ingredientArrayListView.size(); pos++){
+                        if (ingredientArrayListView.get(pos).getIngredientTitle()
+                                  .equals(ingredient.getIngredientTitle()) )
+                        {
+                            break;
+                        }
+                    }
+
                     /* This is to fix the checkbox double check and off issue */
                     checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
-                    Log.d(TAG, " ::: " + _position);
-                    itemClickListener(v, _position);
+                    Log.d(TAG, " ::: " + pos);
+                    itemClickListener(v, pos);
                 }
             });
-
-//            viewHolder.ingredientCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    Log.d(TAG, "checkbox changed to " + isChecked);
-//                    Ingredient ingredient = (Ingredient) buttonView.getTag();
-//                    ingredient.setSelected(isChecked);
-//                }
-//            });
 
         } else {
             // we've just avoided calling findViewById() on the resource file every time
