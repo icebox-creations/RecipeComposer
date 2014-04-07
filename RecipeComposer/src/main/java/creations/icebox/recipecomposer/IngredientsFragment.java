@@ -427,31 +427,6 @@ public class IngredientsFragment extends ListFragment {
         });
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater menuInflater = getActivity().getMenuInflater();
-//        menuInflater.inflate(R.menu.ingredient_cab, menu);
-//    }
-
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo info =
-//                (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        switch (item.getItemId()) {
-//            case R.id.action_remove_ingredient:
-//                // Remove this ingredient from the db
-//                sqLiteDAO.deleteIngredient(ingredientArrayList.get(info.position));
-//
-//                // Remove from listview
-//                ingredientArrayList.remove(info.position);
-//                ((IngredientAdapter)getListAdapter()).notifyDataSetChanged();
-//                return true;
-//        }
-//        return false;
-//    }
-
     private void setupSearchView(SearchView searchView){
         searchView.setQueryHint("Find ingredient..");
     }
