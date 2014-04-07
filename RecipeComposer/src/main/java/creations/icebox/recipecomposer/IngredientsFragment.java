@@ -22,8 +22,18 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import java.security.acl.LastOwnerException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import java.security.acl.LastOwnerException;
+
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
@@ -33,6 +43,9 @@ public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
 
+    private String              ingredientsSuggestionsFilename = "ingredients_list_suggestions.txt";
+    private ArrayList<String>   ingredientsSuggestionsArrayList;
+
     Button      clearQueryButton;
     EditText    keywordEditText;
     SearchView  mSearchView; // ingerdient search
@@ -40,6 +53,7 @@ public class IngredientsFragment extends ListFragment {
     String query = new String();
 
     OnPageChangeListener mCallback;
+
 
     private ArrayList<Ingredient> ingredientArrayList;
     //private ArrayList<Ingredient> ingredientArrayList;
@@ -55,12 +69,45 @@ public class IngredientsFragment extends ListFragment {
         return new IngredientsFragment();
     }
 
+    private ArrayList<String> readIngredientsSuggestionsFile(String filename){
+        ArrayList<String> ingredientsSuggestionsLocal = new ArrayList<String>();;
+        try {
+            InputStream inputStream = getActivity().openFileInput(filename);
+            if (inputStream != null){
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  /// read the input..
+
+                String receiveString;
+
+                /* Read the input using the bufferedReader (which is connected to the inputStream..) */
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    ingredientsSuggestionsLocal.add(receiveString);
+                }
+
+                inputStream.close();
+
+                String file_contents = ingredientsSuggestionsLocal.toString();
+                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + new String(file_contents), Toast.LENGTH_SHORT).show();
+            }
+        } catch(Exception e){
+            Log.d(TAG, "FILE EXCEPTION: " + e.getMessage());
+        }
+
+        return ingredientsSuggestionsLocal;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
+
+        ingredientsSuggestionsArrayList = readIngredientsSuggestionsFile(ingredientsSuggestionsFilename);
+
+//        if (!ingredientsSuggestionsArrayList.isEmpty()){
+//              Setup the shuggestiosn box
+//        }
 
         // when added, invalid optiosn menu, fragments on options menu..
         // manage own items.. no menu switching!
