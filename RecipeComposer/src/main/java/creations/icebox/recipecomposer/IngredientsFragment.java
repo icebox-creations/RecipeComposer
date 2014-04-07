@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
@@ -166,11 +167,11 @@ public class IngredientsFragment extends ListFragment {
                           && ingredientTitleInputEditText.getText().length() > 0)
                     {
                         ingredientTitle = ingredientTitleInputEditText.getText().toString();
-                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle); // NEW INGERDIENT!
 
                         try {
                             if (ingredient != null) {
-                                ingredientAdapter.add(ingredient, mSearchView.getQuery().toString());
+                                ingredientAdapter.add(ingredient);
                                 ingredientAdapter.notifyDataSetChanged();
                             }
                         } catch (NullPointerException e) {
@@ -202,28 +203,31 @@ public class IngredientsFragment extends ListFragment {
                     CheckBox checkbox;
                     ListView listView = getListView();
                     int listViewItemCount = listView.getChildCount();
+
                     for (int i = 0; i < listViewItemCount; i++){
                         try{
                             View v = listView.getAdapter().getView(i, null, null);
                             checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
                             if (checkbox.isChecked()){
-                                Log.d(TAG, "delete... " + ingredientArrayList.get(i));
 
-                                // Remove this ingredient from the db
-                                sqLiteDAO.deleteIngredient(ingredientArrayList.get(i));
+                                // Remove this ingredient from the d    b
+                                sqLiteDAO.deleteIngredient(ingredientAdapter.getItem(i));
 
                                 // Remove from listview -- doesn't handle the case of searching for
                                 // an ingredient and deleting it. It still appears in the original
                                 // list. But upon closing the app and re-opening, it's removed. So
                                 // we need to update the listview when that happens.
-                                ingredientArrayList.remove(i);
-                                ingredientAdapter.notifyDataSetChanged();
+                                ingredientAdapter.remove(ingredientAdapter.getItem(i));
+
+                                listViewItemCount -= 1;
+                                i -= 1; // gotta look at the item that replaced the one we deleted..
                             }
 
                         } catch (Exception e) {
                             Log.d(TAG, "error!!->" + e.getMessage());
                         }
                     }
+                    ingredientAdapter.notifyDataSetChanged();
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

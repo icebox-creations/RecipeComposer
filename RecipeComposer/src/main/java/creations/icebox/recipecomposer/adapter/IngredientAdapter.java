@@ -62,19 +62,18 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     public void add(Ingredient ingredient) {
         /* all ingredients */
         ingredientArrayList.add(ingredient);
-    }
-
-    //    @Override
-    public void add(Ingredient ingredient, String searchQuery) {
-        this.add(ingredient);
 
         ingredientArrayListView.clear();
         for (Ingredient i : ingredientArrayList) {
-            if (i.getIngredientTitle().toLowerCase().contains(searchQuery)) {
                 ingredientArrayListView.add(i);
                 Log.d(TAG, " - - - - - " + i.getIngredientTitle() + ", ");
-            }
         }
+    }
+
+    @Override
+    public void remove(Ingredient object) {
+        super.remove(object);
+        ingredientArrayList.remove(object);
     }
 
     @Override
@@ -180,9 +179,11 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                 public void onClick(View v) {
                     Log.d(TAG, "CheckBox was clicked");
                     CheckBox checkBox = (CheckBox) v;
+                    final int _position = position;
                     /* This is to fix the checkbox double check and off issue */
                     checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
-                    itemClickListener(v, position);
+                    Log.d(TAG, " ::: " + _position);
+                    itemClickListener(v, _position);
                 }
             });
 
@@ -220,20 +221,15 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
         Log.d(TAG, "itemClickListener in the adapter!");
 
-//        Ingredient ingredient = (Ingredient) checkBox.getTag();
-
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
         checkBox.toggle();
 
         Ingredient ingredient = ingredientArrayListView.get(position);
         ingredient.setSelected(checkBox.isChecked());
 
-//        if (ingredient.isSelected()) {
-//            ingredient.setSelected(false);
-//        } else {
-//            ingredient.setSelected(true);
-//        }
+        Log.d(TAG, "INGERDIENT SELECTED: " + ingredient.getIngredientTitle());
 
+        /* clear the string buffer */
         ingredientTitles.delete(0, ingredientTitles.length());
 
         for (Ingredient i : ingredientArrayList) {

@@ -63,7 +63,7 @@ public class SQLiteDAO {
 
         // if the title isn't blank or a duplicate, insert it
         ContentValues contentValues = new ContentValues();
-        contentValues.put(sqLiteDBHelper.COLUMN_TITLE, ingredientTitle.toLowerCase());
+        contentValues.put(sqLiteDBHelper.COLUMN_TITLE, ingredientTitle.toLowerCase().trim());
 
         long insertId = sqLiteDatabase.insert(
                 SQLiteDBHelper.TABLE_INGREDIENTS,
@@ -103,7 +103,7 @@ public class SQLiteDAO {
         }
 
         ContentValues newContentValues = new ContentValues();
-        newContentValues.put("title", newIngredientTitle);
+        newContentValues.put("title", newIngredientTitle.toLowerCase().trim());
 
         return sqLiteDatabase.update(
                 sqLiteDBHelper.TABLE_INGREDIENTS,
