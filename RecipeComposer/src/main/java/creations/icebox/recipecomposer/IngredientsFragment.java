@@ -2,6 +2,7 @@ package creations.icebox.recipecomposer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -20,9 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
@@ -35,14 +34,13 @@ public class IngredientsFragment extends ListFragment {
 
     Button      clearQueryButton;
     EditText    keywordEditText;
-    SearchView  mSearchView; // ingerdient search
+    SearchView  mSearchView;
 
     String query = new String();
 
     OnPageChangeListener mCallback;
 
     private ArrayList<Ingredient> ingredientArrayList;
-    //private ArrayList<Ingredient> ingredientArrayList;
 
     IngredientAdapter ingredientAdapter;
 
@@ -61,9 +59,6 @@ public class IngredientsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
-
-        // when added, invalid optiosn menu, fragments on options menu..
-        // manage own items.. no menu switching!
         setHasOptionsMenu(true);
     }
 
@@ -150,52 +145,15 @@ public class IngredientsFragment extends ListFragment {
 
         int id = item.getItemId();
         if (id == R.id.action_new_ingredient) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("New Ingredient");
 
-            // Set up the input
-            final EditText ingredientTitleInputEditText = new EditText(getActivity());
-            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-            builder.setView(ingredientTitleInputEditText);
-
-            // Set up the buttons
-            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String ingredientTitle = "";
-                    if (ingredientTitleInputEditText.getText() != null
-                          && ingredientTitleInputEditText.getText().length() > 0)
-                    {
-                        ingredientTitle = ingredientTitleInputEditText.getText().toString();
-                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle); // NEW INGERDIENT!
-
-                        try {
-                            if (ingredient != null) {
-                                ingredientAdapter.add(ingredient);
-                                ingredientAdapter.notifyDataSetChanged();
-                            }
-                        } catch (NullPointerException e) {
-                            Log.d(TAG, "add ing. button error: " + e.toString());
-                        }
-                    }
-                    Toast.makeText(getActivity().getBaseContext(), "Add ingredient: "
-                            + ingredientTitle, Toast.LENGTH_LONG).show();
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.show();
-
-            Log.d(TAG, "About to add a new ingredient");
+            FragmentManager fragmentManager = getActivity().getFragmentManager();
+            DialogAddIngredientFragment dialogAddIngredientFragment
+                    = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO);
+            dialogAddIngredientFragment.show(fragmentManager, "dialog");
             return true;
         } else if (id == R.id.action_remove_ingredient) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-//            builder.setTitle("Remove Ingredient");
             builder.setMessage("Remove selected ingredient(s)?");
             builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                 @Override
@@ -210,7 +168,6 @@ public class IngredientsFragment extends ListFragment {
                             checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
                             if (checkbox.isChecked()){
 
-                                // Remove this ingredient from the d    b
                                 sqLiteDAO.deleteIngredient(ingredientAdapter.getItem(i));
 
                                 // Remove from listview -- doesn't handle the case of searching for
