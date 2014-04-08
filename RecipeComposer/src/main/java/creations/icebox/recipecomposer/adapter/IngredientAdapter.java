@@ -142,12 +142,19 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         return convertView;
     }
 
+    public void changeIngredientSelectedState(View view, int position){
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
+        Ingredient ingredient = ingredientArrayListView.get(position);
+        ingredient.setSelected(checkBox.isChecked());
+    }
+
     public void itemClickListener(View view, int position) {
 
         Log.d(TAG, "position: " + position + "<- itemClickListener");
 
         Log.d(TAG, "itemClickListener in the adapter!");
 
+        /* Manually check the checkbox and select the ingredient  */
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
         checkBox.toggle();
 
@@ -156,7 +163,8 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
         Log.d(TAG, "INGERDIENT SELECTED: " + ingredient.getIngredientTitle());
 
-        /* clear the string buffer */
+
+        /* seth the list of ingedient titles that we want in the url */
         ingredientTitles.delete(0, ingredientTitles.length());
 
         for (Ingredient i : ingredientArrayList) {

@@ -102,7 +102,7 @@ public class IngredientsFragment extends ListFragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         try {
-            if (!isVisibleToUser) {
+            if (!isVisibleToUser) { // query is the keyword search query term passed in, not ingedients
                 mCallback.onPageChange(ingredientAdapter.getIngredientTitles(), query);
                 Log.d(TAG, "isVisibleToUser = false");
             } else {
@@ -322,6 +322,8 @@ public class IngredientsFragment extends ListFragment {
 
                 final int pos = position;
 
+                final View v = view;
+
                 builder.setView(ingredientTitleInputEditText);
 
                 builder.setTitle("Edit Ingredient");
@@ -329,8 +331,11 @@ public class IngredientsFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        sqLiteDAO.updateIngredientTitle(oldIngredientTitle, ingredientTitleInputEditText.getText().toString());
+                        CheckBox checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+                        checkbox.setChecked(false);
+                        ingredientAdapter.changeIngredientSelectedState(v, pos);
 
+                        sqLiteDAO.updateIngredientTitle(oldIngredientTitle, ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.getItem(pos).setIngredientTitle(ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.notifyDataSetChanged();
                     }
