@@ -61,7 +61,7 @@ public class IngredientsFragment extends ListFragment {
     }
 
     private ArrayList<String> readIngredientsSuggestionsFile(String filename){
-        ArrayList<String> ingredientsSuggestionsLocal = new ArrayList<String>();;
+        ArrayList<String> ingredientsSuggestionsLocal = new ArrayList<String>();
         try {
             InputStream inputStream = getActivity().openFileInput(filename);
             if (inputStream != null){
