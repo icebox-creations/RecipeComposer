@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Ingredient;
@@ -21,16 +23,15 @@ public class DialogAddIngredientFragment extends DialogFragment {
 
     IngredientAdapter ingredientAdapter;
     SQLiteDAO sqLiteDAO;
+    ArrayList<String> ingredientSuggestions;
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> stringArrayAdapter;
 
-    static final String[] INGREDIENTS = new String[] {
-            "basil", "cream", "berries"
-    };
-
-    public DialogAddIngredientFragment(IngredientAdapter ingredientAdapter, SQLiteDAO sqLiteDAO) {
+    public DialogAddIngredientFragment(IngredientAdapter ingredientAdapter, SQLiteDAO sqLiteDAO,
+                                       ArrayList<String> ingredientsSuggestionsArrayList) {
         this.ingredientAdapter = ingredientAdapter;
         this.sqLiteDAO = sqLiteDAO;
+        ingredientSuggestions = ingredientsSuggestionsArrayList;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class DialogAddIngredientFragment extends DialogFragment {
 
         autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.addIngredientAutoCompleteTextView);
         autoCompleteTextView.setThreshold(1);
-        stringArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, INGREDIENTS);
+        stringArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, ingredientSuggestions);
         autoCompleteTextView.setAdapter(stringArrayAdapter);
 
         builder.setTitle("New Ingredient");

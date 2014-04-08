@@ -3,9 +3,7 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -25,32 +23,19 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
-import creations.icebox.recipecomposer.adapter.RecipeAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Ingredient;
-import creations.icebox.recipecomposer.lib.Recipe;
 
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
 
-    private String              ingredientsSuggestionsFilename = "ingredientSuggestions.txt";
     private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
@@ -74,10 +59,10 @@ public class IngredientsFragment extends ListFragment {
         return new IngredientsFragment();
     }
 
-    private ArrayList<String> readIngredientsSuggestionsFile(String filename){
+    private ArrayList<String> readIngredientsSuggestionsFile(){
         ArrayList<String> ingredientsSuggestionsLocal = new ArrayList<String>();
         try {
-            InputStream inputStream = getActivity().openFileInput(filename);
+            InputStream inputStream = getActivity().getResources().openRawResource(R.raw.ingredient_suggestions);
             if (inputStream != null){
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  /// read the input..
@@ -90,9 +75,10 @@ public class IngredientsFragment extends ListFragment {
                 }
 
                 inputStream.close();
+                bufferedReader.close();
 
                 String file_contents = ingredientsSuggestionsLocal.toString();
-                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + new String(file_contents), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + file_contents, Toast.LENGTH_SHORT).show();
             }
         } catch(Exception e){
             Log.d(TAG, "FILE EXCEPTION: " + e.getMessage());
@@ -107,7 +93,7 @@ public class IngredientsFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
-        ingredientsSuggestionsArrayList = readIngredientsSuggestionsFile(ingredientsSuggestionsFilename);
+        ingredientsSuggestionsArrayList = readIngredientsSuggestionsFile();
         setHasOptionsMenu(true);
     }
 
@@ -196,7 +182,7 @@ public class IngredientsFragment extends ListFragment {
         if (id == R.id.action_new_ingredient) {
             FragmentManager fragmentManager = getActivity().getFragmentManager();
             DialogAddIngredientFragment dialogAddIngredientFragment
-                    = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO);
+                    = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO, ingredientsSuggestionsArrayList);
             dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
             return true;
         } else if (id == R.id.action_remove_ingredient) {
