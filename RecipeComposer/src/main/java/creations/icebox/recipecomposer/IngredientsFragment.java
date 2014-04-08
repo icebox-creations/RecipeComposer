@@ -3,7 +3,9 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Editable;
@@ -23,20 +25,32 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
+import creations.icebox.recipecomposer.adapter.RecipeAdapter;
 import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Ingredient;
+import creations.icebox.recipecomposer.lib.Recipe;
 
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
 
-    private String              ingredientsSuggestionsFilename = "ingredients_list_suggestions.txt";
+    private String              ingredientsSuggestionsFilename = "ingredientSuggestions.txt";
     private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
@@ -350,4 +364,228 @@ public class IngredientsFragment extends ListFragment {
     private void setupSearchView(SearchView searchView){
         searchView.setQueryHint("Find ingredient..");
     }
+
+
+//   /*
+//   * Use AsyncTask if you need to perform background tasks, but also need
+//   * to change components on the GUI. Put the background operations in
+//   * doInBackground. Put the GUI manipulation code in onPostExecute
+//   * */
+//    private class IngredientDownloaderAsyncTask extends AsyncTask<String, Integer, String> {
+//
+//        private String TAG = "***RECIPE DOWNLOADER***: ";
+//
+//        private String ingredientTitle = "";
+//        private String ingredient = "http://www.recipepuppy.com/api/?i=";
+//        private String recipeURL = "";
+//        private String recipeIngredients = "";
+//        private String recipePicUrl = "";
+//
+//        private ProgressDialog progressDialog;
+//
+//        private int lastStatusCode = 200;
+//
+//        public int getLastStatusCode() {
+//            return lastStatusCode;
+//        }
+//
+//        WeakReference<RecipesFragment> recipesFragmentWeakReference;
+//
+//        private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query, int currentPage) {
+//
+//            String currPage;
+//            if (currentPage != 0) {
+//                currPage = "&p=" + currentPage;
+//            } else {
+//                currPage = "";
+//            }
+//
+//            if (ingredientTitles == null) {
+//                recipePuppyURL = recipePuppyURL + "&q=" + query + currPage;
+//            } else if (query == null) {
+//                recipePuppyURL = recipePuppyURL + ingredientTitles + currPage;
+//            } else {
+//                recipePuppyURL = recipePuppyURL + ingredientTitles + "&q=" + query + currPage;
+//            }
+//            Log.d(TAG, "URL now = " + recipePuppyURL);
+//
+//            this.recipesFragmentWeakReference
+//                    = new WeakReference<RecipesFragment>(recipesFragment);
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//
+//            /*
+//            * if the url is different, we know we should clear the recipeList and call the api
+//            * else don't call api (cache previous result)
+//            *   watch for scroll to bottom
+//            * */
+//
+//            //http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3
+//            /*
+//                if i and q are the same
+//                    if p is the same
+//                        nothing
+//                    else p is different
+//                        request
+//                        append
+//                else i or q are different than previous vals
+//                    clear
+//                    request
+//                    append
+//            */
+//
+//            if (ingredientTitlesOld.toString().equals(ingredientTitles.toString()) && queryOld.equals(query)) {
+//                Log.d(TAG, "page old = " + currentPageOld);
+//                Log.d(TAG, "page new = " + currentPageGlobal);
+//                if (currentPageOld == currentPageGlobal) {
+//                    Log.d(TAG, "not going to call API");
+//                    return "";
+//                } else {
+//                    Log.d(TAG, "append to recipe list");
+//                }
+//            } else {
+//                Log.d(TAG, "clear recipe list");
+//                currentPageGlobal = 0;
+//                recipeList.clear();
+//            }
+//
+//            ingredientTitlesOld = new StringBuffer(ingredientTitles);
+//            if (query == null)
+//                queryOld = "";
+//            else queryOld = new String(query);
+//            currentPageOld = currentPageGlobal;
+//
+//            DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new BasicHttpParams());
+//            HttpPost httpPost = new HttpPost(recipePuppyURL);
+//            httpPost.setHeader("Content-type", "application/json");
+//            InputStream inputStream = null;
+//            String queryResult = null;
+//
+//            try {
+//                HttpResponse httpResponse = defaultHttpClient.execute(httpPost);
+//                HttpEntity httpEntity = httpResponse.getEntity();
+//                inputStream = httpEntity.getContent();
+//
+//                Log.d(TAG, "RESULT STATUS: " + httpResponse.getStatusLine().getStatusCode());
+//                lastStatusCode = httpResponse.getStatusLine().getStatusCode();
+//                if (lastStatusCode != 200) {
+//                    return "";
+//                }
+//                // BufferedReader reads data from the InputStream until the Buffer is full
+//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+//
+//                // Will store the data
+//                StringBuilder stringBuilder = new StringBuilder();
+//
+//                String line;
+//
+//                // Read in the data from the Buffer until nothing is left
+//                while ((line = bufferedReader.readLine()) != null) {
+//                    stringBuilder.append(line + '\n');
+//                }
+//
+//                queryResult = stringBuilder.toString();
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            finally {
+//                // Close the InputStream
+//                try {
+//                    if (inputStream != null) {
+//                        inputStream.close();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            // Holds Key / Value pairs from a JSON source
+//            JSONObject jsonObject;
+//
+//            if(queryResult == null || queryResult.isEmpty()){
+//                return "";
+//            }
+//
+//            try {
+//                Log.v("JSONParser RESULT: ", queryResult);
+//
+//                // Get the root JSONObject
+//                jsonObject = new JSONObject(queryResult);
+//                Log.d(TAG, jsonObject.toString());
+//
+//                JSONArray jsonArray = jsonObject.getJSONArray("results");
+//                Log.d(TAG, jsonArray.toString());
+//
+//                for (int i = 0; i < jsonArray.length(); ++i)
+//                {
+//                    try {
+//                        JSONObject recipe = jsonArray.getJSONObject(i);
+//
+//                        Recipe new_recipe = new Recipe();
+//                        recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&");
+//                        recipeURL           = recipe.getString("href").trim();
+//                        recipeIngredients   = recipe.getString("ingredients").trim();
+//                        recipePicUrl        = recipe.getString("thumbnail").trim();
+//
+//                        new_recipe.setRecipeTitle(recipeTitle);
+//                        new_recipe.setRecipeURL(recipeURL);
+//                        new_recipe.setRecipeIngredients(recipeIngredients);
+//                        new_recipe.setRecipePicUrl(recipePicUrl);
+//
+//                        recipeList.add(new_recipe);
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//            } catch (JSONException je) {
+//                je.printStackTrace();
+//            }
+//
+//            return queryResult;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            progressDialog = new ProgressDialog(getActivity());
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            super.onPostExecute(response);
+//
+//            progressDialog.dismiss();
+//
+////            if (this.recipesFragmentWeakReference.get() != null) {
+//            Log.d(TAG, "Now treat the result");
+//
+//            if(response.equals("")){
+//                return;
+//            }
+//
+//            listView = getListView();
+//            if (listView.getAdapter() == null) {
+//                Log.d(TAG, "onPostExecute-> Adapter is null");
+//                recipeAdapter = new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList);
+//                listView.setAdapter(recipeAdapter);
+//            } else {
+//                Log.d(TAG, "onPostExecute-> Adapter is already created");
+//                if (lastStatusCode == 200) {
+//                    recipeAdapter.notifyDataSetChanged();
+//                } else {
+//                    Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
+//                }
+//            }
+////            }
+//        }
+//    }
 }
