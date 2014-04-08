@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:ems="8" />
+        android:hapticFeedbackEnabled="true"
+        android:hint="@string/dialog_add_ingredient_hint"/>
 
 </FrameLayout>

@@ -21,7 +21,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.adapter.IngredientAdapter;
@@ -31,6 +35,9 @@ import creations.icebox.recipecomposer.lib.Ingredient;
 public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
+
+    private String              ingredientsSuggestionsFilename = "ingredients_list_suggestions.txt";
+    private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
     EditText    keywordEditText;
@@ -53,12 +60,40 @@ public class IngredientsFragment extends ListFragment {
         return new IngredientsFragment();
     }
 
+    private ArrayList<String> readIngredientsSuggestionsFile(String filename){
+        ArrayList<String> ingredientsSuggestionsLocal = new ArrayList<String>();;
+        try {
+            InputStream inputStream = getActivity().openFileInput(filename);
+            if (inputStream != null){
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  /// read the input..
+
+                String receiveString;
+
+                /* Read the input using the bufferedReader (which is connected to the inputStream..) */
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    ingredientsSuggestionsLocal.add(receiveString);
+                }
+
+                inputStream.close();
+
+                String file_contents = ingredientsSuggestionsLocal.toString();
+                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + new String(file_contents), Toast.LENGTH_SHORT).show();
+            }
+        } catch(Exception e){
+            Log.d(TAG, "FILE EXCEPTION: " + e.getMessage());
+        }
+
+        return ingredientsSuggestionsLocal;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
+        ingredientsSuggestionsArrayList = readIngredientsSuggestionsFile(ingredientsSuggestionsFilename);
         setHasOptionsMenu(true);
     }
 
@@ -145,11 +180,10 @@ public class IngredientsFragment extends ListFragment {
 
         int id = item.getItemId();
         if (id == R.id.action_new_ingredient) {
-
             FragmentManager fragmentManager = getActivity().getFragmentManager();
             DialogAddIngredientFragment dialogAddIngredientFragment
                     = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO);
-            dialogAddIngredientFragment.show(fragmentManager, "dialog");
+            dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
             return true;
         } else if (id == R.id.action_remove_ingredient) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
