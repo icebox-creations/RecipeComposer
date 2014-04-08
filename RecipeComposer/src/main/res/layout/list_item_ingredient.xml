@@ -26,4 +26,10 @@
         android:paddingBottom="6dp"
         android:paddingTop="7dp" />
 
+    <ImageView
+        android:id="@+id/ingredientImageView"
+        android:contentDescription="Recipe Image"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
 </FrameLayout>

@@ -43,7 +43,7 @@ public class IngredientsFragment extends ListFragment {
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
 
-    private String              ingredientsSuggestionsFilename = "ingredients_list_suggestions.txt";
+    private String              ingredientsSuggestionsFilename = "ingredientSuggestions.txt";
     private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
