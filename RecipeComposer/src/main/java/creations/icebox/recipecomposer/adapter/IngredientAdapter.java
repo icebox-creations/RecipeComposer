@@ -187,22 +187,23 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         ingredientTitles.delete(0, ingredientTitles.length());
 
         for (Ingredient i : ingredientArrayList) {
-            i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
             if (i.isSelected()) {
-                String ingredientTitleModifiedCharacters =  i.getIngredientTitle();
+                String ingredientTitlePrioritized =  i.getIngredientTitle();
                 switch (i.getSelectedState()){
                     case EXCLUDE_STATE:
-                        ingredientTitleModifiedCharacters = "-" + ingredientTitleModifiedCharacters;
+                        ingredientTitlePrioritized = "-" + ingredientTitlePrioritized;
                         break;
                     case REQUIRED_STATE:
-                        ingredientTitleModifiedCharacters = "+" + ingredientTitleModifiedCharacters;
+                        ingredientTitlePrioritized = "+" + ingredientTitlePrioritized;
                         break;
                 }
 
+                ingredientTitlePrioritized = ingredientTitlePrioritized.trim().replace(" ", "+");
+
                 if (ingredientTitles.length() == 0) {
-                    ingredientTitles.append(ingredientTitleModifiedCharacters);
+                    ingredientTitles.append(ingredientTitlePrioritized);
                 } else if (ingredientTitles.length() > 0) {
-                    ingredientTitles.append("," + ingredientTitleModifiedCharacters);
+                    ingredientTitles.append("," + ingredientTitlePrioritized);
                 }
             }
         }

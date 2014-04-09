@@ -8,7 +8,7 @@
         android:id="@+id/addIngredientAutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
         android:hapticFeedbackEnabled="true"
         android:hint="@string/dialog_add_ingredient_hint"/>
 
