@@ -242,6 +242,8 @@ public class RecipesFragment extends ListFragment {
 
         private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query, int currentPage) {
 
+            query = query.replace(" ", "+");
+
             String currPage;
             if (currentPage != 0) {
                 currPage = "&p=" + currentPage;
@@ -375,7 +377,7 @@ public class RecipesFragment extends ListFragment {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
                         Recipe new_recipe = new Recipe();
-                        recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&");
+                        recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&").replaceAll("&.*;", "");
                         recipeURL           = recipe.getString("href").trim();
                         recipeIngredients   = recipe.getString("ingredients").trim();
                         recipePicUrl        = recipe.getString("thumbnail").trim();
