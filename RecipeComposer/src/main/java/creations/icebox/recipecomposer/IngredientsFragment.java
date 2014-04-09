@@ -3,9 +3,12 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -306,6 +309,7 @@ public class IngredientsFragment extends ListFragment {
             }
         });
 
+        /* EDIT INGREDIENT FEATURE */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -321,15 +325,15 @@ public class IngredientsFragment extends ListFragment {
                 final int pos = position;
 
                 final View v = view;
-                View  checkBoxView = View.inflate(getActivity(), R.layout.edit_ingredient_checkbox, null);
-                final EditText ingredientTitleInputEditText = (EditText) checkBoxView.findViewById(R.id.editIngredientEditText);
+                View  editIngredientContentView = View.inflate(getActivity(), R.layout.edit_ingredient_contentview, null);
+                final EditText ingredientTitleInputEditText = (EditText) editIngredientContentView.findViewById(R.id.editIngredientEditText);
 
                 ingredientTitleInputEditText.setText(ingredient.getIngredientTitle());
                 ingredientTitleInputEditText.setSelection(ingredientTitleInputEditText.getText().length());
 
 
-                final CheckBox checkBoxExcludeIngredient = (CheckBox) checkBoxView.findViewById(R.id.checkboxExcludeIngredient);
-                final CheckBox checkboxRequiredIngredient = (CheckBox) checkBoxView.findViewById(R.id.checkboxRequiredIngredient);
+                final CheckBox checkBoxExcludeIngredient = (CheckBox) editIngredientContentView.findViewById(R.id.checkboxExcludeIngredient);
+                final CheckBox checkboxRequiredIngredient = (CheckBox) editIngredientContentView.findViewById(R.id.checkboxRequiredIngredient);
 
                 switch (ingredient.getSelectedState()){
                     case EXCLUDE_STATE:
@@ -368,7 +372,8 @@ public class IngredientsFragment extends ListFragment {
                 checkboxRequiredIngredient.setText(" Require ");
 
                 builder.setTitle("Edit Ingredient");
-                builder.setView(checkBoxView);
+                builder.setView(editIngredientContentView);
+
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
