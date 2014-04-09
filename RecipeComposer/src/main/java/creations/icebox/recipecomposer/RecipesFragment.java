@@ -137,9 +137,10 @@ public class RecipesFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Log.d(TAG, recipeList.get(position).getRecipeTitle() + " clicked");
+        String recipeTitle = recipeList.get(position).getRecipeTitle();
+        Log.d(TAG, recipeTitle + " clicked");
         Toast.makeText(getActivity(),
-                "Recipe #" + position + " clicked",
+                "'" + recipeTitle + "..'",
                 Toast.LENGTH_SHORT).show();
 
         Uri uriUrl = Uri.parse(recipeList.get(position).getRecipeURL());
