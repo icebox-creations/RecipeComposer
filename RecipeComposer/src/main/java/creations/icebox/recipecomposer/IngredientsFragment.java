@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -316,28 +318,76 @@ public class IngredientsFragment extends ListFragment {
                 final String oldIngredientTitle;
                 oldIngredientTitle = ingredient.getIngredientTitle();
 
-                final EditText ingredientTitleInputEditText = new EditText(getActivity());
-                ingredientTitleInputEditText.setText(ingredient.getIngredientTitle());
-                ingredientTitleInputEditText.setSelection(ingredientTitleInputEditText.getText().length());
-
                 final int pos = position;
 
                 final View v = view;
+                View  checkBoxView = View.inflate(getActivity(), R.layout.edit_ingredient_checkbox, null);
+                final EditText ingredientTitleInputEditText = (EditText) checkBoxView.findViewById(R.id.editIngredientEditText);
 
-                builder.setView(ingredientTitleInputEditText);
+                ingredientTitleInputEditText.setText(ingredient.getIngredientTitle());
+                ingredientTitleInputEditText.setSelection(ingredientTitleInputEditText.getText().length());
+
+
+                final CheckBox checkBoxExcludeIngredient = (CheckBox) checkBoxView.findViewById(R.id.checkboxExcludeIngredient);
+                final CheckBox checkboxRequiredIngredient = (CheckBox) checkBoxView.findViewById(R.id.checkboxRequiredIngredient);
+
+                switch (ingredient.getSelectedState()){
+                    case EXCLUDE_STATE:
+                        checkBoxExcludeIngredient.setChecked(true);
+                        break;
+                    case REQUIRED_STATE:
+                        checkboxRequiredIngredient.setChecked(true);
+                        break;
+                }
+
+                    /* onCheckChanged vs onClickListener... */
+                checkBoxExcludeIngredient.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ( checkBoxExcludeIngredient.isChecked() ) {
+                            checkboxRequiredIngredient.setChecked(false);
+                            ingredient.setSelectedState(Ingredient.SelectedStateType.EXCLUDE_STATE);
+                        } else {
+                            ingredient.setSelectedState(Ingredient.SelectedStateType.NORMAL_STATE);
+                        }
+                    }
+                });
+                checkBoxExcludeIngredient.setText(" Exclude  ");
+
+                checkboxRequiredIngredient.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ( checkboxRequiredIngredient.isChecked() ) {
+                            checkBoxExcludeIngredient.setChecked(false);
+                            ingredient.setSelectedState(Ingredient.SelectedStateType.REQUIRED_STATE);
+                        } else {
+                            ingredient.setSelectedState(Ingredient.SelectedStateType.NORMAL_STATE);
+                        }
+                    }
+                });
+                checkboxRequiredIngredient.setText(" Require ");
 
                 builder.setTitle("Edit Ingredient");
+                builder.setView(checkBoxView);
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        boolean prevSelectedState; // false
                         CheckBox checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+                        prevSelectedState = checkbox.isChecked();
                         checkbox.setChecked(false);
-                        ingredientAdapter.changeIngredientSelectedState(v, pos);
+                        ingredientAdapter.changeIngredientSelectedState(v, pos); // not type of ingredient, just ...
 
                         sqLiteDAO.updateIngredientTitle(oldIngredientTitle, ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.getItem(pos).setIngredientTitle(ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.notifyDataSetChanged();
+
+                        if (prevSelectedState == false){
+                            checkbox.toggle();
+                        }
+
+                        ingredientAdapter.itemClickListener(v, pos);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -346,6 +396,7 @@ public class IngredientsFragment extends ListFragment {
                         dialog.cancel();
                     }
                 });
+
                 builder.show();
                 return true;
             }

@@ -132,6 +132,25 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         // Ingredient item based on the position
         Ingredient ingredient = ingredientArrayListView.get(position);
 
+        TextView ingredientIndicator = (TextView) convertView.findViewById(R.id.ingredientIndicator);
+
+        switch (ingredient.getSelectedState()){
+            case NORMAL_STATE:
+                ingredientIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.grey));
+                break;
+            case EXCLUDE_STATE:
+                ingredientIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.red));
+                break;
+            case REQUIRED_STATE:
+                ingredientIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.green));
+                break;
+            case NULL_STATE:
+                // undefined behaviour..
+            default:
+                ingredientIndicator.setBackgroundColor(getContext().getResources().getColor(R.color.blue));
+                break;
+        }
+
         // assign values if the ingredient is not null
         if (ingredient != null) {
             viewHolder.ingredientTitle.setText(ingredient.getIngredientTitle());
@@ -170,10 +189,20 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         for (Ingredient i : ingredientArrayList) {
             i.setIngredientTitle(i.getIngredientTitle().trim().replace(" ", "+"));
             if (i.isSelected()) {
+                String ingredientTitleModifiedCharacters =  i.getIngredientTitle();
+                switch (i.getSelectedState()){
+                    case EXCLUDE_STATE:
+                        ingredientTitleModifiedCharacters = "-" + ingredientTitleModifiedCharacters;
+                        break;
+                    case REQUIRED_STATE:
+                        ingredientTitleModifiedCharacters = "+" + ingredientTitleModifiedCharacters;
+                        break;
+                }
+
                 if (ingredientTitles.length() == 0) {
-                    ingredientTitles.append(i.getIngredientTitle());
+                    ingredientTitles.append(ingredientTitleModifiedCharacters);
                 } else if (ingredientTitles.length() > 0) {
-                    ingredientTitles.append("," + i.getIngredientTitle());
+                    ingredientTitles.append("," + ingredientTitleModifiedCharacters);
                 }
             }
         }

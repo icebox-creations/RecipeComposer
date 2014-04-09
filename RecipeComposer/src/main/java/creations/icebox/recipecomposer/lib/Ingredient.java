@@ -8,6 +8,24 @@ public class Ingredient {
     private String ingredientTitle = "";
     private boolean selected = false;
 
+    private SelectedStateType selectedState = SelectedStateType.NORMAL_STATE;
+
+    public enum SelectedStateType {
+        NULL_STATE,
+        NORMAL_STATE,
+        REQUIRED_STATE,
+        EXCLUDE_STATE
+    };
+
+    public SelectedStateType getSelectedState() {
+        return selectedState;
+    }
+
+    public void setSelectedState(SelectedStateType selectedState) {
+        this.selectedState = selectedState;
+    }
+
+
     public long getIngredientId() {
         return id;
     }

@@ -1,0 +1,9 @@
+<resources>
+    <color name="red">#ffd61d25</color>
+    <color name="orange">#FF7D00</color>
+    <color name="yellow">#ffd5d500</color>
+    <color name="green">#ff00c600</color>
+    <color name="blue">#ff0f6fea</color>
+    <color name="black">#000000</color>
+    <color name="grey">#ff86949d</color>
+</resources>
