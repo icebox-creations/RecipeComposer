@@ -14,25 +14,34 @@
 
         <TableRow>
 
-            <EditText
-                android:id="@+id/keywordEditText"
+            <!--<EditText-->
+                <!--android:id="@+id/keywordEditText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:ems="10"-->
+                <!--android:inputType="text"-->
+                <!--android:hint="@string/keyword_edit_text_hint" >-->
+                <!--&lt;!&ndash;<requestFocus />&ndash;&gt;-->
+            <!--</EditText>-->
+            <!---->
+
+            <SearchView
+                android:id="@+id/keywordSearchView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
-                android:hint="@string/keyword_edit_text_hint" >
+                android:queryHint="@string/keyword_edit_text_hint" >
+            </SearchView>
 
-                <!--<requestFocus />-->
-
-            </EditText>
-
-            <Button
-                android:id="@+id/clearQueryButton"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clear_query_button" />
+            <!--<Button-->
+                <!--android:id="@+id/clearQueryButton"-->
+                <!--style="?android:attr/buttonStyleSmall"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/clear_query_button" />-->
 
         </TableRow>
 

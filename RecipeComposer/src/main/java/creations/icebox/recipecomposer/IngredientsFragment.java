@@ -44,8 +44,9 @@ public class IngredientsFragment extends ListFragment {
     private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
-    EditText    keywordEditText;
-    SearchView  mSearchView;
+//    EditText    keywordEditText;
+    SearchView  keywordSearchView;  // for the keyword search query at the top of ingredients list
+    SearchView  mSearchView;        // ingredients list search
 
     String query = new String();
 
@@ -248,39 +249,53 @@ public class IngredientsFragment extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         try {
-            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
-            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
+//            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
+            keywordSearchView = (SearchView) rootView.findViewById(R.id.keywordSearchView);
+//            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
 
-            keywordEditText.addTextChangedListener(new TextWatcher() {
+            keywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    query = keywordEditText.getText().toString();
-                    Log.d(TAG, "addTextChangedListener-> query: " + query + " char seq: " + s.toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    query = query.trim().replace(" ", "+");
+                public boolean onQueryTextChange(String newText) {
+                    query = newText;
+                    Log.d(TAG, "addTextChangedListener-> query: " + query);
+                    return true;
                 }
             });
 
-            clearQueryButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "clear query button clicked!");
-                    try {
-                        if (keywordEditText.getText().length() > 0) {
-                            keywordEditText.setText("");
-                        }
-                    } catch (NullPointerException e) {
-                        Log.d(TAG, "clearQueryButton: " + e.toString());
-                    }
-                }
-            });
+//            keywordSearchView.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//                    query = query.trim().replace(" ", "+");
+//                }
+//            });
+
+//            clearQueryButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.d(TAG, "clear query button clicked!");
+//                    try {
+//                        if (keywordSearchView.getText().length() > 0) {
+//                            keywordSearchView.setText("");
+//                        }
+//                    } catch (NullPointerException e) {
+//                        Log.d(TAG, "clearQueryButton: " + e.toString());
+//                    }
+//                }
+//            });
 
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateView: " + e.toString());
