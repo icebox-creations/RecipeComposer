@@ -23,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SetPreferenceActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
     </application>
     <uses-permission android:name="android.permission.SEND_SMS">
     </uses-permission>

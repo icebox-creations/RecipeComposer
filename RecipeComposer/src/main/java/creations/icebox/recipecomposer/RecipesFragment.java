@@ -413,9 +413,10 @@ public class RecipesFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(String response) {
+            progressDialog.dismiss();
+
             super.onPostExecute(response);
 
-            progressDialog.dismiss();
 
 //            if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");

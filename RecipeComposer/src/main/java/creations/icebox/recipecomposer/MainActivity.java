@@ -1,6 +1,10 @@
 package creations.icebox.recipecomposer;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.provider.Settings;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -36,10 +40,10 @@ public class MainActivity extends ActionBarActivity
     StringBuffer ingredientTitles;
     String query;
 
-    public StringBuffer getIngredientTitles() {
+    public StringBuffer     getIngredientTitles() {
         return ingredientTitles;
     }
-    public String getQuery() {
+    public String           getQuery() {
         return query;
     }
 
@@ -117,6 +121,16 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, SetPreferenceActivity.class);
+
+            Globals.progressDialog = new ProgressDialog(this);
+            Globals.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            Globals.progressDialog.setMessage("Loading Settings..");
+            Globals.progressDialog.show();
+
+            startActivityForResult(intent, 0);
+//            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -154,4 +168,5 @@ public class MainActivity extends ActionBarActivity
             Log.d(TAG, e.toString());
         }
     }
+
 }
