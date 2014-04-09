@@ -10,11 +10,9 @@ public class SetPreferenceActivity extends Activity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
 
-        Globals.progressDialog.dismiss();
+//        Globals.progressDialog.dismiss();
 
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new PrefsFragment()).commit();
-
     }
-
 }

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
-    android:paddingLeft="40dp" >
+    android:paddingLeft="40dp"
+    android:background="@color/almond" >
 
     <ImageView
         android:id="@+id/recipeImageView"

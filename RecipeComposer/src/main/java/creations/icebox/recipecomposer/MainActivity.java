@@ -124,10 +124,10 @@ public class MainActivity extends ActionBarActivity
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, SetPreferenceActivity.class);
 
-            Globals.progressDialog = new ProgressDialog(this);
-            Globals.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            Globals.progressDialog.setMessage("Loading Settings..");
-            Globals.progressDialog.show();
+//            Globals.progressDialog = new ProgressDialog(this);
+//            Globals.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            Globals.progressDialog.setMessage("Loading Settings..");
+//            Globals.progressDialog.show();
 
             startActivityForResult(intent, 0);
 //            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);

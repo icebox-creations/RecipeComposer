@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="creations.icebox.recipecomposer.RecipesFragment">
+    tools:context="creations.icebox.recipecomposer.RecipesFragment"
+    android:background="@color/lighter_grey"
+    android:orientation="vertical" >
 
     <ListView
         android:id="@android:id/list"

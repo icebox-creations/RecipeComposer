@@ -9,19 +9,10 @@
             <!--android:orderInCategory="4"-->
             <!--app:showAsAction="always" />-->
     <item
-        android:id="@+id/dropdown_menu"
-        android:showAsAction="ifRoom"
-        app:showAsAction="ifRoom"
+        android:id="@+id/action_settings"
+        app:showAsAction="never"
         android:title="Settings"
-        android:orderInCategory="4"
-        android:icon="@drawable/ic_action_settings">
-
-        <menu>
-           <item
-                android:id="@+id/action_settings"
-                android:title="Settings" >
-           </item>
-        </menu>
+        android:orderInCategory="4">
     </item>
 
 </menu>
