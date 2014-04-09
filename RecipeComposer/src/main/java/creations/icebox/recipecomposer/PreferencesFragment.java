@@ -3,7 +3,7 @@ package creations.icebox.recipecomposer;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
-public class PrefsFragment extends PreferenceFragment {
+public class PreferencesFragment extends PreferenceFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

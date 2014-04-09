@@ -17,10 +17,8 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory></PreferenceCategory>
-
     <PreferenceCategory
-        android:title="Privacy Settings...">
+        android:title="Privacy Settings">
 
         <CheckBoxPreference
             android:key="isAllowShareData"

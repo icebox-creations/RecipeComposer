@@ -10,7 +10,8 @@
             <!--app:showAsAction="always" />-->
     <item
         android:id="@+id/action_settings"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_settings"
         android:title="Settings"
         android:orderInCategory="4">
     </item>

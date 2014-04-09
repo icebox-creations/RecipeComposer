@@ -1,10 +1,7 @@
 package creations.icebox.recipecomposer;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
-import android.provider.Settings;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -13,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 
@@ -94,7 +90,6 @@ public class MainActivity extends ActionBarActivity
                             .setTabListener(this));
         }
 
-
 //        if (savedInstanceState != null) {
 //            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 //        }
@@ -122,7 +117,7 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.action_settings) {
 //            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            intent.setClass(MainActivity.this, SetPreferenceActivity.class);
+            intent.setClass(MainActivity.this, PreferencesActivity.class);
 
 //            Globals.progressDialog = new ProgressDialog(this);
 //            Globals.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -132,8 +127,9 @@ public class MainActivity extends ActionBarActivity
             startActivityForResult(intent, 0);
 //            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
             return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
