@@ -417,7 +417,6 @@ public class RecipesFragment extends ListFragment {
 
             super.onPostExecute(response);
 
-
 //            if (this.recipesFragmentWeakReference.get() != null) {
                 Log.d(TAG, "Now treat the result");
 

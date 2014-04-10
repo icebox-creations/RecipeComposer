@@ -4,13 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="creations.icebox.recipecomposer.RecipesFragment"
-    android:background="@color/lighter_grey"
+    android:background="@color/almond"
     android:orientation="vertical" >
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="true"
+        android:divider="@color/lighter_grey"
+        android:dividerHeight="2dp"/>
 
     <TextView
         android:id="@android:id/empty"

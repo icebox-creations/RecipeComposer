@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import creations.icebox.recipecomposer.lib.Ingredient;
 import creations.icebox.recipecomposer.R;
+import creations.icebox.recipecomposer.lib.Ingredient;
 
 /** Follows the ViewHolder Design Pattern */
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {

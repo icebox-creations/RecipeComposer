@@ -1,6 +1,7 @@
 package creations.icebox.recipecomposer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -115,17 +116,9 @@ public class MainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-//            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            intent.setClass(MainActivity.this, PreferencesActivity.class);
-
-//            Globals.progressDialog = new ProgressDialog(this);
-//            Globals.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//            Globals.progressDialog.setMessage("Loading Settings..");
-//            Globals.progressDialog.show();
-
+            intent.setClass(MainActivity.this, SetPreferencesActivity.class);
             startActivityForResult(intent, 0);
-//            startActivityForResult(new Intent(Settings.ACTION_SETTINGS), 0);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

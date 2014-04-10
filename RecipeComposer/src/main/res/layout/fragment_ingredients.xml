@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="creations.icebox.recipecomposer.IngredientsFragment"
     android:orientation="vertical"
-    android:background="@color/lighter_grey"
+    android:background="@color/almond"
     >
 
     <TableLayout
@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text"
-                android:background="@color/lighter_grey"
+                android:background="@color/almond"
                 android:queryHint="@string/keyword_edit_text_hint" >
             </SearchView>
 
@@ -55,7 +55,9 @@
                 android:id="@android:id/list"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:dividerHeight="1dp"/>
+                android:listSelector="@drawable/abc_list_selector_holo_dark"
+                android:dividerHeight="1dp"
+                android:drawSelectorOnTop="true" />
 
         </TableRow>
 

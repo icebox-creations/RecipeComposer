@@ -3,14 +3,9 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.telephony.SmsManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,12 +16,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -251,6 +243,7 @@ public class IngredientsFragment extends ListFragment {
         try {
 //            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
             keywordSearchView = (SearchView) rootView.findViewById(R.id.keywordSearchView);
+            keywordSearchView.setIconifiedByDefault(false);
 //            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
 
             keywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

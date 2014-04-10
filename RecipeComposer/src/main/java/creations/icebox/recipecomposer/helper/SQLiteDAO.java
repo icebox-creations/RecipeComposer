@@ -108,7 +108,7 @@ public class SQLiteDAO {
         return sqLiteDatabase.update(
                 sqLiteDBHelper.TABLE_INGREDIENTS,
                 newContentValues,
-                "title = \"" +  oldIngredientTitle + "\"",
+                "title = \"" + oldIngredientTitle + "\"",
                 null
         );
     }
@@ -139,5 +139,4 @@ public class SQLiteDAO {
         ingredient.setIngredientTitle(cursor.getString(1));
         return ingredient;
     }
-
 }
