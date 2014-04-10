@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Recipe Composer</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Main Activity</string>
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
     <string name="keyword_edit_text_hint">Recipe search keywords..</string>
@@ -13,8 +13,9 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
     <string name="action_remove">Remove</string>
-    <string name="action_new_ingredient">New Ingredient!</string>
-    <string name="action_search">Search..</string>
+    <string name="action_new_ingredient">Add Ingredient</string>
+    <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
     <string name="dialog_add_ingredient_hint">potato</string>
     <string name="ingredient_search">Find existing ingredient..</string>
 

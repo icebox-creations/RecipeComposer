@@ -6,6 +6,8 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,7 +38,7 @@ public class IngredientsFragment extends ListFragment {
     private ArrayList<String>   ingredientsSuggestionsArrayList;
 
     Button      clearQueryButton;
-//    EditText    keywordEditText;
+    EditText    keywordEditText;
     SearchView  keywordSearchView;  // for the keyword search query at the top of ingredients list
     SearchView  mSearchView;        // ingredients list search
 
@@ -75,7 +77,7 @@ public class IngredientsFragment extends ListFragment {
                 inputStream.close();
                 bufferedReader.close();
 
-                String file_contents = ingredientsSuggestionsLocal.toString();
+//                String file_contents = ingredientsSuggestionsLocal.toString();
 //                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + file_contents, Toast.LENGTH_SHORT).show();
             }
         } catch(Exception e){
@@ -241,24 +243,24 @@ public class IngredientsFragment extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
         try {
-//            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
-            keywordSearchView = (SearchView) rootView.findViewById(R.id.keywordSearchView);
-            keywordSearchView.setIconifiedByDefault(false);
-//            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
+            clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
+//            keywordSearchView = (SearchView) rootView.findViewById(R.id.keywordSearchView);
+//            keywordSearchView.setIconifiedByDefault(false);
+            keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
 
-            keywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    query = newText;
-                    Log.d(TAG, "addTextChangedListener-> query: " + query);
-                    return true;
-                }
-            });
+//            keywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//                @Override
+//                public boolean onQueryTextSubmit(String query) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public boolean onQueryTextChange(String newText) {
+//                    query = newText;
+//                    Log.d(TAG, "addTextChangedListener-> query: " + query);
+//                    return true;
+//                }
+//            });
 
 //            keywordSearchView.addTextChangedListener(new TextWatcher() {
 //                @Override
@@ -276,19 +278,41 @@ public class IngredientsFragment extends ListFragment {
 //                }
 //            });
 
-//            clearQueryButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d(TAG, "clear query button clicked!");
-//                    try {
-//                        if (keywordSearchView.getText().length() > 0) {
-//                            keywordSearchView.setText("");
-//                        }
-//                    } catch (NullPointerException e) {
-//                        Log.d(TAG, "clearQueryButton: " + e.toString());
-//                    }
-//                }
-//            });
+            keywordEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    try {
+                        query = keywordEditText.getText().toString();
+                        Log.d(TAG, "addTextChangedListener-> query: " + query + " char seq: " + s.toString());
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, e.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    query = query.trim().replace(" ", "+");
+                }
+            });
+
+            clearQueryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "clear query button clicked!");
+                    try {
+                        if (keywordEditText.getText().length() > 0) {
+                            keywordEditText.setText("");
+                        }
+                    } catch (NullPointerException e) {
+                        Log.d(TAG, "clearQueryButton: " + e.toString());
+                    }
+                }
+            });
 
         } catch (NullPointerException e) {
             Log.d(TAG, "onCreateView: " + e.toString());

@@ -1,15 +1,4 @@
-recipe-composer
+Recipe Composer
 ===============
 
-Ingredients are used to create recipes
-
-Lets make some recipes!
-
-
-
-TODO:
-    
-    Get UI trimmed up
-
-
-
+An Android app that allows users to search for new and exciting recipes based on a list of ingredients!

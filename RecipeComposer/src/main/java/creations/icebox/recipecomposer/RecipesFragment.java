@@ -8,10 +8,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -163,22 +167,45 @@ public class RecipesFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.recipe_actions, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.recipe_fragment_context_menu, menu);
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.recipeActionRefresh:
-//                Log.d(TAG, "Refresh init");
-//                return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.actionShareRecipe:
+                try {
+                    Log.d(TAG, "share recipe: " + recipeAdapter.getItem(itemInfo.position).getRecipeTitle());
+                    shareTextRecipe(itemInfo);
+                } catch (NullPointerException e) {
+                    Log.d(TAG, e.toString());
+                }
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void shareTextRecipe(AdapterView.AdapterContextMenuInfo itemInfo) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "[Recipe Composer] Check out this recipe!");
+
+        Recipe recipe = recipeAdapter.getItem(itemInfo.position);
+
+        String recipeInfo = recipe.getRecipeTitle() + "\nMain ingredients: "
+                + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
+
+        shareIntent.putExtra(Intent.EXTRA_TEXT, recipeInfo);
+
+        startActivity(Intent.createChooser(shareIntent, "Share recipe info to..."));
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -425,6 +452,7 @@ public class RecipesFragment extends ListFragment {
                 }
 
                 listView = getListView();
+                registerForContextMenu(listView);
                 if (listView.getAdapter() == null) {
                     Log.d(TAG, "onPostExecute-> Adapter is null");
                     recipeAdapter = new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList);
