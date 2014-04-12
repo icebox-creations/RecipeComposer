@@ -18,5 +18,6 @@
     <string name="action_share">Share</string>
     <string name="dialog_add_ingredient_hint">potato</string>
     <string name="ingredient_search">Find existing ingredient..</string>
+    <string name="share_intent">Share recipe info to&#8230;</string>
 
 </resources>

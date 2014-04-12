@@ -3,9 +3,11 @@ package creations.icebox.recipecomposer;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -33,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.RecipeAdapter;
 import creations.icebox.recipecomposer.lib.Recipe;
@@ -195,16 +198,53 @@ public class RecipesFragment extends ListFragment {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "[Recipe Composer] Check out this recipe!");
 
         Recipe recipe = recipeAdapter.getItem(itemInfo.position);
 
-        String recipeInfo = recipe.getRecipeTitle() + "\nMain ingredients: "
+        String textMessage = recipe.getRecipeTitle() + "\nMain ingredients: "
                 + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
+        String subjectMessage = "[Recipe Composer] Check out this recipe!";
 
-        shareIntent.putExtra(Intent.EXTRA_TEXT, recipeInfo);
+        try {
+            List<ResolveInfo> resolveInfoList = getActivity().getPackageManager()
+                    .queryIntentActivities(shareIntent, 0);
 
-        startActivity(Intent.createChooser(shareIntent, "Share recipe info to..."));
+            if (!resolveInfoList.isEmpty()) {
+                List<Intent> targetedShareIntents = new ArrayList<Intent>();
+                Intent targetedShareIntent;
+
+                for (ResolveInfo resolveInfo : resolveInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+
+                    targetedShareIntent = new Intent(Intent.ACTION_SEND);
+                    targetedShareIntent.setType("text/plain");
+                    targetedShareIntent.putExtra(Intent.EXTRA_SUBJECT, subjectMessage);
+                    targetedShareIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+                    targetedShareIntent.setPackage(packageName);
+
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+
+                Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0),
+                        getResources().getString(R.string.share_intent));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        targetedShareIntents.toArray(new Parcelable[] {}));
+                startActivityForResult(chooserIntent, 0);
+            }
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, e.toString());
+        }
+
+//        Recipe recipe = recipeAdapter.getItem(itemInfo.position);
+//
+//        String recipeInfo = recipe.getRecipeTitle() + "\nMain ingredients: "
+//                + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
+//
+//        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "[Recipe Composer] Check out this recipe!");
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, recipeInfo);
+//
+//        startActivity(Intent.createChooser(shareIntent, "Share recipe info to..."));
     }
 
     @Override
