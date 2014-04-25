@@ -22,4 +22,7 @@
     <string name="ingredient_search">Find existing ingredient..</string>
     <string name="share_intent">Share recipe info to&#8230;</string>
 
+
+    <string name="action_favorite_recipe_content_description">Favorite This Recipe!</string>
+
 </resources>

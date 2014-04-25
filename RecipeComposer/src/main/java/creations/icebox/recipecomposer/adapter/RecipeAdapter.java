@@ -99,6 +99,23 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
                         .execute(recipeImageURL);
         }
 
+        convertView.findViewById(R.id.favoriteRecipeImageView)
+                .setOnClickListener(new View.OnClickListener()
+        {
+            int favoritedState = 0;
+            @Override
+            public void onClick(View v) {
+                if (favoritedState == 0) {
+                    ((ImageView)v).setImageResource(android.R.drawable.btn_star_big_on);
+                    favoritedState = 1;
+                } else if (favoritedState == 1) {
+                    ((ImageView)v).setImageResource(android.R.drawable.btn_star_big_off);
+                    favoritedState = 0;
+                }
+            }
+
+        });
+
         return convertView;
     }
 

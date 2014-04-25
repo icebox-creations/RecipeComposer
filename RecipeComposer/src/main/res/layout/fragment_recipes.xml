@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:drawSelectorOnTop="true"
         android:divider="@color/lighter_grey"
+        <!--android:maxHeight="20dp"-->
         android:dividerHeight="2dp"/>
 
     <TextView
@@ -22,5 +23,6 @@
         android:text="@string/recipes_empty_list_view"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:layout_gravity="center" />
+
 
 </FrameLayout>
