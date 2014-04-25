@@ -60,6 +60,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
+        /* convertView is the list item */
         if (convertView == null) {
             // inflate the layout
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -83,7 +84,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         Recipe recipe = recipeArrayList.get(position);
         String recipeImageURL = recipe.getRecipePicUrl();
 
-        ImageView iv =  (ImageView)parent.findViewById(R.id.recipeImageView);
+        ImageView iv =  (ImageView)convertView.findViewById(R.id.recipeImageView);
         if (iv != null){
             (new DownloadImageTask(iv))
                     .execute(recipeImageURL);

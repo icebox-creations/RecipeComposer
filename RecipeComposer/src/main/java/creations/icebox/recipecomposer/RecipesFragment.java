@@ -484,7 +484,8 @@ public class RecipesFragment extends ListFragment {
 
             super.onPostExecute(response);
 
-//            if (this.recipesFragmentWeakReference.get() != null) {
+//                if (this.recipesFragmentWeakReference.get() != null) {
+//                }
                 Log.d(TAG, "Now treat the result");
 
                 if(response.equals("")){
@@ -505,7 +506,8 @@ public class RecipesFragment extends ListFragment {
                         Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
                     }
                 }
-//            }
+
+
         }
     }
 }

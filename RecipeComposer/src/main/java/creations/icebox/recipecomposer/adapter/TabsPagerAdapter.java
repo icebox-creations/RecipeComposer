@@ -38,6 +38,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 Log.d(TAB, "Recipes Fragment new instance");
                 return RecipesFragment.newInstance();
+            case 2:
+                Log.d(TAB, "Recipe Favorites Fragment new instance");
+                return RecipesFragment.newInstance();
         }
         return null;
     }
