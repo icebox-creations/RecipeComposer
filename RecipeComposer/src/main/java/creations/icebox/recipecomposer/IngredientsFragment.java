@@ -145,16 +145,36 @@ public class IngredientsFragment extends ListFragment {
         inflater.inflate(R.menu.ingredient_fragment_actions, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem settingsMenuItem = menu.findItem(R.id.action_settings);
 
         try{
             mSearchView = (SearchView) searchItem.getActionView();
             setupSearchView(mSearchView);
 
             if (mSearchView != null) {
+                mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (hasFocus) {
+                            try {
+                                settingsMenuItem.setVisible(false);
+                            } catch (Exception e) {
+                                Log.d(TAG, "Exception 1");
+                            }
+                        } else {
+                            try {
+                                settingsMenuItem.setVisible(true);
+                            } catch (Exception e) {
+                                Log.d(TAG, "Exception 2");
+                            }
+                        }
+                        //  getActivity().invalidateOptionsMenu();
+                    }
+                });
                 mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        return false;
+                        return true;
                     }
 
                     @Override
@@ -166,7 +186,7 @@ public class IngredientsFragment extends ListFragment {
                         } else {
                             lv.setFilterText(newText);
                         }
-                        return false;
+                        return true;
                     }
                 });
             }

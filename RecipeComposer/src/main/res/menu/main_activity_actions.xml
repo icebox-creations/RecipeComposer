@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:icon="@drawable/ic_action_settings" >
 
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        app:showAsAction="never"
-        android:orderInCategory="4">
-    </item>
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="always"-->
+        <!--android:orderInCategory="5">-->
+    <!--</item>-->
 
 </menu>

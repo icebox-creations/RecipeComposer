@@ -86,14 +86,15 @@ public class MainActivity extends ActionBarActivity
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
             actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mTabsPagerAdapter.getPageTitle(i, getApplicationContext()))
-                            .setTabListener(this));
+                actionBar.newTab()
+                    .setText(mTabsPagerAdapter.getPageTitle(i, getApplicationContext()))
+                    .setTabListener(this));
         }
 
 //        if (savedInstanceState != null) {
 //            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 //        }
+        mViewPager.setCurrentItem(1);
     }
 
 //    @Override
@@ -106,6 +107,7 @@ public class MainActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+//        menu.findItem(R.id.action_settings).setEnabled(false);
         return super.onCreateOptionsMenu(menu);
     }
 

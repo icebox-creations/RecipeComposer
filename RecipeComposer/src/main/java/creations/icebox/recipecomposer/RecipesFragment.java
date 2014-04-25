@@ -507,7 +507,6 @@ public class RecipesFragment extends ListFragment {
                     }
                 }
 
-
         }
     }
 }

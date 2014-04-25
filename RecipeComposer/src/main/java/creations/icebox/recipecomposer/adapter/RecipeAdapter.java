@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -84,11 +85,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         Recipe recipe = recipeArrayList.get(position);
         String recipeImageURL = recipe.getRecipePicUrl();
 
-        ImageView iv =  (ImageView)convertView.findViewById(R.id.recipeImageView);
-        if (iv != null){
-            (new DownloadImageTask(iv))
-                    .execute(recipeImageURL);
-        }
 
         // assign values if the recipe is not null
         if (recipe != null) {
@@ -96,8 +92,22 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
 //            viewHolder.recipeURL.setText(recipe.getRecipeURL());
         }
+
+        ImageView iv =  (ImageView) convertView.findViewById(R.id.recipeImageView);
+        if (iv != null) {
+                (new DownloadImageTask(iv))
+                        .execute(recipeImageURL);
+        }
+
         return convertView;
     }
+
+//    public void setAllImages(){
+//        for (int i = 0; i < recipeArrayList.size(); i++) {
+//            recipeArrayList.get(i).getRecipePicUrl();
+//        }
+//    }
+
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;

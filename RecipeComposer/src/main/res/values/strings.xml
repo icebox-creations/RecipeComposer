@@ -5,10 +5,12 @@
     <string name="title_activity_main">Main Activity</string>
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
+    <string name="title_section3">Recipe Favorites</string>
     <string name="keyword_edit_text_hint">Recipe search keywords..</string>
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
-    <string name="recipes_empty_list_view">No recipes to display.</string>
+    <string name="recipes_empty_list_view">Sorry, couldnt find similar recipes.</string>
+    <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites</string>
     <string name="ingredients_empty_list_view">Add some ingredients to get started :)</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
