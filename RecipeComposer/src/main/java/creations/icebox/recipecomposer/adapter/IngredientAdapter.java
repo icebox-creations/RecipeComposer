@@ -219,7 +219,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                 constraint = constraint.toString().toLowerCase();
                 FilterResults results = new FilterResults();
 
-                if (constraint != null && constraint.toString().length() > 0) {
+                if (constraint.toString().length() > 0) {
                     for (Ingredient anIngredient : ingredientArrayList) {
                         Log.d(TAG, " Original Data.. " + anIngredient.getIngredientTitle() + "... ");
                     }

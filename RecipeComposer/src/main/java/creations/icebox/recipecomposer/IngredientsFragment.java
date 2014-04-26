@@ -172,6 +172,8 @@ public class IngredientsFragment extends ListFragment {
                     }
                 });
                 mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    android.widget.Filter filter = ingredientAdapter.getFilter();
+
                     @Override
                     public boolean onQueryTextSubmit(String query) {
                         return true;
@@ -180,12 +182,7 @@ public class IngredientsFragment extends ListFragment {
                     @Override
                     public boolean onQueryTextChange(String newText) {
                         Log.d(TAG, newText);
-                        ListView lv = getListView();
-                        if (newText.length() == 0){
-                            lv.clearTextFilter();
-                        } else {
-                            lv.setFilterText(newText);
-                        }
+                        filter.filter(newText);
                         return true;
                     }
                 });
