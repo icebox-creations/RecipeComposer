@@ -9,7 +9,7 @@
     <string name="keyword_edit_text_hint">Recipe search keywords..</string>
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
-    <string name="recipes_empty_list_view">Sorry, couldnt find similar recipes.</string>
+    <string name="recipes_empty_list_view">Sorry, couldn\'t find similar recipes.</string>
     <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites</string>
     <string name="ingredients_empty_list_view">Add some ingredients to get started :)</string>
     <string name="action_refresh">Refresh</string>

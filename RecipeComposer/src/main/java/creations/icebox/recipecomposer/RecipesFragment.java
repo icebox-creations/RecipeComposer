@@ -203,7 +203,7 @@ public class RecipesFragment extends ListFragment {
 
         String textMessage = recipe.getRecipeTitle() + "\nMain ingredients: "
                 + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
-        String subjectMessage = "[Recipe Composer] Check out this recipe!";
+        String subjectMessage = "Hey, let's make " + recipe.getRecipeTitle() + "!";
 
         try {
             List<ResolveInfo> resolveInfoList = getActivity().getPackageManager()

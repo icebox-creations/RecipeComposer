@@ -3,6 +3,7 @@
 <FrameLayout
     android:id="@+id/checkboxTextViewFrameLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/almond" >
@@ -17,17 +18,20 @@
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
         android:id="@+id/ingredientTitleTextView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:layout_marginRight="70dp"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textStyle="normal"
         android:layout_marginLeft="40dp"
         android:paddingBottom="14dp"
-        android:paddingTop="4dp" />
+        android:paddingTop="4dp"
+        app:typeface="roboto_slab_regular"
+        android:textSize="20sp" />
+
+    <!--android:textAppearance="@android:style/TextAppearance.Medium"-->
+    <!--android:textStyle="normal"-->
 
     <ImageView
         android:id="@+id/ingredientImageView"
