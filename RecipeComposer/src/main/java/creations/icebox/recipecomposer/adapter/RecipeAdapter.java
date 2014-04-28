@@ -13,7 +13,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
@@ -42,7 +46,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     static class ViewHolderItem {
         TextView recipeTitle;
         TextView recipeIngredients;
-//        TextView recipeURL;
+        TextView recipeURL;
     }
 
     @Override
@@ -71,7 +75,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder = new ViewHolderItem();
             viewHolder.recipeTitle = (TextView) convertView.findViewById(R.id.recipeTitleTextView);
             viewHolder.recipeIngredients = (TextView) convertView.findViewById(R.id.recipeIngredientsTextView);
-//            viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeURLTextView);
+            viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeUrlTextView);
 
             convertView.setTag(viewHolder);
 
@@ -85,19 +89,24 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         Recipe recipe = recipeArrayList.get(position);
         String recipeImageURL = recipe.getRecipePicUrl();
 
-
         // assign values if the recipe is not null
-        if (recipe != null) {
-            viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
-            viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
-//            viewHolder.recipeURL.setText(recipe.getRecipeURL());
+        viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
+        viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
+
+        try {
+            URL recipeUrl = new URL(recipe.getRecipeURL());
+            viewHolder.recipeURL.setText(recipeUrl.getHost().substring(4));
+        } catch (MalformedURLException e) {
+            Log.d(TAG, "Recipe URL error");
         }
 
-        ImageView iv =  (ImageView) convertView.findViewById(R.id.recipeImageView);
-        if (iv != null) {
-                (new DownloadImageTask(iv))
-                        .execute(recipeImageURL);
-        }
+        ImageView thumbnail =  (ImageView) convertView.findViewById(R.id.recipeImageView);
+//        if (iv != null) {
+//                (new DownloadImageTask(iv))
+//                        .execute(recipeImageURL);
+//        }
+
+        UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
         convertView.findViewById(R.id.favoriteRecipeImageView)
                 .setOnClickListener(new View.OnClickListener()
@@ -113,9 +122,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
                     favoritedState = 0;
                 }
             }
-
         });
-
         return convertView;
     }
 
@@ -126,32 +133,32 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 //    }
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                Log.d(TAG, "IMAGE URL: " + urldisplay);
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-                Log.d(TAG, "LOADED THE IMAGE FROM INTERNET..");
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if (result != null) {
-                bmImage.setImageBitmap(result);
-            }
-        }
-    }
+//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+//        ImageView bmImage;
+//
+//        public DownloadImageTask(ImageView bmImage) {
+//            this.bmImage = bmImage;
+//        }
+//
+//        protected Bitmap doInBackground(String... urls) {
+//            String urldisplay = urls[0];
+//            Bitmap mIcon11 = null;
+//            try {
+//                Log.d(TAG, "IMAGE URL: " + urldisplay);
+//                InputStream in = new java.net.URL(urldisplay).openStream();
+//                mIcon11 = BitmapFactory.decodeStream(in);
+//                Log.d(TAG, "LOADED THE IMAGE FROM INTERNET..");
+//            } catch (Exception e) {
+//                Log.e("Error", e.getMessage());
+//                e.printStackTrace();
+//            }
+//            return mIcon11;
+//        }
+//
+//        protected void onPostExecute(Bitmap result) {
+//            if (result != null) {
+//                bmImage.setImageBitmap(result);
+//            }
+//        }
+//    }
 }

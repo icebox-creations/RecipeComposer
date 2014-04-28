@@ -18,13 +18,13 @@
 
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@android:id/empty"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
         app:typeface="roboto_slab_regular"
         android:textSize="22sp"
         android:text="@string/recipes_empty_list_view"
         android:layout_gravity="center" />
-
-    <!--android:textAppearance="@android:style/TextAppearance.Large"-->
 
 </FrameLayout>
