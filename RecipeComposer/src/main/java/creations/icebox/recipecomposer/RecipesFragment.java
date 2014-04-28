@@ -51,7 +51,7 @@ public class RecipesFragment extends ListFragment {
     String queryOld = new String();
     String query;
     private int preLast;
-    int currentPageGlobal = 0;
+    int currentPageGlobal = 1;
     int currentPageOld = 0;
 
     /*
@@ -64,7 +64,7 @@ public class RecipesFragment extends ListFragment {
     an object, but you don't want that reference to protect the object
     from the garbage collector.
     */
-    WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
+//    WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
 
     ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
@@ -86,8 +86,8 @@ public class RecipesFragment extends ListFragment {
 
             if (!ingredientTitles.toString().isEmpty() || query != null) {
                 RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this, ingredientTitles, query, currentPageGlobal);
-                this.recipeDownloaderAsyncTaskWeakReference
-                    = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
+//                this.recipeDownloaderAsyncTaskWeakReference
+//                    = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
                 recipeDownloaderAsyncTask.execute();
             } else {
                 Log.d(TAG, "ELSE");
@@ -109,6 +109,8 @@ public class RecipesFragment extends ListFragment {
 
         listView = getListView();
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int page = 1;
+
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
@@ -124,10 +126,14 @@ public class RecipesFragment extends ListFragment {
                             Log.d(TAG, "BOTTOM");
                             preLast = lastItem;
 
+                            // Temporary fix to call the next subsequent page the first time.
+                            // currentPageGlobal is 0 here even when initialized to some other value
+                            // outside of this class.
+                            page += 1;
                             currentPageGlobal += 1;
 
                             new RecipeDownloaderAsyncTask((RecipesFragment) getTargetFragment(),
-                                    ingredientTitles, query, currentPageGlobal).execute();
+                                    ingredientTitles, query, page).execute();
                         }
                     }
                 }
@@ -328,8 +334,8 @@ public class RecipesFragment extends ListFragment {
             }
             Log.d(TAG, "URL now = " + recipePuppyURL);
 
-            this.recipesFragmentWeakReference
-                    = new WeakReference<RecipesFragment>(recipesFragment);
+//            this.recipesFragmentWeakReference
+//                    = new WeakReference<RecipesFragment>(recipesFragment);
         }
 
         @Override
@@ -354,6 +360,7 @@ public class RecipesFragment extends ListFragment {
                     request
                     append
             */
+
 
             if (ingredientTitlesOld.toString().equals(ingredientTitles.toString()) && queryOld.equals(query)) {
                 Log.d(TAG, "page old = " + currentPageOld);
@@ -434,10 +441,10 @@ public class RecipesFragment extends ListFragment {
 
                 // Get the root JSONObject
                 jsonObject = new JSONObject(queryResult);
-                Log.d(TAG, jsonObject.toString());
+//                Log.d(TAG, jsonObject.toString());
 
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
-                Log.d(TAG, jsonArray.toString());
+//                Log.d(TAG, jsonArray.toString());
 
                 for (int i = 0; i < jsonArray.length(); ++i)
                 {

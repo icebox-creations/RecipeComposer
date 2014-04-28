@@ -437,7 +437,7 @@ public class IngredientsFragment extends ListFragment {
                         ingredientAdapter.getItem(pos).setIngredientTitle(ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.notifyDataSetChanged();
 
-                        if (prevSelectedState == false){
+                        if (!prevSelectedState){
                             checkbox.toggle();
                         }
 
