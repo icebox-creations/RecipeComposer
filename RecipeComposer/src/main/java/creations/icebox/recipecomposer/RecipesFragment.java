@@ -34,6 +34,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,9 +154,9 @@ public class RecipesFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         String recipeTitle = recipeList.get(position).getRecipeTitle();
         Log.d(TAG, recipeTitle + " clicked");
-        Toast.makeText(getActivity(),
-                "'" + recipeTitle + "..'",
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(),
+//                "'" + recipeTitle + "..'",
+//                Toast.LENGTH_SHORT).show();
 
         Uri uriUrl = Uri.parse(recipeList.get(position).getRecipeURL());
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
@@ -451,19 +453,29 @@ public class RecipesFragment extends ListFragment {
                     try {
                         JSONObject recipe = jsonArray.getJSONObject(i);
 
-                        Recipe new_recipe = new Recipe();
-                        recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&").replaceAll("&.*;", "");
-                        recipeURL           = recipe.getString("href").trim();
-                        recipeIngredients   = recipe.getString("ingredients").trim();
-                        recipePicUrl        = recipe.getString("thumbnail").trim();
+                        try {
+                            String urlHost = new URL(recipe.getString("href")).getHost();
+                            Log.d(TAG, "URL HOST: " + urlHost);
 
-                        new_recipe.setRecipeTitle(recipeTitle);
-                        new_recipe.setRecipeURL(recipeURL);
-                        new_recipe.setRecipeIngredients(recipeIngredients);
-                        new_recipe.setRecipePicUrl(recipePicUrl);
+                            if (!urlHost.equals("www.eatingwell.com") && !urlHost.equals("www.eatshare.com")) {
+                                Recipe new_recipe = new Recipe();
+                                recipeTitle         = recipe.getString("title").trim().replace("&amp;", "&").replaceAll("&.*;", "");
+                                recipeURL           = recipe.getString("href").trim();
+                                recipeIngredients   = recipe.getString("ingredients").trim();
+                                recipePicUrl        = recipe.getString("thumbnail").trim();
 
-                        recipeList.add(new_recipe);
+                                new_recipe.setRecipeTitle(recipeTitle);
+                                new_recipe.setRecipeURL(recipeURL);
+                                new_recipe.setRecipeIngredients(recipeIngredients);
+                                new_recipe.setRecipePicUrl(recipePicUrl);
 
+                                recipeList.add(new_recipe);
+                            } else {
+                                Log.d(TAG, "<HOST BLOCKED>");
+                            }
+                        } catch (MalformedURLException e) {
+                            Log.d(TAG, "URL parsing error.");
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

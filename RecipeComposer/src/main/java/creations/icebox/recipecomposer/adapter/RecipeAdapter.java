@@ -95,9 +95,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         try {
             URL recipeUrl = new URL(recipe.getRecipeURL());
-            viewHolder.recipeURL.setText(recipeUrl.getHost().substring(4));
+            viewHolder.recipeURL.setText(recipeUrl.getHost());
         } catch (MalformedURLException e) {
-            Log.d(TAG, "Recipe URL error");
+            Log.d(TAG, "URL parsing error.");
         }
 
         ImageView thumbnail =  (ImageView) convertView.findViewById(R.id.recipeImageView);
