@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity
 //            actionBar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 //        }
         mViewPager.setCurrentItem(1);
+        mViewPager.setOffscreenPageLimit(2);
     }
 
 //    @Override

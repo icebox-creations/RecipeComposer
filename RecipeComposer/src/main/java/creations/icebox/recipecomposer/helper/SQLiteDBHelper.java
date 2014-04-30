@@ -51,6 +51,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             + TABLE_RECIPE_FAVS;
 
 
+
     public SQLiteDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         Log.d(TAG, "in constructor");

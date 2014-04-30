@@ -67,6 +67,7 @@ public class RecipeFavoritesFragment extends ListFragment {
         try{
             if (isVisibleToUser) {
                 Log.d(TAG, "isVisible");
+
                 recipeFavoritesAdapter.notifyDataSetChanged();
             } else {
                 Log.d(TAG, "is not visible");
@@ -95,6 +96,10 @@ public class RecipeFavoritesFragment extends ListFragment {
         Log.d(TAG, "onActivityCreated...");
 
         recipeFavoritesList = sqLiteDAO.getAllRecipeFavorites();
+
+        for (int i = 0; i < recipeFavoritesList.size(); ++i) {
+            Log.d(TAG, recipeFavoritesList.get(i).toString());
+        }
 
         final ListView listView = getListView();
         recipeFavoritesAdapter = new RecipeFavoritesAdapter(getActivity(),

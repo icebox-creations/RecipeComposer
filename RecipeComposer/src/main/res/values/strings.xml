@@ -25,5 +25,6 @@
     <string name="ingredient_image_view_content_description">Ingredient Image</string>
     <string name="action_favorite_recipe_content_description">Favorite This Recipe!</string>
     <string name="action_recipe_favorite">Add to favorites</string>
+    <string name="action_recipe_remove_favorite">Remove from favorites</string>
 
 </resources>

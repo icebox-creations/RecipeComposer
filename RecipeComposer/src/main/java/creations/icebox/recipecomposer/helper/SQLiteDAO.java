@@ -191,10 +191,10 @@ public class SQLiteDAO {
                 recipeTitle.toLowerCase().trim());
 
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST,
-                recipe.getRecipeIngredients().toLowerCase().trim());
+                recipe.getRecipeIngredients());
 
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL,
-                recipe.getRecipeURL().toLowerCase().trim());
+                recipe.getRecipeURL());
 
         /**  insert into the database */
         long insertId = sqLiteDatabase.insert(
@@ -220,13 +220,29 @@ public class SQLiteDAO {
         return newRecipe;
     }
 
+    public boolean isExistsRecipe(Recipe recipe) {
+        String duplicateCheckQuery =
+                "select * from "
+                        + SQLiteDBHelper.TABLE_RECIPE_FAVS
+                        + " where " + SQLiteDBHelper.RECIPE_FAV_COLUMN_URL
+                        +  " like '" + recipe.getRecipeURL() + "';";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(duplicateCheckQuery, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+//            Toast.makeText(context, "REcipe is already in the list", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return false;
+    }
+
     public void deleteRecipeFavorite(Recipe recipeFavorite) {
-        long id = recipeFavorite.getRecipeId();
-        Log.d(TAG, "recipe favorite deleted with id: " + id);
+        String recipeUrl = recipeFavorite.getRecipeURL();
+        Log.d(TAG, "recipe favorite deleted with url: " + recipeUrl);
 
         sqLiteDatabase.delete(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
-                SQLiteDBHelper.COLUMN_ID + " = " + id,
+                SQLiteDBHelper.RECIPE_FAV_COLUMN_URL + " = '" + recipeUrl + "'",
                 null
         );
     }

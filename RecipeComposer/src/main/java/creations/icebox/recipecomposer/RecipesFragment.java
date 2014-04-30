@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
+import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -183,16 +184,42 @@ public class RecipesFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
+      /* created when we long hold a specific item in the recipe list */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.recipe_fragment_context_menu, menu);
+
+        AdapterView.AdapterContextMenuInfo itemInfo =  (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+//        v.findViewById(R.id.actionAddFavoriteRecipe);
+//        v.findViewById(R.id.actionAddFavoriteRecipe);
+//        Log.d(TAG, " .... " + v.findViewById(R.id.actionAddFavoriteRecipe));
+
+        try {
+            Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
+            if (sqLiteDAO.isExistsRecipe(recipeToFavorite)) {
+                menu.getItem(1).setVisible(false);
+                menu.getItem(2).setVisible(true);
+                Log.d(TAG, " Recipe already Exists in the favorites");
+            } else {
+                menu.getItem(1).setVisible(true);
+                menu.getItem(2).setVisible(false);
+                Log.d(TAG, " This Recipe CAN be added to favorites" );
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Nasty Exception: " + e.getMessage());
+        }
+
     }
 
+    /* When an item is selected in the context menu */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
         switch (item.getItemId()) {
             case R.id.actionShareRecipe:
                 try {
@@ -202,9 +229,9 @@ public class RecipesFragment extends ListFragment {
                     Log.d(TAG, e.toString());
                 }
                 return true;
-            case R.id.actionFavorite:
+            case R.id.actionAddFavoriteRecipe:
                 try {
-                    Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
+
                     Log.d(TAG, "favorite recipe: " + recipeToFavorite.getRecipeTitle());
                     Log.d(TAG, "favorite recpe url: " + recipeToFavorite.getRecipeURL());
                     recipeToFavorite = sqLiteDAO.createRecipeFavorite(recipeToFavorite);
@@ -215,6 +242,22 @@ public class RecipesFragment extends ListFragment {
                     } else {
                         Toast.makeText(getActivity(),
                                 "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  ",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NullPointerException e) {
+                    Log.d(TAG, e.toString());
+                }
+                return true;
+            case R.id.actionRemoveFavoriteRecipe:
+                try {
+                    Log.d(TAG, " ABOIT UT EORNV" );
+                    if (recipeToFavorite == null) {
+                        Toast.makeText(getActivity(), "Tried to delete a non existant recipe, silly! ",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        sqLiteDAO.deleteRecipeFavorite(recipeToFavorite);
+                        Toast.makeText(getActivity(),
+                                "Removed '" + recipeToFavorite.getRecipeTitle() + "' from your favorites!  ",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } catch (NullPointerException e) {
