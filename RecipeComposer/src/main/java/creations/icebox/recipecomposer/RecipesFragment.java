@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import creations.icebox.recipecomposer.adapter.RecipeAdapter;
+import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Recipe;
 
 public class RecipesFragment extends ListFragment {
@@ -55,6 +56,7 @@ public class RecipesFragment extends ListFragment {
     private int preLast;
     int currentPageGlobal = 1;
     int currentPageOld = 0;
+    SQLiteDAO sqLiteDAO;
 
     /*
     A weak reference is used so that the fragment and the async task
@@ -168,6 +170,9 @@ public class RecipesFragment extends ListFragment {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
+        sqLiteDAO = new SQLiteDAO(getActivity());
+        sqLiteDAO.open();
+
         ingredientTitles = new StringBuffer();
 
         /* Configure the fragment instance to be retained on configuration
@@ -193,6 +198,25 @@ public class RecipesFragment extends ListFragment {
                 try {
                     Log.d(TAG, "share recipe: " + recipeAdapter.getItem(itemInfo.position).getRecipeTitle());
                     shareTextRecipe(itemInfo);
+                } catch (NullPointerException e) {
+                    Log.d(TAG, e.toString());
+                }
+                return true;
+            case R.id.actionFavorite:
+                try {
+                    Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
+                    Log.d(TAG, "favorite recipe: " + recipeToFavorite.getRecipeTitle());
+                    Log.d(TAG, "favorite recpe url: " + recipeToFavorite.getRecipeURL());
+                    recipeToFavorite = sqLiteDAO.createRecipeFavorite(recipeToFavorite);
+
+                    if (recipeToFavorite == null) {
+                        Toast.makeText(getActivity(), "That recipe favorite has already been added to your favorites!",
+                            Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(),
+                                "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  ",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
                 }

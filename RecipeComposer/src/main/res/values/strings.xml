@@ -10,7 +10,7 @@
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
     <string name="recipes_empty_list_view">Sorry, couldn\'t find any recipes.</string>
-    <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites</string>
+    <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites!</string>
     <string name="ingredients_empty_list_view">Add some ingredients to get started :)</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
@@ -23,8 +23,6 @@
     <string name="share_intent">Share recipe info to&#8230;</string>
     <string name="recipe_image_view_content_description">Recipe Image</string>
     <string name="ingredient_image_view_content_description">Ingredient Image</string>
-
-
     <string name="action_favorite_recipe_content_description">Favorite This Recipe!</string>
     <string name="action_recipe_favorite">Add to favorites</string>
 

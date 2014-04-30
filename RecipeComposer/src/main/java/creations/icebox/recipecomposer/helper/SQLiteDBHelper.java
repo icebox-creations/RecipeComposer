@@ -43,9 +43,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_RECIPE_FAVS = "create table "
             + TABLE_RECIPE_FAVS + "("
             + RECIPE_FAV_COLUMN_ID + " integer primary key autoincrement, "
-            + RECIPE_FAV_COLUMN_TITLE + "text not null, "
-            + RECIPE_FAV_COLUMN_INGREDIENT_LIST + "text not null,  "
-            + RECIPE_FAV_COLUMN_URL + "text not null);";
+            + RECIPE_FAV_COLUMN_TITLE + " text not null, "
+            + RECIPE_FAV_COLUMN_INGREDIENT_LIST + " text not null,  "
+            + RECIPE_FAV_COLUMN_URL + " text not null);";
 
     private static final String DB_RECIPE_FAVS_TABLE_DROP = "drop table if exists "
             + TABLE_RECIPE_FAVS;
@@ -60,6 +60,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "onCreate");
         db.execSQL(CREATE_TABLE_INGREDIENTS);
+        db.execSQL(CREATE_TABLE_RECIPE_FAVS);
     }
 
     @Override

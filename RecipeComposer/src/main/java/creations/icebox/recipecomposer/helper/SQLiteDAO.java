@@ -165,34 +165,47 @@ public class SQLiteDAO {
      *      so we can update the recipe favorite list view in the recipe fragment
      *      using the recipe favorite adapter... */
 
-    public Recipe createRecipeFavorite(String recipeTitle) {
+    public Recipe createRecipeFavorite(Recipe recipe) {
+        String recipeTitle = recipe.getRecipeTitle();
 
         // Check for duplications
         String duplicateCheckQuery =
                 "select * from "
                         + SQLiteDBHelper.TABLE_RECIPE_FAVS
-                        + " where title like '" + recipeTitle + "';";
+                        + " where " + SQLiteDBHelper.RECIPE_FAV_COLUMN_URL
+                        +  " like '" + recipe.getRecipeURL() + "';";
 
         Cursor cursor = sqLiteDatabase.rawQuery(duplicateCheckQuery, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            Toast.makeText(context, "Ingredient is already in the list", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Recipe is already in the list", Toast.LENGTH_LONG).show();
             return null;
         } else if (recipeTitle.isEmpty()) {
-            Toast.makeText(context, "You must specify an ingredient", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "You must specify a recipe fav", Toast.LENGTH_LONG).show();
             return null;
         }
 
         // if the title isn't blank or a duplicate, insert it
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE, recipeTitle.toLowerCase().trim());
+        contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE,
+                recipeTitle.toLowerCase().trim());
 
+        contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST,
+                recipe.getRecipeIngredients().toLowerCase().trim());
+
+        contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL,
+                recipe.getRecipeURL().toLowerCase().trim());
+
+        /**  insert into the database */
         long insertId = sqLiteDatabase.insert(
-                SQLiteDBHelper.TABLE_INGREDIENTS,
+                SQLiteDBHelper.TABLE_RECIPE_FAVS,
                 null,
                 contentValues
         );
 
+        /**  check if it was inserted properly by
+         *  finding it in the table... also return it
+         *  from the database. */
         cursor = sqLiteDatabase.query(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
                 recipeFavoritesColumns,
@@ -200,6 +213,7 @@ public class SQLiteDAO {
                 null, null, null, null
         );
 
+        /** retur the recipe favorite whih had been just added to the db */
         cursor.moveToFirst();
         Recipe newRecipe = cursorToRecipeFavorite(cursor);
         cursor.close();
