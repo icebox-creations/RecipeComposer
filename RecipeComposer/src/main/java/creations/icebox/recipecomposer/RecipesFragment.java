@@ -249,23 +249,6 @@ public class RecipesFragment extends ListFragment {
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
                                     .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
-//                        try {
-//                            View v = listView.getAdapter().getView(itemInfo.position, null, null);
-//                            Log.d(TAG, "f------>: " + v);
-//                            if (v != null){
-//                                ImageView iv = (ImageView) v.findViewById(R.id.recipeFavoriteStarImageView);
-//                                Log.d(TAG, "f------>: " + iv);
-//                                if (iv != null){
-//                                    iv.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
-//                                    Log.d(TAG, "f------>: " + "HEY");
-//                                }
-//                            }
-//
-//                        } catch (Exception e){
-//                            Log.d(TAG, e.toString());
-//                        }
-
-//                        recipeFavoriteImageView.setImageResource(android.R.drawable.btn_star_big_on);
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
@@ -285,18 +268,7 @@ public class RecipesFragment extends ListFragment {
                         /** Hide the favorite start for the recipe.. */
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
                                 .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_off));
-//                        try {
-//                            View v = listView.getAdapter().getView(itemInfo.position, null, null);
-//                            if (v != null){
-//                                ImageView iv = (ImageView) v.findViewById(R.id.recipeFavoriteStarImageView);
-//                                if (iv != null){
-//                                    iv.setImageResource(0);
-//                                }
-//                            }
-//
-//                        } catch (Exception e){
-//                            Log.d(TAG, e.toString());
-//                        }
+
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());

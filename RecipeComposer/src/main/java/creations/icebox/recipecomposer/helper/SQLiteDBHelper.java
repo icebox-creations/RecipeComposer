@@ -39,13 +39,15 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String RECIPE_FAV_COLUMN_TITLE = "title";
     public static final String RECIPE_FAV_COLUMN_INGREDIENT_LIST = "ingredient_list";
     public static final String RECIPE_FAV_COLUMN_URL             = "url";
+    public static final String RECIPE_FAV_COLUMN_PIC_URL             = "pic_url";
 
     private static final String CREATE_TABLE_RECIPE_FAVS = "create table "
             + TABLE_RECIPE_FAVS + "("
             + RECIPE_FAV_COLUMN_ID + " integer primary key autoincrement, "
             + RECIPE_FAV_COLUMN_TITLE + " text not null, "
             + RECIPE_FAV_COLUMN_INGREDIENT_LIST + " text not null,  "
-            + RECIPE_FAV_COLUMN_URL + " text not null);";
+            + RECIPE_FAV_COLUMN_URL + " text not null, "
+            + RECIPE_FAV_COLUMN_PIC_URL + " text not null);";
 
     private static final String DB_RECIPE_FAVS_TABLE_DROP = "drop table if exists "
             + TABLE_RECIPE_FAVS;

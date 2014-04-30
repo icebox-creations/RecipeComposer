@@ -1,12 +1,16 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
         TextView recipeFavoriteTitle;
         TextView recipeFavoriteIngredients;
         TextView recipeFavoriteURL;
+        ImageView recipeFavoritePicImageView;
     }
 
     @Override
@@ -66,6 +71,7 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeFavoriteTitle = (TextView) convertView.findViewById(R.id.recipeFavoriteTitleTextView);
             viewHolder.recipeFavoriteIngredients = (TextView) convertView.findViewById(R.id.recipeFavoriteIngredientsTextView);
             viewHolder.recipeFavoriteURL = (TextView) convertView.findViewById(R.id.recipeFavoriteUrlTextView);
+            viewHolder.recipeFavoritePicImageView = (ImageView) convertView.findViewById(R.id.recipeFavoriteImageView);
 
             // store the holder with the view
             convertView.setTag(viewHolder);
@@ -81,7 +87,12 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeFavoriteTitle.setText(recipe.getRecipeTitle());
             viewHolder.recipeFavoriteIngredients.setText(recipe.getRecipeIngredients());
             viewHolder.recipeFavoriteURL.setText(recipe.getRecipeIngredients());
+
+            ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeFavoriteImageView);
+            UrlImageViewHelper.setUrlDrawable(thumbnail, recipe.getRecipePicUrl());
         }
+
+
         return convertView;
     }
 }

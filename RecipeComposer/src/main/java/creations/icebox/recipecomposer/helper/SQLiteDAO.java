@@ -32,7 +32,8 @@ public class SQLiteDAO {
             SQLiteDBHelper.RECIPE_FAV_COLUMN_ID,
             SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE,
             SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST,
-            SQLiteDBHelper.RECIPE_FAV_COLUMN_URL
+            SQLiteDBHelper.RECIPE_FAV_COLUMN_URL,
+            SQLiteDBHelper.RECIPE_FAV_COLUMN_PIC_URL
     };
 
     public SQLiteDAO(Context context) {
@@ -196,6 +197,10 @@ public class SQLiteDAO {
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL,
                 recipe.getRecipeURL() );
 
+        contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_PIC_URL,
+                recipe.getRecipePicUrl() );
+
+
         /**  insert into the database */
         long insertId = sqLiteDatabase.insert(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
@@ -260,11 +265,13 @@ public class SQLiteDAO {
         String newRecipeTitle           = newRecipe.getRecipeTitle();
         String newRecipeIngredientList  = newRecipe.getRecipeTitle();
         String newRecipeUrl             = newRecipe.getRecipeTitle();
+        String newRecipePicUrl          = newRecipe.getRecipePicUrl();
 
         ContentValues newContentValues = new ContentValues();
         newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE, newRecipeTitle.toLowerCase().trim());
         newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST, newRecipeIngredientList.toLowerCase().trim());
         newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL, newRecipeUrl.toLowerCase().trim());
+        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_PIC_URL, newRecipePicUrl.toLowerCase().trim());
 
         return sqLiteDatabase.update(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
@@ -301,6 +308,7 @@ public class SQLiteDAO {
         recipe.setRecipeTitle(cursor.getString(1));
         recipe.setRecipeIngredients(cursor.getString(2));
         recipe.setRecipeURL(cursor.getString(3));
+        recipe.setRecipePicUrl(cursor.getString(4));
         return recipe;
     }
 }

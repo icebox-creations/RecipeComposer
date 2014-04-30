@@ -16,7 +16,6 @@
         android:visible="true"
         android:showAsAction="always" />
 
-
     <item
         android:id="@+id/actionRemoveFavoriteRecipe"
         android:icon="@drawable/abc_ic_menu_share_holo_dark"

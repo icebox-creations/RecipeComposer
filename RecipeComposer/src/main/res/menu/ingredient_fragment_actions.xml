@@ -35,4 +35,10 @@
         android:orderInCategory="5">
     </item>
 
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="6"
+        android:title="@string/action_about">
+    </item>
+
 </menu>
