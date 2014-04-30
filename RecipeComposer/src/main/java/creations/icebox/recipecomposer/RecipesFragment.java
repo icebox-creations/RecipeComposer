@@ -1,9 +1,11 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,6 +62,7 @@ public class RecipesFragment extends ListFragment {
     int currentPageOld = 0;
     SQLiteDAO sqLiteDAO;
 
+    View curRecipeView;
     /*
     A weak reference is used so that the fragment and the async task
     are loosely coupled. If a weak reference isn't used, the async
@@ -191,15 +195,13 @@ public class RecipesFragment extends ListFragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.recipe_fragment_context_menu, menu);
 
-        AdapterView.AdapterContextMenuInfo itemInfo =  (AdapterView.AdapterContextMenuInfo) menuInfo;
-
-//        v.findViewById(R.id.actionAddFavoriteRecipe);
-//        v.findViewById(R.id.actionAddFavoriteRecipe);
-//        Log.d(TAG, " .... " + v.findViewById(R.id.actionAddFavoriteRecipe));
+        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        curRecipeView = ((ListView) v).getChildAt(itemInfo.position);
 
         try {
             Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
             if (sqLiteDAO.isExistsRecipe(recipeToFavorite)) {
+                /** Then do not allow add recipe to favorites.. */
                 menu.getItem(1).setVisible(false);
                 menu.getItem(2).setVisible(true);
                 Log.d(TAG, " Recipe already Exists in the favorites");
@@ -231,7 +233,6 @@ public class RecipesFragment extends ListFragment {
                 return true;
             case R.id.actionAddFavoriteRecipe:
                 try {
-
                     Log.d(TAG, "favorite recipe: " + recipeToFavorite.getRecipeTitle());
                     Log.d(TAG, "favorite recpe url: " + recipeToFavorite.getRecipeURL());
                     recipeToFavorite = sqLiteDAO.createRecipeFavorite(recipeToFavorite);
@@ -241,8 +242,30 @@ public class RecipesFragment extends ListFragment {
                             Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(),
-                                "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  ",
+                                "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  " ,
                                 Toast.LENGTH_SHORT).show();
+
+                        /** Show the favorite start for the recipe.. */
+                        Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
+                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
+                                    .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+//                        try {
+//                            View v = listView.getAdapter().getView(itemInfo.position, null, null);
+//                            Log.d(TAG, "f------>: " + v);
+//                            if (v != null){
+//                                ImageView iv = (ImageView) v.findViewById(R.id.recipeFavoriteStarImageView);
+//                                Log.d(TAG, "f------>: " + iv);
+//                                if (iv != null){
+//                                    iv.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+//                                    Log.d(TAG, "f------>: " + "HEY");
+//                                }
+//                            }
+//
+//                        } catch (Exception e){
+//                            Log.d(TAG, e.toString());
+//                        }
+
+//                        recipeFavoriteImageView.setImageResource(android.R.drawable.btn_star_big_on);
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
@@ -250,7 +273,6 @@ public class RecipesFragment extends ListFragment {
                 return true;
             case R.id.actionRemoveFavoriteRecipe:
                 try {
-                    Log.d(TAG, " ABOIT UT EORNV" );
                     if (recipeToFavorite == null) {
                         Toast.makeText(getActivity(), "Tried to delete a non existant recipe, silly! ",
                                 Toast.LENGTH_SHORT).show();
@@ -259,6 +281,22 @@ public class RecipesFragment extends ListFragment {
                         Toast.makeText(getActivity(),
                                 "Removed '" + recipeToFavorite.getRecipeTitle() + "' from your favorites!  ",
                                 Toast.LENGTH_SHORT).show();
+
+                        /** Hide the favorite start for the recipe.. */
+                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
+                                .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_off));
+//                        try {
+//                            View v = listView.getAdapter().getView(itemInfo.position, null, null);
+//                            if (v != null){
+//                                ImageView iv = (ImageView) v.findViewById(R.id.recipeFavoriteStarImageView);
+//                                if (iv != null){
+//                                    iv.setImageResource(0);
+//                                }
+//                            }
+//
+//                        } catch (Exception e){
+//                            Log.d(TAG, e.toString());
+//                        }
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());

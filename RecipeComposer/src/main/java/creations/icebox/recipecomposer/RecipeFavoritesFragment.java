@@ -63,11 +63,13 @@ public class RecipeFavoritesFragment extends ListFragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         try{
             if (isVisibleToUser) {
                 Log.d(TAG, "isVisible");
-
+                recipeFavoritesAdapter.clear();
+                for (Recipe recipe : recipeFavoritesList = sqLiteDAO.getAllRecipeFavorites()) {
+                    recipeFavoritesAdapter.add(recipe);
+                }
                 recipeFavoritesAdapter.notifyDataSetChanged();
             } else {
                 Log.d(TAG, "is not visible");

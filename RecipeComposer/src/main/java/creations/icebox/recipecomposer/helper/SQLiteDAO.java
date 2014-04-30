@@ -188,13 +188,13 @@ public class SQLiteDAO {
         // if the title isn't blank or a duplicate, insert it
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE,
-                recipeTitle.toLowerCase().trim());
+                recipeTitle.toLowerCase().trim() );
 
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST,
-                recipe.getRecipeIngredients());
+                recipe.getRecipeIngredients() );
 
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL,
-                recipe.getRecipeURL());
+                recipe.getRecipeURL() );
 
         /**  insert into the database */
         long insertId = sqLiteDatabase.insert(

@@ -1,12 +1,14 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
@@ -29,9 +31,26 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
     }
 
     @Override
+    public void notifyDataSetChanged() {
+        Log.d(TAG, "notifyDataSetChanged: recipeArrayList size = " + recipeFavoritesArrayList.size());
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        recipeFavoritesArrayList.clear();
+    }
+
+    @Override
     public void remove(Recipe object) {
         super.remove(object);
         recipeFavoritesArrayList.remove(object);
+    }
+
+    public boolean setRecipeFavoritesList(ArrayList<Recipe> recipeFavoriteList) {
+        this.recipeFavoritesArrayList = recipeFavoriteList;
+        return true;
     }
 
     @Override

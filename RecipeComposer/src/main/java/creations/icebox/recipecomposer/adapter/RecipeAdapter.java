@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
+import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Recipe;
 
 /** Follows the ViewHolder Design Pattern */
@@ -29,6 +30,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     private static final String TAG = "***RECIPE ADAPTER***: ";
 
     private ArrayList<Recipe> recipeArrayList;
+    SQLiteDAO sqLiteDAO;
 
     /*
     * here we must override the constructor for ArrayAdapter.
@@ -40,6 +42,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         this.recipeArrayList = new ArrayList<Recipe>();
         Log.d(TAG, "constructor: recipeArrayList size = " + recipeArrayList.size());
         this.recipeArrayList = recipeArrayList;
+
+        sqLiteDAO = new SQLiteDAO(getContext());
+        sqLiteDAO.open();
     }
 
     /**
@@ -49,6 +54,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         TextView recipeTitle;
         TextView recipeIngredients;
         TextView recipeURL;
+        ImageView recipeStar;
     }
 
     @Override
@@ -78,6 +84,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeTitle = (TextView) convertView.findViewById(R.id.recipeTitleTextView);
             viewHolder.recipeIngredients = (TextView) convertView.findViewById(R.id.recipeIngredientsTextView);
             viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeUrlTextView);
+            viewHolder.recipeStar = (ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView);
 
             convertView.setTag(viewHolder);
 
@@ -106,23 +113,10 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
-        convertView.findViewById(R.id.favoriteRecipeImageView)
-            .setOnClickListener(new View.OnClickListener() {
-                int favoritedState = 0;
-
-                @Override
-                public void onClick(View v) {
-                    if (favoritedState == 0) {
-                        // push the recipe to the database..
-                        ((ImageView) v).setImageResource(android.R.drawable.btn_star_big_on);
-                        favoritedState = 1;
-                    } else if (favoritedState == 1) {
-                        // delete the recipe from the database
-                        ((ImageView) v).setImageResource(android.R.drawable.btn_star_big_off);
-                        favoritedState = 0;
-                    }
-                }
-            });
+        if (sqLiteDAO.isExistsRecipe(recipe)) {
+            ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView))
+                    .setImageResource(android.R.drawable.btn_star_big_on);
+        }
 
         return convertView;
     }

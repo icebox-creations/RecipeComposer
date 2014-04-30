@@ -4,11 +4,12 @@ package creations.icebox.recipecomposer.lib;
 public class Recipe {
     private static final String TAG = "***NEW RECIPE***: ";
 
-    private long   id = 0;
-    private String recipeTitle = "";
-    private String recipeURL = "";
-    private String recipeIngredients = "";
-    private String recipePicUrl = "";
+    private long    id = 0;
+    private String  recipeTitle = "";
+    private String  recipeURL = "";
+    private String  recipeIngredients = "";
+    private String  recipePicUrl = "";
+    private boolean isFavorited = false;
 
 
     public long getRecipeId() {
@@ -54,4 +55,14 @@ public class Recipe {
     public void setRecipePicUrl(String recipePicUrl) {
         this.recipePicUrl = recipePicUrl;
     }
+
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public void setFavorited(boolean isFavorited) {
+        this.isFavorited = isFavorited;
+    }
+
 }
