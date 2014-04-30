@@ -42,7 +42,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         this.recipeArrayList = recipeArrayList;
     }
 
-    /** ViewHolder: caches our TextViews */
+    /**
+     * ViewHolder: caches our TextViews
+     */
     static class ViewHolderItem {
         TextView recipeTitle;
         TextView recipeIngredients;
@@ -100,65 +102,28 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             Log.d(TAG, "URL parsing error.");
         }
 
-        ImageView thumbnail =  (ImageView) convertView.findViewById(R.id.recipeImageView);
-//        if (iv != null) {
-//                (new DownloadImageTask(iv))
-//                        .execute(recipeImageURL);
-//        }
+        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeImageView);
 
         UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
         convertView.findViewById(R.id.favoriteRecipeImageView)
-                .setOnClickListener(new View.OnClickListener()
-        {
-            int favoritedState = 0;
-            @Override
-            public void onClick(View v) {
-                if (favoritedState == 0) {
-                    ((ImageView)v).setImageResource(android.R.drawable.btn_star_big_on);
-                    favoritedState = 1;
-                } else if (favoritedState == 1) {
-                    ((ImageView)v).setImageResource(android.R.drawable.btn_star_big_off);
-                    favoritedState = 0;
+            .setOnClickListener(new View.OnClickListener() {
+                int favoritedState = 0;
+
+                @Override
+                public void onClick(View v) {
+                    if (favoritedState == 0) {
+                        // push the recipe to the database..
+                        ((ImageView) v).setImageResource(android.R.drawable.btn_star_big_on);
+                        favoritedState = 1;
+                    } else if (favoritedState == 1) {
+                        // delete the recipe from the database
+                        ((ImageView) v).setImageResource(android.R.drawable.btn_star_big_off);
+                        favoritedState = 0;
+                    }
                 }
-            }
-        });
+            });
+
         return convertView;
     }
-
-//    public void setAllImages(){
-//        for (int i = 0; i < recipeArrayList.size(); i++) {
-//            recipeArrayList.get(i).getRecipePicUrl();
-//        }
-//    }
-
-
-//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-//        ImageView bmImage;
-//
-//        public DownloadImageTask(ImageView bmImage) {
-//            this.bmImage = bmImage;
-//        }
-//
-//        protected Bitmap doInBackground(String... urls) {
-//            String urldisplay = urls[0];
-//            Bitmap mIcon11 = null;
-//            try {
-//                Log.d(TAG, "IMAGE URL: " + urldisplay);
-//                InputStream in = new java.net.URL(urldisplay).openStream();
-//                mIcon11 = BitmapFactory.decodeStream(in);
-//                Log.d(TAG, "LOADED THE IMAGE FROM INTERNET..");
-//            } catch (Exception e) {
-//                Log.e("Error", e.getMessage());
-//                e.printStackTrace();
-//            }
-//            return mIcon11;
-//        }
-//
-//        protected void onPostExecute(Bitmap result) {
-//            if (result != null) {
-//                bmImage.setImageBitmap(result);
-//            }
-//        }
-//    }
 }

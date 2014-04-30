@@ -4,8 +4,8 @@ package creations.icebox.recipecomposer.lib;
 public class Ingredient {
     private static final String TAG = "***NEW INGREDIENT***: ";
 
-    private long id = 0;
-    private String ingredientTitle = "";
+    private long    id = 0;
+    private String  ingredientTitle = "";
     private boolean selected = false;
 
     private SelectedStateType selectedState = SelectedStateType.NORMAL_STATE;
@@ -24,7 +24,6 @@ public class Ingredient {
     public void setSelectedState(SelectedStateType selectedState) {
         this.selectedState = selectedState;
     }
-
 
     public long getIngredientId() {
         return id;
@@ -50,9 +49,11 @@ public class Ingredient {
         this.selected = selected;
     }
 
+}
+
 //    /** Will be used by the ArrayAdapter in the Listview */
 //    @Override
 //    public String toString() {
 //        return ingredientTitle;
 //    }
-}
+

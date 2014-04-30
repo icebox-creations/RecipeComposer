@@ -26,5 +26,6 @@
 
 
     <string name="action_favorite_recipe_content_description">Favorite This Recipe!</string>
+    <string name="action_recipe_favorite">Add to favorites</string>
 
 </resources>

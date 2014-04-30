@@ -4,10 +4,21 @@ package creations.icebox.recipecomposer.lib;
 public class Recipe {
     private static final String TAG = "***NEW RECIPE***: ";
 
+    private long   id = 0;
     private String recipeTitle = "";
     private String recipeURL = "";
     private String recipeIngredients = "";
     private String recipePicUrl = "";
+
+
+    public long getRecipeId() {
+        return id;
+    }
+
+    public void setRecipeId(long id) {
+        this.id = id;
+    }
+
 
     public String getRecipeTitle() {
         return recipeTitle;
@@ -17,13 +28,6 @@ public class Recipe {
         this.recipeTitle = recipeTitle;
     }
 
-    public String getRecipeURL() {
-        return recipeURL;
-    }
-
-    public void setRecipeURL(String recipeURL) {
-        this.recipeURL = recipeURL;
-    }
 
     public String getRecipeIngredients() {
         return recipeIngredients;
@@ -32,6 +36,16 @@ public class Recipe {
     public void setRecipeIngredients(String recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
     }
+
+
+    public String getRecipeURL() {
+        return recipeURL;
+    }
+
+    public void setRecipeURL(String recipeURL) {
+        this.recipeURL = recipeURL;
+    }
+
 
     public String getRecipePicUrl() {
         return recipePicUrl;
