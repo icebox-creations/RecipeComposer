@@ -101,6 +101,9 @@ public class RecipesFragment extends ListFragment {
             } else {
                 Log.d(TAG, "ELSE");
             }
+
+//            listView = getListView();
+//            registerForContextMenu(listView);
         }
     }
 
