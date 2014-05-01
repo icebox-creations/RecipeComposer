@@ -10,6 +10,7 @@
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
     <string name="recipes_empty_list_view">Sorry, couldn\'t find any recipes.</string>
+    <string name="recipe_favorites_empty_list_view">Favorite some recipes and view them here!</string>
     <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites!</string>
     <string name="ingredients_empty_list_view">Add some ingredients to get started :)</string>
     <string name="action_refresh">Refresh</string>
@@ -27,10 +28,25 @@
     <string name="action_recipe_favorite">Add to favorites</string>
     <string name="action_recipe_remove_favorite">Remove from favorites</string>
     <string name="action_about">About</string>
-
-    <string name="about_title">About Recipe Composer</string>
-    <string name="about_description">Built from curiosity and passion for making great recipes from simple household ingredients</string>
-    <string name="about_developer">http://github.com/trance-with-me/RecipeComposer</string>
-    <string name="about_version">v 1.0</string>
     <string name="about_dismiss">Dismiss</string>
+    <string name="about_app_name_and_version">Recipe Composer, v1.0</string>
+    <string name="about_body">
+        <![CDATA[
+        Recipe Composer was built with a curiosity and passion for making great recipes from simple household ingredients. It is powered by Recipe Puppy: an ingredient based recipe search engine. If you would like more information, follow these delicious links:
+        <br><br>
+            <b>&bull;&nbsp;&nbsp;<a href="http://www.recipepuppy.com/">Recipe Puppy</a></b>
+            <i>Many thanks to Kris Brower, creator of Recipe Puppy</i>
+        <br>
+            <b>&bull;&nbsp;&nbsp;<a href="https://github.com/icebox-creations/RecipeComposer">Github repository</a></b>
+            <i>Source code of the project</i>
+        <br><br>
+            Libraries and Resources used:
+            <b>&bull;&nbsp;&nbsp;<a href="https://johnkil.github.io/Android-RobotoTextView/">Android-RobotoTextView</a></b>
+        <br>
+            <b>&bull;&nbsp;&nbsp;<a href="http://koush.com/UrlImageViewHelper">UrlImageViewHelper</a></b>
+        <br>
+            <b>&bull;&nbsp;&nbsp;<a href="http://www.elegantthemes.com/blog/freebie-of-the-week/beautiful-flat-icons-for-free">Elegant Themes Blog</a></b>
+        ]]>
+    </string>
+
 </resources>

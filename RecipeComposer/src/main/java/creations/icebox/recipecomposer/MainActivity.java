@@ -1,22 +1,18 @@
 package creations.icebox.recipecomposer;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import creations.icebox.recipecomposer.adapter.TabsPagerAdapter;
 
@@ -130,24 +126,14 @@ public class MainActivity extends ActionBarActivity
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_about) {
-            View messageView = getLayoutInflater().inflate(R.layout.dialog_about, null, false);
-
-//            final SpannableString s = new SpannableString(getText(R.string.about_developer));
-//            Linkify.addLinks(s, Linkify.ALL);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setIcon(R.drawable.ic_launcher);
-            builder.setTitle(R.string.app_name);
-            builder.setView(messageView);
-//            builder.setMessage(s);
-            builder.setPositiveButton(R.string.about_dismiss, null);
-            builder.create();
-            builder.show();
+            FragmentManager fragmentManager = this.getFragmentManager();
+            DialogAboutFragment dialogAboutFragment
+                    = new DialogAboutFragment();
+            dialogAboutFragment.show(fragmentManager, "dialog about fragment");
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override

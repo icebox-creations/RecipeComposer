@@ -197,11 +197,13 @@ public class IngredientsFragment extends ListFragment {
 
         int id = item.getItemId();
         if (id == R.id.action_new_ingredient) {
+
             FragmentManager fragmentManager = getActivity().getFragmentManager();
             DialogAddIngredientFragment dialogAddIngredientFragment
                     = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO, ingredientsSuggestionsArrayList);
             dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
             return true;
+
         } else if (id == R.id.action_remove_ingredient) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

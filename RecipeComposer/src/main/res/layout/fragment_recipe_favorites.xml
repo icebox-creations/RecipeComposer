@@ -26,7 +26,7 @@
         android:paddingRight="50dp"
         app:typeface="roboto_slab_regular"
         android:textSize="22sp"
-        android:text="@string/recipes_empty_list_view"
+        android:text="@string/recipe_favorites_empty_list_view"
         android:layout_gravity="center" />
 
 </FrameLayout>
