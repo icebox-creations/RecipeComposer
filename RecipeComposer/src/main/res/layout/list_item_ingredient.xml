@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    android:id="@+id/checkboxTextViewFrameLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/almond" >
+
+    <CheckBox
+        android:id="@+id/ingredientCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/ingredientTitleTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="40dp"
+        android:paddingBottom="14dp"
+        android:paddingTop="4dp"
+        app:typeface="roboto_slab_regular"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/ingredientImageView"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:contentDescription="@string/ingredient_image_view_content_description"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/ingredientIndicator"
+        android:layout_width="6dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@color/blue"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textStyle="bold|normal"
+        android:layout_marginLeft="40dp"
+        android:paddingBottom="19dp"
+        android:paddingTop="7dp" />
+
+</FrameLayout>

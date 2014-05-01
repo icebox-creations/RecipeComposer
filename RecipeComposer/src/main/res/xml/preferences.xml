@@ -1,0 +1,39 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Recipe/Ingredient Images">
+
+        <CheckBoxPreference
+            android:key="isDownloadRecipeImages"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:title="Allow Recipe Images"
+            android:summary="" />
+        <CheckBoxPreference
+            android:key="isDownloadIngredientImages"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:title="Allow Ingredient Images"
+            android:summary="" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Privacy Settings">
+
+        <CheckBoxPreference
+            android:key="isAllowShareData"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:title="Send Usage Stats"
+            android:summary="" />
+
+        <EditTextPreference
+            android:key="preferencesPhoneNumber"
+            android:title="Edit Phone Number"
+            android:textSize="5dp"
+            android:summary=""
+            android:dialogTitle="Edit Phone Number" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

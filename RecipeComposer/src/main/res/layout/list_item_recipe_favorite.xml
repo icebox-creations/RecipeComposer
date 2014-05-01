@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:paddingLeft="40dp"
+    android:background="@color/almond" >
+
+    <ImageView
+        android:id="@+id/recipeFavoriteImageView"
+        android:contentDescription="@string/recipe_image_view_content_description"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/recipeFavoriteTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:typeface="roboto_bold"
+        android:textSize="20sp"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="10dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/recipeFavoriteIngredientsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:typeface="roboto_slab_regular"
+        android:textSize="18sp"
+        android:layout_below="@id/recipeFavoriteTitleTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="10dp"/>
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/recipeFavoriteUrlTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:typeface="roboto_light"
+        android:textSize="16sp"
+        android:layout_below="@id/recipeFavoriteIngredientsTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="10dp"/>
+
+</RelativeLayout>

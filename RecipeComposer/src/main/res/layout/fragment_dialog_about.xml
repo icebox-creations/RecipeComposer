@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:divider="@android:drawable/divider_horizontal_bright"
+    android:showDividers="middle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        android:id="@+id/about_title"
+        android:drawableLeft="@drawable/ic_launcher"
+        android:drawablePadding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/about_app_name_and_version"
+        android:textSize="24sp"
+        app:typeface="roboto_slab_bold"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            android:id="@+id/about_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="1.2"
+            android:textIsSelectable="true"
+            android:textSize="16sp"
+            app:typeface="roboto_slab_regular"
+            android:paddingTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:text="@string/about_body"/>
+
+    </ScrollView>
+
+</LinearLayout>

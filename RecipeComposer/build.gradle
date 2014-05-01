@@ -2,10 +2,10 @@ apply plugin: 'android'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion "19"
 
     defaultConfig {
-        minSdkVersion 7
+        minSdkVersion 14
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
@@ -20,5 +20,8 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:support-v4:+'
+    compile 'com.github.johnkil.android-robototextview:robototextview:2.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    compile files('libs/urlimageviewhelper-1.0.4.jar')
 }
