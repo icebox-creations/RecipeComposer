@@ -15,6 +15,7 @@ import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,6 +106,12 @@ public class RecipesFragment extends ListFragment {
 //            listView = getListView();
 //            registerForContextMenu(listView);
         }
+    }
+
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.recipe_fragment_actions, menu);
     }
 
     @Override

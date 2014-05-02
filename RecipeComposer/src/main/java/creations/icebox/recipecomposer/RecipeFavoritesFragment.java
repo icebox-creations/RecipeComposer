@@ -13,6 +13,7 @@ import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,6 +81,11 @@ public class RecipeFavoritesFragment extends ListFragment {
         } catch (NullPointerException e) {
             Log.d(TAG, "setUserVisibleHint-> " + e.toString());
         }
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.recipe_favorites_fragment_actions, menu);
     }
 
     @Override

@@ -144,8 +144,10 @@ public class IngredientsFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.ingredient_fragment_actions, menu);
 
+            // ((MainActivity)getActivity())._menu.
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final MenuItem settingsMenuItem = menu.findItem(R.id.action_settings);
+        final MenuItem aboutAppMenuItem = menu.findItem(R.id.action_about);
 
         try{
             mSearchView = (SearchView) searchItem.getActionView();
@@ -158,12 +160,14 @@ public class IngredientsFragment extends ListFragment {
                         if (hasFocus) {
                             try {
                                 settingsMenuItem.setVisible(false);
+                                aboutAppMenuItem.setVisible(false);
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception 1");
                             }
                         } else {
                             try {
                                 settingsMenuItem.setVisible(true);
+                                aboutAppMenuItem.setVisible(true);
                             } catch (Exception e) {
                                 Log.d(TAG, "Exception 2");
                             }

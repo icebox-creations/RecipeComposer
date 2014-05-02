@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     TabsPagerAdapter mTabsPagerAdapter;
+    Menu _menu;
 
     /**
      * The {@link ViewPager} that will host the tab contents.
@@ -111,6 +112,7 @@ public class MainActivity extends ActionBarActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_actions, menu);
 //        menu.findItem(R.id.action_settings).setEnabled(false);
+        _menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
