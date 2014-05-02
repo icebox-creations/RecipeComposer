@@ -22,8 +22,9 @@
         android:layout_height="wrap_content"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
+        android:gravity="center"
         app:typeface="roboto_slab_regular"
-        android:textSize="22sp"
+        android:textSize="24sp"
         android:text="@string/recipes_empty_list_view"
         android:layout_gravity="center" />
 
