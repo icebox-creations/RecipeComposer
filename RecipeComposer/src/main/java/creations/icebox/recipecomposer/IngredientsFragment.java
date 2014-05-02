@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -209,49 +210,54 @@ public class IngredientsFragment extends ListFragment {
             return true;
 
         } else if (id == R.id.action_remove_ingredient) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            ListView listView = getListView();
+            int listViewItemCount = listView.getChildCount();
 
-            builder.setMessage("Remove selected ingredient(s)?");
-            builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CheckBox checkbox;
-                    ListView listView = getListView();
-                    int listViewItemCount = listView.getChildCount();
-
-                    for (int i = 0; i < listViewItemCount; i++){
-                        try{
-                            View v = listView.getAdapter().getView(i, null, null);
-                            checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
-                            if (checkbox.isChecked()){
-
-                                sqLiteDAO.deleteIngredient(ingredientAdapter.getItem(i));
-
-                                // Remove from listview -- doesn't handle the case of searching for
-                                // an ingredient and deleting it. It still appears in the original
-                                // list. But upon closing the app and re-opening, it's removed. So
-                                // we need to update the listview when that happens.
-                                ingredientAdapter.remove(ingredientAdapter.getItem(i));
-
-                                listViewItemCount -= 1;
-                                i -= 1; // gotta look at the item that replaced the one we deleted..
-                            }
-
-                        } catch (Exception e) {
-                            Log.d(TAG, "error!!->" + e.getMessage());
+            if (listViewItemCount <= 0) {
+                Toast.makeText(getActivity(), "No ingredients selected..", Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                final ArrayList<Ingredient> ingredientsToDelete = new ArrayList<Ingredient>();
+                CheckBox checkbox;
+                for (int i = 0; i < listViewItemCount; i++){
+                    try{
+                        View v = listView.getAdapter().getView(i, null, null);
+                        checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+                        if (checkbox.isChecked()){
+                            ingredientsToDelete.add(ingredientAdapter.getItem(i));
                         }
+                    } catch (Exception e) {
+                        Log.d(TAG, "error!!->" + e.getMessage());
                     }
-                    ingredientAdapter.notifyDataSetChanged();
                 }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.show();
-            return true;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder.setMessage("Remove selected ingredient(s)?");
+                builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int i = 0; i < ingredientsToDelete.size(); i++){
+                            sqLiteDAO.deleteIngredient(ingredientsToDelete.get(i));
+
+                            // Remove from listview -- doesn't handle the case of searching for
+                            // an ingredient and deleting it. It still appears in the original
+                            // list. But upon closing the app and re-opening, it's removed. So
+                            // we need to update the listview when that happens.
+                            ingredientAdapter.remove(ingredientsToDelete.get(i));
+                        }
+                        ingredientAdapter.notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+                return true;
+            }
         } else if (id == R.id.action_search) {
             Log.d(TAG, "About to search");
             return true;

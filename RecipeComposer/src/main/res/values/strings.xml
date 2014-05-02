@@ -6,7 +6,8 @@
     <string name="title_section1">Ingredients</string>
     <string name="title_section2">Recipes</string>
     <string name="title_section3">Recipe Favorites</string>
-    <string name="keyword_edit_text_hint">Recipe search keywords..</string>
+    <!--<string name="keyword_edit_text_hint">Recipe search keywords..</string>-->
+    <string name="keyword_edit_text_hint">Search recipes with keywords!</string>
     <string name="clear_query_button">Clear</string>
     <string name="add_ingredient_button">Add Ingredient</string>
     <string name="recipes_empty_list_view">Sorry, couldn\'t find any recipes.</string>
