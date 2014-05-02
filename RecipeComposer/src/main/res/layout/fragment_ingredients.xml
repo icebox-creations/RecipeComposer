@@ -19,7 +19,7 @@
                 android:id="@+id/keywordEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:ems="10"
                 android:inputType="text"
                 android:hint="@string/keyword_edit_text_hint" />
@@ -27,8 +27,9 @@
             <Button
                 android:id="@+id/clearQueryButton"
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="@string/clear_query_button" />
 
         </TableRow>
