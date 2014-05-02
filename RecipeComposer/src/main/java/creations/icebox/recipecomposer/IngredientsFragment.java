@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -207,6 +208,7 @@ public class IngredientsFragment extends ListFragment {
             DialogAddIngredientFragment dialogAddIngredientFragment
                     = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO, ingredientsSuggestionsArrayList);
             dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
+            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
             return true;
 
         } else if (id == R.id.action_remove_ingredient) {
@@ -357,6 +359,9 @@ public class IngredientsFragment extends ListFragment {
 
         Log.d(TAG, "onActivityCreated");
         ingredientArrayList = sqLiteDAO.getAllIngredients();
+        if (ingredientArrayList.size() > 0){
+            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
+        }
 
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
         final ListView listView = getListView();
