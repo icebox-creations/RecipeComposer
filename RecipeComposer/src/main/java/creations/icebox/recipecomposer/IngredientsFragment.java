@@ -213,23 +213,26 @@ public class IngredientsFragment extends ListFragment {
             ListView listView = getListView();
             int listViewItemCount = listView.getChildCount();
 
-            if (listViewItemCount <= 0) {
+            /* first check if there are ingredients to delete and add them to the TO DELETE list.. */
+            final ArrayList<Ingredient> ingredientsToDelete = new ArrayList<Ingredient>();
+            CheckBox checkbox;
+            for (int i = 0; i < listViewItemCount; i++){
+                try{
+                    View v = listView.getAdapter().getView(i, null, null);
+                    checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
+                    if (checkbox.isChecked()){
+                        ingredientsToDelete.add(ingredientAdapter.getItem(i));
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "error!!->" + e.getMessage());
+                }
+            }
+
+            /*  if appropriate, then delete the items, otherwise just TOAST a warning response*/
+            if (ingredientsToDelete.size() <= 0) {
                 Toast.makeText(getActivity(), "No ingredients selected..", Toast.LENGTH_SHORT).show();
                 return true;
             } else {
-                final ArrayList<Ingredient> ingredientsToDelete = new ArrayList<Ingredient>();
-                CheckBox checkbox;
-                for (int i = 0; i < listViewItemCount; i++){
-                    try{
-                        View v = listView.getAdapter().getView(i, null, null);
-                        checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
-                        if (checkbox.isChecked()){
-                            ingredientsToDelete.add(ingredientAdapter.getItem(i));
-                        }
-                    } catch (Exception e) {
-                        Log.d(TAG, "error!!->" + e.getMessage());
-                    }
-                }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
