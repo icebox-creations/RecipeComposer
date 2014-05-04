@@ -205,6 +205,7 @@ public class RecipesFragment extends ListFragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.recipe_fragment_context_menu, menu);
 
+        /* determine how to  */
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
         curRecipeView = ((ListView) v).getChildAt(itemInfo.position);
 
@@ -330,16 +331,6 @@ public class RecipesFragment extends ListFragment {
         } catch (NullPointerException e) {
             Log.d(TAG, e.toString());
         }
-
-//        Recipe recipe = recipeAdapter.getItem(itemInfo.position);
-//
-//        String recipeInfo = recipe.getRecipeTitle() + "\nMain ingredients: "
-//                + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
-//
-//        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "[Recipe Composer] Check out this recipe!");
-//        shareIntent.putExtra(Intent.EXTRA_TEXT, recipeInfo);
-//
-//        startActivity(Intent.createChooser(shareIntent, "Share recipe info to..."));
     }
 
     @Override

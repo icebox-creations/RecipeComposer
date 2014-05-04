@@ -4,14 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/actionShareRecipe"
+        android:id="@+id/actionShareRecipeFavorite"
         android:icon="@drawable/abc_ic_menu_share_holo_dark"
         android:title="@string/action_share"
         android:showAsAction="always" />
 
 
     <item
-        android:id="@+id/actionRemoveFavoriteRecipe"
+        android:id="@+id/actionRemoveFavoriteRecipeFavorite"
         android:icon="@drawable/abc_ic_menu_share_holo_dark"
         android:title="@string/action_recipe_remove_favorite"
         android:visible="true"

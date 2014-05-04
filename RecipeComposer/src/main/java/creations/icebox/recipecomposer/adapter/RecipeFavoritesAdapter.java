@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import creations.icebox.recipecomposer.R;
@@ -86,7 +88,16 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
         if (recipe != null) {
             viewHolder.recipeFavoriteTitle.setText(recipe.getRecipeTitle());
             viewHolder.recipeFavoriteIngredients.setText(recipe.getRecipeIngredients());
-            viewHolder.recipeFavoriteURL.setText(recipe.getRecipeIngredients());
+
+            String recipeURLString;
+            try {
+                URL recipeUrl = new URL(recipe.getRecipeURL());
+                recipeURLString = recipeUrl.getHost();
+            } catch (MalformedURLException e) {
+                Log.d(TAG, "URL parsing error.");
+                recipeURLString = "";
+            }
+            viewHolder.recipeFavoriteURL.setText(recipeURLString);
 
             ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeFavoriteImageView);
             UrlImageViewHelper.setUrlDrawable(thumbnail, recipe.getRecipePicUrl());

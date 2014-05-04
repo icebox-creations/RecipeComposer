@@ -142,96 +142,97 @@ public class RecipeFavoritesFragment extends ListFragment {
         setRetainInstance(true);
     }
 //
-//    /* created when we long hold a specific item in the recipe list */
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater inflater = getActivity().getMenuInflater();
-//        inflater.inflate(R.menu.recipe_favorites_fragment_context_menu, menu);
-//    }
-//
-//    /* When an item is selected in the context menu */
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        Recipe recipeFavorite = recipeFavoritesAdapter.getItem(itemInfo.position);
-//        switch (item.getItemId()) {
-//            case R.id.actionShareRecipe:
-//                try {
-//                    Log.d(TAG, "share recipe: " + recipeFavorite.getRecipeTitle());
-//                    shareTextRecipe(itemInfo);
-//                } catch (NullPointerException e) {
-//                    Log.d(TAG, e.toString());
-//                }
-//                return true;
-//            case R.id.actionRemoveFavoriteRecipe:
-//                try {
-//                    if (recipeFavorite == null) {
-//                        Toast.makeText(getActivity(), "Tried to delete a non existant recipe, silly! ",
-//                                Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        recipeFavoritesAdapter.remove(recipeFavorite);
-//                        sqLiteDAO.deleteRecipeFavorite(recipeFavorite);
-//                        recipeFavoritesAdapter.notifyDataSetChanged();
-//                        Toast.makeText(getActivity(),
-//                                "Removed '" + recipeFavorite.getRecipeTitle() + "' from your favorites!  ",
-//                                Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                } catch (NullPointerException e) {
-//                    Log.d(TAG, e.toString());
-//                }
-//                return true;
-//            default:
-//                return super.onContextItemSelected(item);
-//        }
-//    }
-//
-//    private void shareTextRecipe(AdapterView.AdapterContextMenuInfo itemInfo) {
-//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//        shareIntent.setType("text/plain");
-//        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-//
-//        Recipe recipe = recipeFavoritesAdapter.getItem(itemInfo.position);
-//
-//        String textMessage = recipe.getRecipeTitle() + "\nMain ingredients: "
-//                + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
-//        String subjectMessage = "Hey, let's make " + recipe.getRecipeTitle() + "!";
-//
-//        try {
-//            List<ResolveInfo> resolveInfoList = getActivity().getPackageManager()
-//                    .queryIntentActivities(shareIntent, 0);
-//
-//            if (!resolveInfoList.isEmpty()) {
-//                List<Intent> targetedShareIntents = new ArrayList<Intent>();
-//                Intent targetedShareIntent;
-//
-//                for (ResolveInfo resolveInfo : resolveInfoList) {
-//                    String packageName = resolveInfo.activityInfo.packageName;
-//
-//                    targetedShareIntent = new Intent(Intent.ACTION_SEND);
-//                    targetedShareIntent.setType("text/plain");
-//                    targetedShareIntent.putExtra(Intent.EXTRA_SUBJECT, subjectMessage);
-//                    targetedShareIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
-//                    targetedShareIntent.setPackage(packageName);
-//
-//                    targetedShareIntents.add(targetedShareIntent);
-//                }
-//
-//                Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0),
-//                        getResources().getString(R.string.share_intent));
-//                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-//                        targetedShareIntents.toArray(new Parcelable[] {}));
-//                startActivityForResult(chooserIntent, 0);
-//            }
-//
-//        } catch (NullPointerException e) {
-//            Log.d(TAG, e.toString());
-//        }
-//
-//
-//    }
+    /* created when we long hold a specific item in the recipe list */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        Toast.makeText(getActivity(), "Long Hold..", Toast.LENGTH_SHORT).show();
+        inflater.inflate(R.menu.recipe_favorites_fragment_context_menu, menu);
+    }
+
+    /* When an item is selected in the context menu */
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        Recipe recipeFavorite = recipeFavoritesAdapter.getItem(itemInfo.position);
+        switch (item.getItemId()) {
+            case R.id.actionShareRecipeFavorite:
+                try {
+                    Log.d(TAG, "share recipe: " + recipeFavorite.getRecipeTitle());
+                    shareTextRecipe(itemInfo);
+                } catch (NullPointerException e) {
+                    Log.d(TAG, e.toString());
+                }
+                return true;
+            case R.id.actionRemoveFavoriteRecipeFavorite:
+                try {
+                    if (recipeFavorite == null) {
+                        Toast.makeText(getActivity(), "Tried to delete a non existant recipe, silly! ",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        recipeFavoritesAdapter.remove(recipeFavorite);
+                        sqLiteDAO.deleteRecipeFavorite(recipeFavorite);
+                        recipeFavoritesAdapter.notifyDataSetChanged();
+                        Toast.makeText(getActivity(),
+                                "Removed '" + recipeFavorite.getRecipeTitle() + "' from your favorites!  ",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (NullPointerException e) {
+                    Log.d(TAG, e.toString());
+                }
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void shareTextRecipe(AdapterView.AdapterContextMenuInfo itemInfo) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        Recipe recipe = recipeFavoritesAdapter.getItem(itemInfo.position);
+
+        String textMessage = recipe.getRecipeTitle() + "\nMain ingredients: "
+                + recipe.getRecipeIngredients() + "\n" + recipe.getRecipeURL();
+        String subjectMessage = "Hey, let's make " + recipe.getRecipeTitle() + "!";
+
+        try {
+            List<ResolveInfo> resolveInfoList = getActivity().getPackageManager()
+                    .queryIntentActivities(shareIntent, 0);
+
+            if (!resolveInfoList.isEmpty()) {
+                List<Intent> targetedShareIntents = new ArrayList<Intent>();
+                Intent targetedShareIntent;
+
+                for (ResolveInfo resolveInfo : resolveInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+
+                    targetedShareIntent = new Intent(Intent.ACTION_SEND);
+                    targetedShareIntent.setType("text/plain");
+                    targetedShareIntent.putExtra(Intent.EXTRA_SUBJECT, subjectMessage);
+                    targetedShareIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+                    targetedShareIntent.setPackage(packageName);
+
+                    targetedShareIntents.add(targetedShareIntent);
+                }
+
+                Intent chooserIntent = Intent.createChooser(targetedShareIntents.remove(0),
+                        getResources().getString(R.string.share_intent));
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        targetedShareIntents.toArray(new Parcelable[] {}));
+                startActivityForResult(chooserIntent, 0);
+            }
+
+        } catch (NullPointerException e) {
+            Log.d(TAG, e.toString());
+        }
+
+
+    }
 
 
     @Override
