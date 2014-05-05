@@ -1,21 +1,16 @@
 package creations.icebox.recipecomposer.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -111,15 +106,13 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeImageView);
         UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
-        ImageView favoritesStarImageView = ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView));
         if (sqLiteDAO.isExistsRecipe(recipe)) {
-            favoritesStarImageView.setImageResource(android.R.drawable.btn_star_big_on);
+            viewHolder.recipeStar.setImageResource(R.drawable.star_small);
         } else {
-//            favoritesStarImageView.setImageResource(android.R.drawable.btn_star_big_off);
-            favoritesStarImageView.setImageResource(0);
+            viewHolder.recipeStar.setImageResource(0);
         }
-        favoritesStarImageView.invalidate();
-
+        viewHolder.recipeStar.invalidate();
+        notifyDataSetChanged();
         return convertView;
     }
 }

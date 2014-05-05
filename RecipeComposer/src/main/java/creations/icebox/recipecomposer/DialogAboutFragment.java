@@ -7,19 +7,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-
-import creations.icebox.recipecomposer.adapter.IngredientAdapter;
-import creations.icebox.recipecomposer.helper.SQLiteDAO;
-import creations.icebox.recipecomposer.lib.Ingredient;
 
 public class DialogAboutFragment extends DialogFragment {
     private static final String TAG = "***ABOUT DIALOG FRAGMENT***: ";

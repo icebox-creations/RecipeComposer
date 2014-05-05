@@ -1,5 +1,3 @@
-green
-herbal
 almonds
 apples
 asparagus
@@ -29,30 +27,17 @@ cutlets
 dry
 eggplant
 eggs
-etc
-ezekial
-fajitas
-fat
 fish
 fish oil
-flank
 flax seed oil
 fruit
-fry
 garlic
 grapefruit
-green
-ground
 halibut
-herbal
 kale
-leafy
 lemon
-lemons
 lettuce
-limes
-loin
-mahi
+lime
 milk
 mushrooms
 mustard
@@ -75,7 +60,6 @@ potato
 pumpkin
 ramen
 raspberry
-ribeye
 rice
 ricotta
 roast
@@ -94,20 +78,14 @@ spaghetti
 spinach
 sprouts
 steak
-steaks
-steal
-stir
 strawberries
-string
 sushi
-sweet
 tea
 tenderloin
 tilapia
 tomato
 tuna
 turkey
-venison
 walnuts
 wheat
 yams

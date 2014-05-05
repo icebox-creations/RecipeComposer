@@ -208,7 +208,7 @@ public class IngredientsFragment extends ListFragment {
             DialogAddIngredientFragment dialogAddIngredientFragment
                     = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO, ingredientsSuggestionsArrayList);
             dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
-            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
+//            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
             return true;
 
         } else if (id == R.id.action_remove_ingredient) {
@@ -359,12 +359,13 @@ public class IngredientsFragment extends ListFragment {
 
         Log.d(TAG, "onActivityCreated");
         ingredientArrayList = sqLiteDAO.getAllIngredients();
-        if (ingredientArrayList.size() > 0){
-            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
-        }
+//        if (ingredientArrayList.size() > 0){
+//            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
+//        }
 
         // https://developer.android.com/guide/topics/ui/menus.html#context-menu
         final ListView listView = getListView();
+//        listView.setBackgroundResource(R.drawable.fruit_bowl);
         ingredientAdapter = new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);

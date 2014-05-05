@@ -1,17 +1,14 @@
 package creations.icebox.recipecomposer;
 
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
-import android.support.v7.internal.view.menu.MenuView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -266,8 +263,10 @@ public class RecipesFragment extends ListFragment {
                         /** Show the favorite start for the recipe.. curRecipeView is set when the menu is loaded each time */
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
-                                    .setImageResource(android.R.drawable.btn_star_big_on);
-                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
+                                    .setImageResource(R.drawable.star_small);
+                        (curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
+
+                        listView.invalidateViews();
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
@@ -287,7 +286,7 @@ public class RecipesFragment extends ListFragment {
                         /** Hide the favorite start for the recipe.. */
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
                                 .setImageResource(0);
-                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
+                        (curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
 
                     }
                 } catch (NullPointerException e) {

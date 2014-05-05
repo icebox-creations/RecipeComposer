@@ -6,7 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/almond" >
+    android:background="#A6ffffff">
+
+    <!-- https://stackoverflow.com/questions/11285961/how-to-make-a-background-transparent-20-in-android -->
 
     <CheckBox
         android:id="@+id/ingredientCheckbox"
