@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -208,6 +209,11 @@ public class IngredientsFragment extends ListFragment {
             DialogAddIngredientFragment dialogAddIngredientFragment
                     = new DialogAddIngredientFragment(ingredientAdapter, sqLiteDAO, ingredientsSuggestionsArrayList);
             dialogAddIngredientFragment.show(fragmentManager, "add ingredient dialog");
+
+            // Close soft keyboard after button selection
+            getActivity().getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
 //            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
             return true;
 
