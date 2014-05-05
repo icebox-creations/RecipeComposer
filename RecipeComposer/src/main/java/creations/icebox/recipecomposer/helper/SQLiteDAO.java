@@ -230,7 +230,7 @@ public class SQLiteDAO {
                 "select * from "
                         + SQLiteDBHelper.TABLE_RECIPE_FAVS
                         + " where " + SQLiteDBHelper.RECIPE_FAV_COLUMN_URL
-                        +  " like '" + recipe.getRecipeURL() + "';";
+                        +  " like '" + recipe.getRecipeURL().trim().toLowerCase() + "';";
 
         Cursor cursor = sqLiteDatabase.rawQuery(duplicateCheckQuery, null);
 

@@ -101,7 +101,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         // assign values if the recipe is not null
         viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
         viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
-
         try {
             URL recipeUrl = new URL(recipe.getRecipeURL());
             viewHolder.recipeURL.setText(recipeUrl.getHost());
@@ -110,13 +109,16 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
 
         ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeImageView);
-
         UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
         if (sqLiteDAO.isExistsRecipe(recipe)) {
             ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView))
                     .setImageResource(android.R.drawable.btn_star_big_on);
+        } else {
+            ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView))
+                    .setImageResource(android.R.drawable.btn_star_big_off);
         }
+        ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
 
         return convertView;
     }

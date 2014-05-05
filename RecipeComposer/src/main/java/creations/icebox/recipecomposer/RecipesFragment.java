@@ -232,6 +232,10 @@ public class RecipesFragment extends ListFragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
+//        Log.d(TAG, " Recipe fragment..");
+        if (getUserVisibleHint() == false)
+            return false;
+
         Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
         switch (item.getItemId()) {
             case R.id.actionShareRecipe:
@@ -256,7 +260,7 @@ public class RecipesFragment extends ListFragment {
                                 "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  " ,
                                 Toast.LENGTH_SHORT).show();
 
-                        /** Show the favorite start for the recipe.. */
+                        /** Show the favorite start for the recipe.. curRecipeView is set when the menu is loaded each time */
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
                                     .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));

@@ -115,6 +115,7 @@ public class RecipeFavoritesFragment extends ListFragment {
         final ListView listView = getListView();
         recipeFavoritesAdapter = new RecipeFavoritesAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, recipeFavoritesList);
+        registerForContextMenu(listView);
         listView.setAdapter(recipeFavoritesAdapter);
     }
 
@@ -138,8 +139,8 @@ public class RecipeFavoritesFragment extends ListFragment {
         sqLiteDAO = new SQLiteDAO(getActivity());
         sqLiteDAO.open();
 
-        setHasOptionsMenu(true);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 //
     /* created when we long hold a specific item in the recipe list */
@@ -147,7 +148,6 @@ public class RecipeFavoritesFragment extends ListFragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        Toast.makeText(getActivity(), "Long Hold..", Toast.LENGTH_SHORT).show();
         inflater.inflate(R.menu.recipe_favorites_fragment_context_menu, menu);
     }
 
@@ -155,6 +155,10 @@ public class RecipeFavoritesFragment extends ListFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+//        Log.d(TAG, " Recipe favorite fragment ..");
+        if (getUserVisibleHint() == false)
+            return false;
 
         Recipe recipeFavorite = recipeFavoritesAdapter.getItem(itemInfo.position);
         switch (item.getItemId()) {
