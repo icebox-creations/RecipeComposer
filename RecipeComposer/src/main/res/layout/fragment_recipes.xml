@@ -8,13 +8,52 @@
     android:background="@color/almond"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@android:id/list"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:drawSelectorOnTop="true"
-        android:divider="@color/lighter_grey"
-        android:dividerHeight="1dp"/>
+        android:weightSum="5">
+
+        <TableRow>
+
+            <!--<EditText-->
+                <!--android:id="@+id/keywordEditText"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="2"-->
+                <!--android:ems="10"-->
+                <!--android:inputType="text"-->
+                <!--android:hint="@string/keyword_edit_text_hint" />-->
+
+            <!--<Button-->
+                <!--android:id="@+id/clearQueryButton"-->
+                <!--style="?android:attr/buttonStyleSmall"-->
+                <!--android:layout_width="80dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/white"-->
+                <!--android:textStyle="bold"-->
+                <!--android:paddingRight="5dp"-->
+                <!--android:textSize="22sp"-->
+                <!--android:text="@string/clear_query_button" />-->
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="true"
+                android:divider="@color/lighter_grey"
+                android:dividerHeight="1dp"/>
+
+           </TableRow>
+    </TableLayout>
+
+
+
 
     <com.devspark.robototextview.widget.RobotoTextView
         android:id="@android:id/empty"

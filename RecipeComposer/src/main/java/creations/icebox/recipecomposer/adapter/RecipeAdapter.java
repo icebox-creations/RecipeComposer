@@ -111,14 +111,14 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeImageView);
         UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
 
+        ImageView favoritesStarImageView = ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView));
         if (sqLiteDAO.isExistsRecipe(recipe)) {
-            ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView))
-                    .setImageResource(android.R.drawable.btn_star_big_on);
+            favoritesStarImageView.setImageResource(android.R.drawable.btn_star_big_on);
         } else {
-            ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView))
-                    .setImageResource(android.R.drawable.btn_star_big_off);
+//            favoritesStarImageView.setImageResource(android.R.drawable.btn_star_big_off);
+            favoritesStarImageView.setImageResource(0);
         }
-        ((ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
+        favoritesStarImageView.invalidate();
 
         return convertView;
     }

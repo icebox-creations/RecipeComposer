@@ -247,6 +247,9 @@ public class RecipesFragment extends ListFragment {
                 }
                 return true;
             case R.id.actionAddFavoriteRecipe:
+
+                // favorite_recipe();
+
                 try {
                     Log.d(TAG, "favorite recipe: " + recipeToFavorite.getRecipeTitle());
                     Log.d(TAG, "favorite recpe url: " + recipeToFavorite.getRecipeURL());
@@ -263,7 +266,8 @@ public class RecipesFragment extends ListFragment {
                         /** Show the favorite start for the recipe.. curRecipeView is set when the menu is loaded each time */
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
-                                    .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                                    .setImageResource(android.R.drawable.btn_star_big_on);
+                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
@@ -282,7 +286,8 @@ public class RecipesFragment extends ListFragment {
 
                         /** Hide the favorite start for the recipe.. */
                         ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
-                                .setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_off));
+                                .setImageResource(0);
+                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
 
                     }
                 } catch (NullPointerException e) {
