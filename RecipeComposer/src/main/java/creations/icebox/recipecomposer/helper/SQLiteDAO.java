@@ -189,7 +189,7 @@ public class SQLiteDAO {
         // if the title isn't blank or a duplicate, insert it
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE,
-                recipeTitle.toLowerCase().trim() );
+                recipeTitle.trim() );
 
         contentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST,
                 recipe.getRecipeIngredients() );
