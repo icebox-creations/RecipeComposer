@@ -99,9 +99,6 @@ public class RecipesFragment extends ListFragment {
             } else {
                 Log.d(TAG, "ELSE");
             }
-
-//            listView = getListView();
-//            registerForContextMenu(listView);
         }
     }
 
@@ -168,10 +165,6 @@ public class RecipesFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         String recipeTitle = recipeList.get(position).getRecipeTitle();
         Log.d(TAG, recipeTitle + " clicked");
-//        Toast.makeText(getActivity(),
-//                "'" + recipeTitle + "..'",
-//                Toast.LENGTH_SHORT).show();
-
         Uri uriUrl = Uri.parse(recipeList.get(position).getRecipeURL());
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
@@ -190,8 +183,6 @@ public class RecipesFragment extends ListFragment {
         /* Configure the fragment instance to be retained on configuration
         * change. Then start the async task */
         setRetainInstance(true);
-        // when added, invalid optiosn menu, fragments on options menu..
-        // manage own items.. no menu switching!
         setHasOptionsMenu(true);
     }
 
@@ -229,8 +220,7 @@ public class RecipesFragment extends ListFragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-//        Log.d(TAG, " Recipe fragment..");
-        if (getUserVisibleHint() == false)
+        if (!getUserVisibleHint())
             return false;
 
         Recipe recipeToFavorite = recipeAdapter.getItem(itemInfo.position);
@@ -244,9 +234,6 @@ public class RecipesFragment extends ListFragment {
                 }
                 return true;
             case R.id.actionAddFavoriteRecipe:
-
-                // favorite_recipe();
-
                 try {
                     Log.d(TAG, "favorite recipe: " + recipeToFavorite.getRecipeTitle());
                     Log.d(TAG, "favorite recpe url: " + recipeToFavorite.getRecipeURL());
@@ -386,11 +373,12 @@ public class RecipesFragment extends ListFragment {
 
         private String TAG = "***RECIPE DOWNLOADER***: ";
 
-        private String recipeTitle = "";
         private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
+        private String recipeTitle = "";
         private String recipeURL = "";
         private String recipeIngredients = "";
         private String recipePicUrl = "";
+        private String currPage = "";
 
         private ProgressDialog progressDialog;
 
@@ -400,17 +388,16 @@ public class RecipesFragment extends ListFragment {
             return lastStatusCode;
         }
 
-        WeakReference<RecipesFragment> recipesFragmentWeakReference;
+//        WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
         private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query, int currentPage) {
 
             query = query.replace(" ", "+");
 
-            String currPage;
             if (currentPage != 0) {
                 currPage = "&p=" + currentPage;
             } else {
-                currPage = "";
+                currPage = "&p=1";
             }
 
             if (ingredientTitles == null) {
@@ -435,20 +422,7 @@ public class RecipesFragment extends ListFragment {
             *   watch for scroll to bottom
             * */
 
-            //http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3
-            /*
-                if i and q are the same
-                    if p is the same
-                        nothing
-                    else p is different
-                        request
-                        append
-                else i or q are different than previous vals
-                    clear
-                    request
-                    append
-            */
-
+            // example URL => http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3
 
             if (ingredientTitlesOld.toString().equals(ingredientTitles.toString()) && queryOld.equals(query)) {
                 Log.d(TAG, "page old = " + currentPageOld);
@@ -461,7 +435,7 @@ public class RecipesFragment extends ListFragment {
                 }
             } else {
                 Log.d(TAG, "clear recipe list");
-                currentPageGlobal = 0;
+                currentPageGlobal = 1;
                 recipeList.clear();
             }
 
@@ -529,10 +503,8 @@ public class RecipesFragment extends ListFragment {
 
                 // Get the root JSONObject
                 jsonObject = new JSONObject(queryResult);
-//                Log.d(TAG, jsonObject.toString());
 
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
-//                Log.d(TAG, jsonArray.toString());
 
                 for (int i = 0; i < jsonArray.length(); ++i)
                 {
@@ -591,11 +563,7 @@ public class RecipesFragment extends ListFragment {
 
 //                if (this.recipesFragmentWeakReference.get() != null) {
 //                }
-                Log.d(TAG, "Now treat the result");
-
-                if(response.equals("")){
-                    return;
-                }
+                Log.d(TAG, "onPostExecute");
 
                 listView = getListView();
                 registerForContextMenu(listView);
@@ -608,7 +576,19 @@ public class RecipesFragment extends ListFragment {
                     if (lastStatusCode == 200) {
                         recipeAdapter.notifyDataSetChanged();
                     } else {
-                        Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
+                        /* if 500, increment page number and request again. Flaw of Recipe Puppy.
+                        * Right now, just clear the list to show the "no recipes found" message.
+                        * */
+                        if (lastStatusCode == 500) {
+                            Log.d(TAG, "Status was 500, so try next page if possible");
+//                            recipeList.clear();
+//                            recipeAdapter.clear();
+                            recipeAdapter.notifyDataSetChanged();
+//                            Log.d(TAG, "" + currentPageGlobal);
+//                            new RecipeDownloaderAsyncTask((RecipesFragment) getTargetFragment(), ingredientTitles, query, currentPageGlobal+1).execute();
+                        } else {
+                            Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
+                        }
                     }
                 }
 

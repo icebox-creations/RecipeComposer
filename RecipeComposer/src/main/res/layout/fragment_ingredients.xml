@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:listSelector="@drawable/abc_list_selector_holo_dark"
-                android:dividerHeight="2dp"
+                android:dividerHeight="1dp"
                 android:drawSelectorOnTop="true" />
 
         </TableRow>

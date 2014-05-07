@@ -84,10 +84,11 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
 
         // assign values if the ingredient is not null
         if (recipe != null) {
+            String recipeURLString;
+
             viewHolder.recipeFavoriteTitle.setText(recipe.getRecipeTitle());
             viewHolder.recipeFavoriteIngredients.setText(recipe.getRecipeIngredients());
 
-            String recipeURLString;
             try {
                 URL recipeUrl = new URL(recipe.getRecipeURL());
                 recipeURLString = recipeUrl.getHost();
@@ -97,10 +98,8 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
             }
             viewHolder.recipeFavoriteURL.setText(recipeURLString);
 
-            ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeFavoriteImageView);
-            UrlImageViewHelper.setUrlDrawable(thumbnail, recipe.getRecipePicUrl());
+            UrlImageViewHelper.setUrlDrawable(viewHolder.recipeFavoritePicImageView, recipe.getRecipePicUrl());
         }
-
 
         return convertView;
     }
