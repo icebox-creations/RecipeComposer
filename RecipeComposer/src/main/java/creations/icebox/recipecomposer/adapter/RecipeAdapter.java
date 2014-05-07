@@ -50,6 +50,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         TextView recipeIngredients;
         TextView recipeURL;
         ImageView recipeStar;
+        ImageView recipePic;
     }
 
     @Override
@@ -67,7 +68,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         Log.d(TAG, "IN GET VIEW!!");
         final ViewHolderItem viewHolder;
-        //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
         /* convertView is the list item */
         if (convertView == null) {
@@ -81,6 +81,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeIngredients = (TextView) convertView.findViewById(R.id.recipeIngredientsTextView);
             viewHolder.recipeURL = (TextView) convertView.findViewById(R.id.recipeUrlTextView);
             viewHolder.recipeStar = (ImageView) convertView.findViewById(R.id.recipeFavoriteStarImageView);
+            viewHolder.recipePic = (ImageView) convertView.findViewById(R.id.recipeImageView);
 
             convertView.setTag(viewHolder);
 
@@ -91,29 +92,41 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         }
 
         // Recipe item based on the position
+        if (recipeArrayList.isEmpty()) {
+            Log.d(TAG, "recipeArrayList is empty");
+            return convertView;
+        }
+
         Recipe recipe = recipeArrayList.get(position);
-        String recipeImageURL = recipe.getRecipePicUrl();
 
-        // assign values if the recipe is not null
-        viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
-        viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
-        try {
-            URL recipeUrl = new URL(recipe.getRecipeURL());
-            viewHolder.recipeURL.setText(recipeUrl.getHost());
-        } catch (MalformedURLException e) {
-            Log.d(TAG, "URL parsing error.");
+        if (recipe != null) {
+            String recipeImageURL = recipe.getRecipePicUrl();
+
+            // assign values if the recipe is not null
+            viewHolder.recipeTitle.setText(recipe.getRecipeTitle());
+            viewHolder.recipeIngredients.setText(recipe.getRecipeIngredients());
+
+            try {
+                URL recipeUrl = new URL(recipe.getRecipeURL());
+                viewHolder.recipeURL.setText(recipeUrl.getHost());
+            } catch (MalformedURLException e) {
+                Log.d(TAG, "URL parsing error.");
+                recipeImageURL = "";
+            }
+
+            UrlImageViewHelper.setUrlDrawable(viewHolder.recipePic, recipeImageURL, R.drawable.placeholder);
+
+            if (sqLiteDAO.isExistsRecipe(recipe)) {
+                viewHolder.recipeStar.setImageResource(R.drawable.star_small);
+            } else {
+                viewHolder.recipeStar.setImageResource(0);
+            }
+            viewHolder.recipeStar.invalidate();
         }
 
-        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.recipeImageView);
-        UrlImageViewHelper.setUrlDrawable(thumbnail, recipeImageURL);
-
-        if (sqLiteDAO.isExistsRecipe(recipe)) {
-            viewHolder.recipeStar.setImageResource(R.drawable.star_small);
-        } else {
-            viewHolder.recipeStar.setImageResource(0);
-        }
-        viewHolder.recipeStar.invalidate();
+//        viewHolder.recipeStar.invalidate();
 //        notifyDataSetChanged();
+
         return convertView;
     }
 }

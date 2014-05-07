@@ -13,7 +13,7 @@
     <string name="recipes_empty_list_view">Sorry, couldn\'t find any recipes.</string>
     <string name="recipe_favorites_empty_list_view">Favorite some recipes and view them here!</string>
     <string name="recipes_favorites_empty_list_view">Add some recipes to your favorites!</string>
-    <string name="ingredients_empty_list_view">Add some ingredients to get started</string>
+    <string name="ingredients_empty_list_view">Add some ingredients to get started!</string>
     <string name="ingredients_empty_helper_image">Add an ingredient by clicking the plus! Use the text field at the top to search for recipe by a keyword!</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>

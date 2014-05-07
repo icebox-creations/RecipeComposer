@@ -26,9 +26,7 @@ cucumber
 cutlets
 dry
 eggplant
-eggs
 fish
-fish oil
 flax seed oil
 fruit
 garlic
@@ -291,3 +289,4 @@ marsala wine
 hash browns
 chinese five spice powder
 cider vinegar
+vodka
