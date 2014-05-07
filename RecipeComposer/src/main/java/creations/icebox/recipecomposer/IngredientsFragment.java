@@ -100,6 +100,7 @@ public class IngredientsFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

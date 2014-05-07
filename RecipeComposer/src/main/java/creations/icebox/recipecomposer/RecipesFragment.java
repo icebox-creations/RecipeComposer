@@ -87,6 +87,7 @@ public class RecipesFragment extends ListFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
+//            listView.setAdapter(null);
             ingredientTitles = ((MainActivity) getActivity()).getIngredientTitles();
             query = ((MainActivity) getActivity()).getQuery();
             Log.d(TAG, "setUserVisibleHint-> ingredientTitles: " + ingredientTitles + " | query: " + query);

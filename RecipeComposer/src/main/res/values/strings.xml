@@ -20,6 +20,7 @@
     <string name="action_remove">Remove</string>
     <string name="action_new_ingredient">Add Ingredient</string>
     <string name="action_search">Search</string>
+    <string name="action_create_new_recipe">Create a recipe</string>
     <string name="action_share">Share</string>
     <string name="dialog_add_ingredient_hint">potato</string>
     <string name="ingredient_search">Find existing ingredient..</string>

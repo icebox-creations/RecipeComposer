@@ -65,6 +65,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        Log.d(TAG, "IN GET VIEW!!");
         final ViewHolderItem viewHolder;
         //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
@@ -112,7 +113,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             viewHolder.recipeStar.setImageResource(0);
         }
         viewHolder.recipeStar.invalidate();
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
         return convertView;
     }
 }
