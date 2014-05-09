@@ -131,6 +131,11 @@ public class MainActivity extends ActionBarActivity
                     = new DialogAboutFragment();
             dialogAboutFragment.show(fragmentManager, "dialog about fragment");
             return true;
+        } else if (id == R.id.action_create_new_recipe) {
+//            getFragmentManager().beginTransaction()
+//                    .replace(android.R.id.content, new RecipeCreatorFragment())
+//                    .addToBackStack(null).commit();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }

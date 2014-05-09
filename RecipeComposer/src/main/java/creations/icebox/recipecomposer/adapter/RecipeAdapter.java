@@ -66,6 +66,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        Log.d(TAG, "IN GET VIEW!!");
         final ViewHolderItem viewHolder;
 
         /* convertView is the list item */
@@ -122,6 +123,9 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
             }
             viewHolder.recipeStar.invalidate();
         }
+
+//        viewHolder.recipeStar.invalidate();
+//        notifyDataSetChanged();
 
         return convertView;
     }

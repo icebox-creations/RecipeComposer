@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context="creations.icebox.recipecomposer.RecipeCreatorFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:id="@+id/recipeCreateLinearLayout"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:hint="Recipe Name"
+        android:layout_height="58dp"
+        android:id="@+id/newRecipeTitle" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="347dp"
+        android:id="@+id/list"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp" />
+
+    <!--<VideoView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="199dp"-->
+        <!--android:id="@+id/newRecipeVideoView"-->
+        <!--android:layout_gravity="center_horizontal" />-->
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="131dp"
+        android:layout_height="match_parent"
+        android:text="Capture!"
+        android:id="@+id/captureRecipeBtn"
+        android:layout_gravity="center_horizontal"
+        android:textSize="24dp"
+        android:layout_marginTop="-5dp" />
+
+</LinearLayout>
