@@ -62,7 +62,7 @@ public class DialogAddIngredientFragment extends DialogFragment {
                     if (autoCompleteTextView.getText() != null
                             && autoCompleteTextView.getText().length() > 0) {
                         ingredientTitle = autoCompleteTextView.getText().toString();
-                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle);
+                        Ingredient ingredient = sqLiteDAO.createIngredient(ingredientTitle.trim().toLowerCase());
 
                         try {
                             if (ingredient != null) {
