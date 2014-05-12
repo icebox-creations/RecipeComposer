@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -250,15 +251,23 @@ public class RecipesFragment extends ListFragment {
 
                         /** Show the favorite start for the recipe.. curRecipeView is set when the menu is loaded each time */
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
-                        ((ImageView) curRecipeView.findViewById(R.id.recipeFavoriteStarImageView))
-                                    .setImageResource(R.drawable.star_small);
-                        (curRecipeView.findViewById(R.id.recipeFavoriteStarImageView)).invalidate();
+                        ImageView starIv = (ImageView) (curRecipeView.findViewById(R.id.recipeFavoriteStarImageView));
+                        starIv.setImageResource(R.drawable.star_small);
+                        starIv.refreshDrawableState();
+                        starIv.invalidate();
+                        starIv.setVisibility(ImageView.VISIBLE);
 
-                        listView.invalidateViews();
+                        /* make sure that the imageview is updated properly.. which it isnt
+                         * when the recipe item happens to have started out outside of the current
+                         * visible view.. ie the favorited recipe started at a position on the list
+                         * below the last visible item when the scroll position is 0. */
+
+                        listView.invalidate();
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
                 }
+                listView.refreshDrawableState();
                 return true;
             case R.id.actionRemoveFavoriteRecipe:
                 try {
