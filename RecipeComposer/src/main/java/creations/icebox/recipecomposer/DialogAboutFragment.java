@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 public class DialogAboutFragment extends DialogFragment {
+
     private static final String TAG = "***ABOUT DIALOG FRAGMENT***: ";
 
     public DialogAboutFragment() {

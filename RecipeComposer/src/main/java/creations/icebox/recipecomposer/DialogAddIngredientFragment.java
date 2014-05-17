@@ -19,19 +19,18 @@ import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Ingredient;
 
 public class DialogAddIngredientFragment extends DialogFragment {
-    private static final String TAG = "***DIALOG FRAGMENT***: ";
 
-    IngredientAdapter ingredientAdapter;
-    SQLiteDAO sqLiteDAO;
-    ArrayList<String> ingredientSuggestions;
-    AutoCompleteTextView autoCompleteTextView;
-    ArrayAdapter<String> stringArrayAdapter;
+    private static final String TAG = "***DIALOG FRAGMENT***: ";
+    private IngredientAdapter ingredientAdapter;
+    private SQLiteDAO sqLiteDAO;
+    private ArrayList<String> ingredientSuggestions;
+    private AutoCompleteTextView autoCompleteTextView;
 
     public DialogAddIngredientFragment(IngredientAdapter ingredientAdapter, SQLiteDAO sqLiteDAO,
-                                       ArrayList<String> ingredientsSuggestionsArrayList) {
+                                       ArrayList<String> ingredientSuggestions) {
         this.ingredientAdapter = ingredientAdapter;
         this.sqLiteDAO = sqLiteDAO;
-        ingredientSuggestions = ingredientsSuggestionsArrayList;
+        this.ingredientSuggestions = ingredientSuggestions;
     }
 
     @Override
@@ -41,18 +40,17 @@ public class DialogAddIngredientFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View rootView = inflater.inflate(R.layout.fragment_dialog_add_ingredient, null);
-        builder.setView(rootView);
 
         autoCompleteTextView = (AutoCompleteTextView) rootView.findViewById(R.id.addIngredientAutoCompleteTextView);
         autoCompleteTextView.setThreshold(1);
-        stringArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, ingredientSuggestions);
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, ingredientSuggestions);
         autoCompleteTextView.setAdapter(stringArrayAdapter);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("New Ingredient");
+        builder.setView(rootView);
 
         // Set up the buttons
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -83,7 +81,6 @@ public class DialogAddIngredientFragment extends DialogFragment {
                     dialog.cancel();
                 }
             });
-
         return builder.create();
     }
 }

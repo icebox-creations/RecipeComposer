@@ -19,19 +19,8 @@ import creations.icebox.recipecomposer.lib.Ingredient;
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
     private static final String TAG = "***INGREDIENT ADAPTER***: ";
-
-    private ArrayList<Ingredient> ingredientArrayList; // for the view
-
-    public ArrayList<Ingredient> getIngredientArrayListView() {
-        return ingredientArrayListView;
-    }
-
-    public ArrayList<Ingredient> getIngredientArrayList() {
-        return ingredientArrayList;
-    }
-
-    private ArrayList<Ingredient> ingredientArrayListView;  // used fro the data
-
+    private ArrayList<Ingredient> ingredientArrayList; // used for the view
+    private ArrayList<Ingredient> ingredientArrayListView;  // used for the data
     private StringBuffer ingredientTitles;
 
     public StringBuffer getIngredientTitles() {
@@ -41,7 +30,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     public IngredientAdapter(Context context, int resource, ArrayList<Ingredient> ingredientArrayListView) {
         super(context, resource, ingredientArrayListView);
         this.ingredientArrayListView = ingredientArrayListView;
-        ingredientArrayList = new ArrayList<Ingredient>(ingredientArrayListView); // original datas
+        ingredientArrayList = new ArrayList<Ingredient>(ingredientArrayListView); // original data
         ingredientTitles = new StringBuffer();
     }
 
@@ -51,11 +40,6 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     static class ViewHolderItem {
         TextView ingredientTitle;
         CheckBox ingredientCheckBox;
-    }
-
-    public void toggleCheckBoxDrawable(){
-
-
     }
 
     @Override
@@ -79,9 +63,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        //Log.d(TAG, "position: " + position + "<- getView");
         final ViewHolderItem viewHolder;
-        //Log.d(TAG, "ConvertView " + String.valueOf(position));
 
         if (convertView == null) {
             // inflate the layout
@@ -97,15 +79,14 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
             convertView.setTag(viewHolder);
             convertView.setTag(R.id.ingredientCheckbox, viewHolder.ingredientCheckBox);
 
-
             viewHolder.ingredientCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "CheckBox was clicked");
                     CheckBox checkBox = (CheckBox) v;
 
-                     /* get the tag of the ingredient that belongs to this checbkox..
-                      * from the ingredient arraylist for listview  */
+                     // get the tag of the ingredient that belongs to this checbkox from the
+                     // ingredient arraylist for listview
                     Ingredient ingredient = (Ingredient) checkBox.getTag();
                     int pos = 0;
                     for ( ; pos < ingredientArrayListView.size(); pos++){
@@ -116,16 +97,15 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
                         }
                     }
 
-                    /* This is to fix the checkbox double check and off issue */
-                    checkBox.toggle(); // under the assumtion toggle happens.. we need to do this
+                    // This is to fix the checkbox double check and off issue
+                    checkBox.toggle(); // under the assumption toggle happens.. we need to do this
                     Log.d(TAG, " ::: " + pos);
                     itemClickListener(v, pos);
                 }
             });
-
         } else {
-            // we've just avoided calling findViewById() on the resource file every time
-            // just use the viewHolder
+            // we've just avoided calling findViewById() on the resource file every time just use
+            // the viewHolder
             viewHolder = (ViewHolderItem) convertView.getTag();
         }
 
@@ -170,10 +150,9 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
     public void itemClickListener(View view, int position) {
 
         Log.d(TAG, "position: " + position + "<- itemClickListener");
-
         Log.d(TAG, "itemClickListener in the adapter!");
 
-        /* Manually check the checkbox and select the ingredient  */
+        // Manually check the checkbox and select the ingredient
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.ingredientCheckbox);
         checkBox.toggle();
 
@@ -182,8 +161,7 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
         Log.d(TAG, "INGERDIENT SELECTED: " + ingredient.getIngredientTitle());
 
-
-        /* seth the list of ingedient titles that we want in the url */
+        // set the list of ingredient titles that we want in the url */
         ingredientTitles.delete(0, ingredientTitles.length());
 
         for (Ingredient i : ingredientArrayList) {

@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -35,23 +34,13 @@ import creations.icebox.recipecomposer.helper.SQLiteDAO;
 import creations.icebox.recipecomposer.lib.Ingredient;
 
 public class IngredientsFragment extends ListFragment {
+
     private static final String TAG = "***INGREDIENTS FRAGMENT***: ";
     private SQLiteDAO sqLiteDAO;
-
     private ArrayList<String>   ingredientsSuggestionsArrayList;
-
-    Button      clearQueryButton;
-    EditText    keywordEditText;
-    SearchView  keywordSearchView;  // for the keyword search query at the top of ingredients list
-    SearchView  mSearchView;        // ingredients list search
-
-    String query = new String();
-
-    OnPageChangeListener mCallback;
-
-    private ArrayList<Ingredient> ingredientArrayList;
-
-    IngredientAdapter ingredientAdapter;
+    private String query = new String();
+    private OnPageChangeListener mCallback;
+    private IngredientAdapter ingredientAdapter;
 
     public interface OnPageChangeListener {
         public void onPageChange(StringBuffer ingredientTitles, String query);
@@ -68,23 +57,19 @@ public class IngredientsFragment extends ListFragment {
             InputStream inputStream = getActivity().getResources().openRawResource(R.raw.ingredient_suggestions);
             if (inputStream != null){
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);  /// read the input..
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 String receiveString;
 
-                /* Read the input using the bufferedReader (which is connected to the inputStream..) */
+                // Read the input using the bufferedReader (which is connected to the inputStream..)
                 while ( (receiveString = bufferedReader.readLine()) != null ) {
                     ingredientsSuggestionsLocal.add(receiveString);
                 }
-
                 inputStream.close();
                 bufferedReader.close();
-
-//                String file_contents = ingredientsSuggestionsLocal.toString();
-//                Toast.makeText(getActivity(), "Ingredient Suggestions Parsed!  " + file_contents, Toast.LENGTH_SHORT).show();
             }
         } catch(Exception e){
-            Log.d(TAG, "FILE EXCEPTION: " + e.getMessage());
+            Log.d(TAG, "File exception: " + e.getMessage());
         }
 
         return ingredientsSuggestionsLocal;
@@ -100,13 +85,12 @@ public class IngredientsFragment extends ListFragment {
         setHasOptionsMenu(true);
     }
 
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
         try {
-            if (!isVisibleToUser) { // query is the keyword search query term passed in, not ingedients
+            if (!isVisibleToUser) {
                 mCallback.onPageChange(ingredientAdapter.getIngredientTitles(), query);
                 Log.d(TAG, "isVisibleToUser = false");
             } else {
@@ -148,11 +132,11 @@ public class IngredientsFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.ingredient_fragment_actions, menu);
 
-            // ((MainActivity)getActivity())._menu.
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final MenuItem settingsMenuItem = menu.findItem(R.id.action_settings);
         final MenuItem aboutAppMenuItem = menu.findItem(R.id.action_about);
 
+        SearchView mSearchView;
         try{
             mSearchView = (SearchView) searchItem.getActionView();
             setupSearchView(mSearchView);
@@ -176,7 +160,6 @@ public class IngredientsFragment extends ListFragment {
                                 Log.d(TAG, "Exception 2");
                             }
                         }
-                        //  getActivity().invalidateOptionsMenu();
                     }
                 });
                 mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -214,15 +197,13 @@ public class IngredientsFragment extends ListFragment {
             // Close soft keyboard after button selection
             getActivity().getWindow().setSoftInputMode(
                     WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-//            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
             return true;
 
         } else if (id == R.id.action_remove_ingredient) {
             ListView listView = getListView();
             int listViewItemCount = listView.getChildCount();
 
-            /* first check if there are ingredients to delete and add them to the TO DELETE list.. */
+            // first check if there are ingredients to delete and add them to the TO DELETE list..
             final ArrayList<Ingredient> ingredientsToDelete = new ArrayList<Ingredient>();
             CheckBox checkbox;
             for (int i = 0; i < listViewItemCount; i++){
@@ -233,30 +214,23 @@ public class IngredientsFragment extends ListFragment {
                         ingredientsToDelete.add(ingredientAdapter.getItem(i));
                     }
                 } catch (Exception e) {
-                    Log.d(TAG, "error!!->" + e.getMessage());
+                    Log.d(TAG, "Exception: " + e.getMessage());
                 }
             }
 
-            /*  if appropriate, then delete the items, otherwise just TOAST a warning response*/
+            //  if appropriate, then delete the items, otherwise just TOAST a warning response
             if (ingredientsToDelete.size() <= 0) {
-                Toast.makeText(getActivity(), "No ingredients selected..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No ingredients selected...", Toast.LENGTH_SHORT).show();
                 return true;
             } else {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
                 builder.setMessage("Remove selected ingredient(s)?");
                 builder.setPositiveButton("Remove", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0; i < ingredientsToDelete.size(); i++){
-                            sqLiteDAO.deleteIngredient(ingredientsToDelete.get(i));
-
-                            // Remove from listview -- doesn't handle the case of searching for
-                            // an ingredient and deleting it. It still appears in the original
-                            // list. But upon closing the app and re-opening, it's removed. So
-                            // we need to update the listview when that happens.
-                            ingredientAdapter.remove(ingredientsToDelete.get(i));
+                        for (Ingredient anIngredientsToDelete : ingredientsToDelete) {
+                            sqLiteDAO.deleteIngredient(anIngredientsToDelete);
+                            ingredientAdapter.remove(anIngredientsToDelete);
                         }
                         ingredientAdapter.notifyDataSetChanged();
                     }
@@ -283,46 +257,16 @@ public class IngredientsFragment extends ListFragment {
         Log.d(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
+        Button clearQueryButton;
+        final EditText keywordEditText;
+
         try {
             clearQueryButton = (Button) rootView.findViewById(R.id.clearQueryButton);
-//            keywordSearchView = (SearchView) rootView.findViewById(R.id.keywordSearchView);
-//            keywordSearchView.setIconifiedByDefault(false);
+
             keywordEditText = (EditText) rootView.findViewById(R.id.keywordEditText);
-
-//            keywordSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//                    query = newText;
-//                    Log.d(TAG, "addTextChangedListener-> query: " + query);
-//                    return true;
-//                }
-//            });
-
-//            keywordSearchView.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    query = query.trim().replace(" ", "+");
-//                }
-//            });
-
             keywordEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
@@ -362,17 +306,11 @@ public class IngredientsFragment extends ListFragment {
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         Log.d(TAG, "onActivityCreated");
-        ingredientArrayList = sqLiteDAO.getAllIngredients();
-//        if (ingredientArrayList.size() > 0){
-//            ((ImageView)getView().findViewById(R.id.addIngredientHelper)).setVisibility(ImageView.GONE);
-//        }
+        super.onActivityCreated(savedInstanceState);
+        ArrayList<Ingredient> ingredientArrayList = sqLiteDAO.getAllIngredients();
 
-        // https://developer.android.com/guide/topics/ui/menus.html#context-menu
         final ListView listView = getListView();
-//        listView.setBackgroundResource(R.drawable.fruit_bowl);
         ingredientAdapter = new IngredientAdapter(getActivity(),
                 android.R.layout.simple_list_item_multiple_choice, ingredientArrayList);
         listView.setAdapter(ingredientAdapter);
@@ -381,33 +319,32 @@ public class IngredientsFragment extends ListFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "LIST CLICK");
+                Log.d(TAG, "onItemClick");
                 ingredientAdapter.itemClickListener(view, position);
             }
         });
 
-        /* EDIT INGREDIENT FEATURE */
+        // Edit the ingredient
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "LONG CLICK");
+                Log.d(TAG, "onItemLongClick");
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
                 final Ingredient ingredient = (Ingredient) listView.getItemAtPosition(position);
 
                 final String oldIngredientTitle;
                 oldIngredientTitle = ingredient.getIngredientTitle();
 
                 final int pos = position;
-
                 final View v = view;
-                View  editIngredientContentView = View.inflate(getActivity(), R.layout.edit_ingredient_contentview, null);
-                final EditText ingredientTitleInputEditText = (EditText) editIngredientContentView.findViewById(R.id.editIngredientEditText);
 
+                View  editIngredientContentView = View.inflate(getActivity(),
+                        R.layout.edit_ingredient_contentview, null);
+                final EditText ingredientTitleInputEditText =
+                        (EditText) editIngredientContentView.findViewById(R.id.editIngredientEditText);
                 ingredientTitleInputEditText.setText(ingredient.getIngredientTitle());
                 ingredientTitleInputEditText.setSelection(ingredientTitleInputEditText.getText().length());
-
 
                 final CheckBox checkBoxExcludeIngredient = (CheckBox) editIngredientContentView.findViewById(R.id.checkboxExcludeIngredient);
                 final CheckBox checkboxRequiredIngredient = (CheckBox) editIngredientContentView.findViewById(R.id.checkboxRequiredIngredient);
@@ -421,7 +358,6 @@ public class IngredientsFragment extends ListFragment {
                         break;
                 }
 
-                    /* onCheckChanged vs onClickListener... */
                 checkBoxExcludeIngredient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -450,17 +386,14 @@ public class IngredientsFragment extends ListFragment {
 
                 builder.setTitle("Edit Ingredient");
                 builder.setView(editIngredientContentView);
-
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                        boolean prevSelectedState; // false
+                        boolean prevSelectedState;
                         CheckBox checkbox = (CheckBox) v.findViewById(R.id.ingredientCheckbox);
                         prevSelectedState = checkbox.isChecked();
                         checkbox.setChecked(false);
-                        ingredientAdapter.changeIngredientSelectedState(v, pos); // not type of ingredient, just ...
-
+                        ingredientAdapter.changeIngredientSelectedState(v, pos);
                         sqLiteDAO.updateIngredientTitle(oldIngredientTitle, ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.getItem(pos).setIngredientTitle(ingredientTitleInputEditText.getText().toString());
                         ingredientAdapter.notifyDataSetChanged();
@@ -468,7 +401,6 @@ public class IngredientsFragment extends ListFragment {
                         if (!prevSelectedState){
                             checkbox.toggle();
                         }
-
                         ingredientAdapter.itemClickListener(v, pos);
                     }
                 });
@@ -486,6 +418,6 @@ public class IngredientsFragment extends ListFragment {
     }
 
     private void setupSearchView(SearchView searchView){
-        searchView.setQueryHint("Find ingredient..");
+        searchView.setQueryHint("Find ingredient...");
     }
 }

@@ -20,8 +20,8 @@ import creations.icebox.recipecomposer.RecipesFragment;
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
+    static final String TAB = "***TABS PAGER ADAPTER***: ";
     static final int NUM_TABS = 3;
-    static final String TAB = "***TABS PAGER ADAPTER***";
     Context mContext;
 
     public TabsPagerAdapter(FragmentActivity fragmentActivity, FragmentManager fm) {

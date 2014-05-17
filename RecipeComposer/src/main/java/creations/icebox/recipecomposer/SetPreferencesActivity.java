@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-
 public class SetPreferencesActivity extends Activity {
-    final private static String TAG = "***SET PREF ACTIVITY***";
+    final private static String TAG = "***SET PREF ACTIVITY***: ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

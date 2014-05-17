@@ -1,7 +1,5 @@
 package creations.icebox.recipecomposer;
 
-
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -30,8 +28,6 @@ import creations.icebox.recipecomposer.lib.Recipe;
 public class RecipeFavoritesFragment extends ListFragment {
 
     private static final String TAG = "***RECIPE FAVORITES FRAGMENT: ";
-
-    private ListView listView;
     private RecipeFavoritesAdapter recipeFavoritesAdapter;
     private SQLiteDAO sqLiteDAO;
     private ArrayList<Recipe> recipeFavoritesList = new ArrayList<Recipe>();
@@ -42,7 +38,6 @@ public class RecipeFavoritesFragment extends ListFragment {
     }
 
     public RecipeFavoritesFragment() {
-
     }
 
     @Override
@@ -56,8 +51,6 @@ public class RecipeFavoritesFragment extends ListFragment {
                     recipeFavoritesAdapter.add(recipe);
                 }
                 recipeFavoritesAdapter.notifyDataSetChanged();
-//                listView = getListView();
-//                registerForContextMenu(listView);
             } else {
                 Log.d(TAG, "is not visible");
             }
@@ -108,7 +101,7 @@ public class RecipeFavoritesFragment extends ListFragment {
         String recipeTitle = recipeFavoritesList.get(position).getRecipeTitle();
         Log.d(TAG, recipeTitle + " clicked");
 
-        /* Open recipe's URL in browser */
+        // Open recipe's URL in browser
         Uri uriUrl = Uri.parse(recipeFavoritesList.get(position).getRecipeURL());
         Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
         startActivity(launchBrowser);
@@ -125,7 +118,7 @@ public class RecipeFavoritesFragment extends ListFragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
-//
+
     /* created when we long hold a specific item in the recipe list */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -139,8 +132,7 @@ public class RecipeFavoritesFragment extends ListFragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-//        Log.d(TAG, " Recipe favorite fragment ..");
-        if (getUserVisibleHint() == false)
+        if (!getUserVisibleHint())
             return false;
 
         Recipe recipeFavorite = recipeFavoritesAdapter.getItem(itemInfo.position);
@@ -165,7 +157,6 @@ public class RecipeFavoritesFragment extends ListFragment {
                         Toast.makeText(getActivity(),
                                 "Removed '" + recipeFavorite.getRecipeTitle() + "' from your favorites!  ",
                                 Toast.LENGTH_SHORT).show();
-
                     }
                 } catch (NullPointerException e) {
                     Log.d(TAG, e.toString());
@@ -213,48 +204,8 @@ public class RecipeFavoritesFragment extends ListFragment {
                         targetedShareIntents.toArray(new Parcelable[] {}));
                 startActivityForResult(chooserIntent, 0);
             }
-
         } catch (NullPointerException e) {
-            Log.d(TAG, e.toString());
+            Log.d(TAG, "Exception: " + e.getMessage());
         }
-
-
-    }
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        Log.d(TAG, "onAttach");
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "onStart");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(TAG, "onResume");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        Log.d(TAG, "onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onDetach() {
-        Log.d(TAG, "onDetach");
-        super.onDetach();
     }
 }

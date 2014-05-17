@@ -23,7 +23,6 @@ import creations.icebox.recipecomposer.lib.Recipe;
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
     private static final String TAG = "***RECIPE ADAPTER***: ";
-
     private ArrayList<Recipe> recipeArrayList;
     SQLiteDAO sqLiteDAO;
 
@@ -69,7 +68,7 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         Log.d(TAG, "IN GET VIEW!!");
         final ViewHolderItem viewHolder;
 
-        /* convertView is the list item */
+        // convertView is the list item
         if (convertView == null) {
             // inflate the layout
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

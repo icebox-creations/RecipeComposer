@@ -22,7 +22,6 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
     private static final String TAG = "***RECIPE FAVORITES ADAPTER***: ";
     private ArrayList<Recipe> recipeFavoritesArrayList;
 
-
     public RecipeFavoritesAdapter(Context context, int resource, ArrayList<Recipe> recipeFavoritesArrayList) {
         super(context, resource, recipeFavoritesArrayList);
         this.recipeFavoritesArrayList = recipeFavoritesArrayList;
@@ -51,11 +50,6 @@ public class RecipeFavoritesAdapter extends ArrayAdapter<Recipe> {
     public void remove(Recipe object) {
         super.remove(object);
         recipeFavoritesArrayList.remove(object);
-    }
-
-    public boolean setRecipeFavoritesList(ArrayList<Recipe> recipeFavoriteList) {
-        this.recipeFavoritesArrayList = recipeFavoriteList;
-        return true;
     }
 
     @Override

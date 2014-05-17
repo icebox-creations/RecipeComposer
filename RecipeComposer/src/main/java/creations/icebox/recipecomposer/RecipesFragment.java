@@ -48,7 +48,7 @@ import creations.icebox.recipecomposer.lib.Recipe;
 
 public class RecipesFragment extends ListFragment {
 
-    private static final String TAG = "***RECIPES FRAGMENT: ";
+    private static final String TAG = "***RECIPES FRAGMENT***: ";
 
     ListView listView;
     RecipeAdapter recipeAdapter;
@@ -60,20 +60,7 @@ public class RecipesFragment extends ListFragment {
     int currentPageGlobal = 1;
     int currentPageOld = 0;
     SQLiteDAO sqLiteDAO;
-
     View curRecipeView;
-    /*
-    A weak reference is used so that the fragment and the async task
-    are loosely coupled. If a weak reference isn't used, the async
-    task will not be garbage collected because the fragment maintains
-    a reference to it.
-
-    You should think about using one whenever you need a reference to
-    an object, but you don't want that reference to protect the object
-    from the garbage collector.
-    */
-//    WeakReference<RecipeDownloaderAsyncTask> recipeDownloaderAsyncTaskWeakReference;
-
     ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 
     public static RecipesFragment newInstance() {
@@ -95,15 +82,12 @@ public class RecipesFragment extends ListFragment {
 
             if (!ingredientTitles.toString().isEmpty() || query != null) {
                 RecipeDownloaderAsyncTask recipeDownloaderAsyncTask = new RecipeDownloaderAsyncTask(this, ingredientTitles, query, currentPageGlobal);
-//                this.recipeDownloaderAsyncTaskWeakReference
-//                    = new WeakReference<RecipeDownloaderAsyncTask>(recipeDownloaderAsyncTask);
                 recipeDownloaderAsyncTask.execute();
             } else {
                 Log.d(TAG, "ELSE");
             }
         }
     }
-
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -137,7 +121,7 @@ public class RecipesFragment extends ListFragment {
                 case android.R.id.list:
                     final int lastItem = firstVisibleItem + visibleItemCount;
                     if(lastItem == totalItemCount) {
-                        if(preLast!=lastItem){ //to avoid multiple calls for last item
+                        if(preLast!=lastItem){ // to avoid multiple calls for last item
                             Log.d(TAG, "BOTTOM");
                             preLast = lastItem;
 
@@ -154,12 +138,6 @@ public class RecipesFragment extends ListFragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated...");
     }
 
     @Override
@@ -182,20 +160,19 @@ public class RecipesFragment extends ListFragment {
 
         ingredientTitles = new StringBuffer();
 
-        /* Configure the fragment instance to be retained on configuration
-        * change. Then start the async task */
+        // Configure the fragment instance to be retained on configuration change. Then start the
+        // async task
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
 
-      /* created when we long hold a specific item in the recipe list */
+    /* created when we long hold a specific item in the recipe list */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.recipe_fragment_context_menu, menu);
 
-        /* determine how to  */
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
         curRecipeView = ((ListView) v).getChildAt(itemInfo.position);
 
@@ -249,19 +226,14 @@ public class RecipesFragment extends ListFragment {
                                 "Added '" + recipeToFavorite.getRecipeTitle() + "' to your favorites!  " ,
                                 Toast.LENGTH_SHORT).show();
 
-                        /** Show the favorite start for the recipe.. curRecipeView is set when the menu is loaded each time */
+                        // Show the favorite start for the recipe.. curRecipeView is set when the
+                        // menu is loaded each time
                         Log.d(TAG, "PARALLEL: " + curRecipeView.toString() );
                         ImageView starIv = (ImageView) (curRecipeView.findViewById(R.id.recipeFavoriteStarImageView));
                         starIv.setImageResource(R.drawable.star_small);
                         starIv.refreshDrawableState();
                         starIv.invalidate();
                         starIv.setVisibility(ImageView.VISIBLE);
-
-                        /* make sure that the imageview is updated properly.. which it isnt
-                         * when the recipe item happens to have started out outside of the current
-                         * visible view.. ie the favorited recipe started at a position on the list
-                         * below the last visible item when the scroll position is 0. */
-
                         listView.invalidate();
                     }
                 } catch (NullPointerException e) {
@@ -338,42 +310,6 @@ public class RecipesFragment extends ListFragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        Log.d(TAG, "onAttach");
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "onStart");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(TAG, "onResume");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        Log.d(TAG, "onPause");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        Log.d(TAG, "onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onDetach() {
-        Log.d(TAG, "onDetach");
-        super.onDetach();
-    }
-
     /*
     * Use AsyncTask if you need to perform background tasks, but also need
     * to change components on the GUI. Put the background operations in
@@ -382,23 +318,14 @@ public class RecipesFragment extends ListFragment {
     private class RecipeDownloaderAsyncTask extends AsyncTask<String, Integer, String> {
 
         private String TAG = "***RECIPE DOWNLOADER***: ";
-
         private String recipePuppyURL = "http://www.recipepuppy.com/api/?i=";
         private String recipeTitle = "";
         private String recipeURL = "";
         private String recipeIngredients = "";
         private String recipePicUrl = "";
         private String currPage = "";
-
         private ProgressDialog progressDialog;
-
         private int lastStatusCode = 200;
-
-        public int getLastStatusCode() {
-            return lastStatusCode;
-        }
-
-//        WeakReference<RecipesFragment> recipesFragmentWeakReference;
 
         private RecipeDownloaderAsyncTask (RecipesFragment recipesFragment, StringBuffer ingredientTitles, String query, int currentPage) {
 
@@ -418,9 +345,6 @@ public class RecipesFragment extends ListFragment {
                 recipePuppyURL = recipePuppyURL + ingredientTitles + "&q=" + query + currPage;
             }
             Log.d(TAG, "URL now = " + recipePuppyURL);
-
-//            this.recipesFragmentWeakReference
-//                    = new WeakReference<RecipesFragment>(recipesFragment);
         }
 
         @Override
@@ -431,7 +355,6 @@ public class RecipesFragment extends ListFragment {
             * else don't call api (cache previous result)
             *   watch for scroll to bottom
             * */
-
             // example URL => http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3
 
             if (ingredientTitlesOld.toString().equals(ingredientTitles.toString()) && queryOld.equals(query)) {
@@ -548,7 +471,6 @@ public class RecipesFragment extends ListFragment {
                         e.printStackTrace();
                     }
                 }
-
             } catch (JSONException je) {
                 je.printStackTrace();
             }
@@ -567,41 +489,37 @@ public class RecipesFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(String response) {
-            progressDialog.dismiss();
+            Log.d(TAG, "onPostExecute");
 
+            progressDialog.dismiss();
             super.onPostExecute(response);
 
-//                if (this.recipesFragmentWeakReference.get() != null) {
-//                }
-                Log.d(TAG, "onPostExecute");
-
-                listView = getListView();
-                registerForContextMenu(listView);
-                if (listView.getAdapter() == null) {
-                    Log.d(TAG, "onPostExecute-> Adapter is null");
-                    recipeAdapter = new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList);
-                    listView.setAdapter(recipeAdapter);
+            listView = getListView();
+            registerForContextMenu(listView);
+            if (listView.getAdapter() == null) {
+                Log.d(TAG, "onPostExecute-> Adapter is null");
+                recipeAdapter = new RecipeAdapter(getActivity(), android.R.layout.simple_selectable_list_item, recipeList);
+                listView.setAdapter(recipeAdapter);
+            } else {
+                Log.d(TAG, "onPostExecute-> Adapter is already created");
+                if (lastStatusCode == 200) {
+                    recipeAdapter.notifyDataSetChanged();
                 } else {
-                    Log.d(TAG, "onPostExecute-> Adapter is already created");
-                    if (lastStatusCode == 200) {
-                        recipeAdapter.notifyDataSetChanged();
-                    } else {
-                        /* if 500, increment page number and request again. Flaw of Recipe Puppy.
-                        * Right now, just clear the list to show the "no recipes found" message.
-                        * */
-                        if (lastStatusCode == 500) {
-                            Log.d(TAG, "Status was 500, so try next page if possible");
+                /* if 500, increment page number and request again. Flaw of Recipe Puppy.
+                * Right now, just clear the list to show the "no recipes found" message.
+                * */
+                    if (lastStatusCode == 500) {
+                        Log.d(TAG, "Status was 500, so try next page if possible");
 //                            recipeList.clear();
 //                            recipeAdapter.clear();
-                            recipeAdapter.notifyDataSetChanged();
+                        recipeAdapter.notifyDataSetChanged();
 //                            Log.d(TAG, "" + currentPageGlobal);
 //                            new RecipeDownloaderAsyncTask((RecipesFragment) getTargetFragment(), ingredientTitles, query, currentPageGlobal+1).execute();
-                        } else {
-                            Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
-                        }
+                    } else {
+                        Log.d(TAG, "status = " + lastStatusCode + " so don't do anything");
                     }
                 }
-
+            }
         }
     }
 }

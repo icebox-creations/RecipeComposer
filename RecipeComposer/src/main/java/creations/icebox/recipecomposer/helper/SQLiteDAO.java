@@ -20,14 +20,12 @@ public class SQLiteDAO {
 
     private static final String TAG = "***SQLITEDAO***: ";
     private Context context;
-
     private SQLiteDatabase sqLiteDatabase;
     private SQLiteDBHelper sqLiteDBHelper;
     private String[] ingredientsColumns = {
             SQLiteDBHelper.COLUMN_ID,
             SQLiteDBHelper.COLUMN_TITLE
     };
-
     private String[] recipeFavoritesColumns = {
             SQLiteDBHelper.RECIPE_FAV_COLUMN_ID,
             SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE,
@@ -51,12 +49,6 @@ public class SQLiteDAO {
         Log.d(TAG, "close");
         sqLiteDBHelper.close();
     }
-
-
-    /** DAO methods to access ingredient objects from the Database:
-     *
-     *  We need to be able to create new ingredeints and update them..
-     *  We also need to be able to get the list of all ingredients*/
 
     public Ingredient createIngredient(String ingredientTitle) {
 
@@ -156,20 +148,10 @@ public class SQLiteDAO {
         return ingredient;
     }
 
-
-    /** DAO methods to access database for recipe favorite objects:
-     *
-     *  We need to be able to create new recipe favorites, store them
-     *      in a database and later retrieve them
-     *
-     *  We also need the ability to retrieve the list of all recipe favorites
-     *      so we can update the recipe favorite list view in the recipe fragment
-     *      using the recipe favorite adapter... */
-
     public Recipe createRecipeFavorite(Recipe recipe) {
         String recipeTitle = recipe.getRecipeTitle();
 
-        // Check for duplications
+        // Check for duplicates
         String duplicateCheckQuery =
                 "select * from "
                         + SQLiteDBHelper.TABLE_RECIPE_FAVS
@@ -201,16 +183,14 @@ public class SQLiteDAO {
                 recipe.getRecipePicUrl() );
 
 
-        /**  insert into the database */
+        // insert into the database
         long insertId = sqLiteDatabase.insert(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
                 null,
                 contentValues
         );
 
-        /**  check if it was inserted properly by
-         *  finding it in the table... also return it
-         *  from the database. */
+        // check if it was inserted properly by finding it in the table... also return it
         cursor = sqLiteDatabase.query(
                 SQLiteDBHelper.TABLE_RECIPE_FAVS,
                 recipeFavoritesColumns,
@@ -218,7 +198,7 @@ public class SQLiteDAO {
                 null, null, null, null
         );
 
-        /** retur the recipe favorite whih had been just added to the db */
+        // return the recipe favorite which had been just added to the db
         cursor.moveToFirst();
         Recipe newRecipe = cursorToRecipeFavorite(cursor);
         cursor.close();
@@ -234,11 +214,7 @@ public class SQLiteDAO {
 
         Cursor cursor = sqLiteDatabase.rawQuery(duplicateCheckQuery, null);
 
-        if (cursor != null && cursor.moveToFirst()) {
-//            Toast.makeText(context, "REcipe is already in the list", Toast.LENGTH_LONG).show();
-            return true;
-        }
-        return false;
+        return cursor != null && cursor.moveToFirst();
     }
 
     public void deleteRecipeFavorite(Recipe recipeFavorite) {
@@ -255,31 +231,31 @@ public class SQLiteDAO {
     /** Takes a new recipe and updates the recipe with the same ID, which exists in the database
      *  TODO: check to see if the id of the recipe we wish to update already exists in the database
      *        before updating */
-    public int updateRecipeFavorite(Recipe newRecipe) {
-        if (newRecipe == null) {
-            Toast.makeText(context, "Update Recipe Favorite newRecipe is null..", Toast.LENGTH_LONG).show();
-            return 0;
-        }
-
-        long id                         = newRecipe.getRecipeId();
-        String newRecipeTitle           = newRecipe.getRecipeTitle();
-        String newRecipeIngredientList  = newRecipe.getRecipeTitle();
-        String newRecipeUrl             = newRecipe.getRecipeTitle();
-        String newRecipePicUrl          = newRecipe.getRecipePicUrl();
-
-        ContentValues newContentValues = new ContentValues();
-        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE, newRecipeTitle.toLowerCase().trim());
-        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST, newRecipeIngredientList.toLowerCase().trim());
-        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL, newRecipeUrl.toLowerCase().trim());
-        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_PIC_URL, newRecipePicUrl.toLowerCase().trim());
-
-        return sqLiteDatabase.update(
-                SQLiteDBHelper.TABLE_RECIPE_FAVS,
-                newContentValues,
-                SQLiteDBHelper.RECIPE_FAV_COLUMN_ID + " = \"" + id + "\"",
-                null
-        );
-    }
+//    public int updateRecipeFavorite(Recipe newRecipe) {
+//        if (newRecipe == null) {
+//            Toast.makeText(context, "Update Recipe Favorite newRecipe is null..", Toast.LENGTH_LONG).show();
+//            return 0;
+//        }
+//
+//        long id                         = newRecipe.getRecipeId();
+//        String newRecipeTitle           = newRecipe.getRecipeTitle();
+//        String newRecipeIngredientList  = newRecipe.getRecipeTitle();
+//        String newRecipeUrl             = newRecipe.getRecipeTitle();
+//        String newRecipePicUrl          = newRecipe.getRecipePicUrl();
+//
+//        ContentValues newContentValues = new ContentValues();
+//        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_TITLE, newRecipeTitle.toLowerCase().trim());
+//        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_INGREDIENT_LIST, newRecipeIngredientList.toLowerCase().trim());
+//        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_URL, newRecipeUrl.toLowerCase().trim());
+//        newContentValues.put(SQLiteDBHelper.RECIPE_FAV_COLUMN_PIC_URL, newRecipePicUrl.toLowerCase().trim());
+//
+//        return sqLiteDatabase.update(
+//                SQLiteDBHelper.TABLE_RECIPE_FAVS,
+//                newContentValues,
+//                SQLiteDBHelper.RECIPE_FAV_COLUMN_ID + " = \"" + id + "\"",
+//                null
+//        );
+//    }
 
     public ArrayList<Recipe> getAllRecipeFavorites() {
         ArrayList<Recipe> recipeList = new ArrayList<Recipe>();

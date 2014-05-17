@@ -15,7 +15,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     final static String DB_NAME = "recipe_composer.db";
     final static int DB_VERSION = 1;
 
-
      /** Ingredient DB TABLE and SQL definitions */
     public static final String TABLE_INGREDIENTS = "ingredients";
 
@@ -51,8 +50,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_RECIPE_FAVS_TABLE_DROP = "drop table if exists "
             + TABLE_RECIPE_FAVS;
-
-
 
     public SQLiteDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

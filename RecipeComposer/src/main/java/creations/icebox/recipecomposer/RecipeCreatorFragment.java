@@ -1,6 +1,5 @@
 package creations.icebox.recipecomposer;
 
-
 import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
@@ -15,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class RecipeCreatorFragment extends Fragment {
-    final private static String TAG = "***RECIPE CREATOR FRAGMENT***";
+
+    final private static String TAG = "***RECIPE CREATOR FRAGMENT***:";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
